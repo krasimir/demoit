@@ -1,4 +1,3 @@
-const SETTINGS_PATH = './settings.json';
 const CODEMIRROR_SETTINGS = {
   value: '',
   mode:  'jsx',
@@ -16,10 +15,11 @@ const addStyleString = function (str) {
   node.innerHTML = str;
   document.body.appendChild(node);
 }
-const addJSFile = function (path) {
+const addJSFile = function (path, done) {
   const node = document.createElement('script');
 
   node.src = path;
+  node.addEventListener('load', done);
   document.body.appendChild(node);
 }
 
@@ -110,18 +110,18 @@ const initColumnResizer = function () {
     }
   );
 }
-const getSettings = async function (path) {
-  const res = await fetch(path);
-  return await res.json();
-}
 const getResources = async function (settings) {
-  settings.resources.forEach(resource => {
-    const extension = resource.split('.').pop().toLowerCase();
+  return Promise.all(
+    settings.resources.map(resource => {
+      return new Promise(done => {
+        const extension = resource.split('.').pop().toLowerCase();
 
-    if (extension === 'js') {
-      addJSFile(resource)
-    }
-  });
+        if (extension === 'js') {
+          addJSFile(resource, done)
+        }
+      });
+    })
+  );
 }
 
 // ********************************************************************************* INIT
@@ -131,8 +131,8 @@ const initialize = async function (settings) {
 
   const output = createOutput(settings);
   const settingsPanel = createSettingsPanel(settings);
-  const editor = createEditor(settings, text => {
-    console.log(text);
+  const editor = createEditor(settings, code => {
+    settings.transform(code);
   });
 
   await editor.showFrame();
@@ -141,5 +141,5 @@ const initialize = async function (settings) {
 
 window.onload = async function () {
   initColumnResizer();
-  initialize(await getSettings(SETTINGS_PATH));
+  initialize(settings());
 };
