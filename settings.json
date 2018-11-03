@@ -1,0 +1,18 @@
+{
+  "editor": {
+    "theme": "neat",
+    "suitable themes": "dark: material, light: neat",
+    "fontSize": "20px",
+    "lineHeight": "28px"
+  },
+  "output": {
+    "backgroundColor": "#c7e2e5"
+  },
+  "demos": [
+    {
+      "frames": [
+        { "name": "initial", "path": "./demos/01/init.js" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "demoit",
+  "version": "0.1.0",
+  "description": "A live coding tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krasimir/demoit.git"
+  },
+  "keywords": [
+    "demo",
+    "code",
+    "live",
+    "coding"
+  ],
+  "author": "Krasimir Tsonev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krasimir/demoit/issues"
+  },
+  "homepage": "https://github.com/krasimir/demoit#readme"
+}
