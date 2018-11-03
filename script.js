@@ -16,6 +16,14 @@ const addStyleString = function (str) {
   node.innerHTML = str;
   document.body.appendChild(node);
 }
+const addJSFile = function (path) {
+  const node = document.createElement('script');
+
+  node.src = path;
+  document.body.appendChild(node);
+}
+
+// ********************************************************************************* EDITOR
 const createEditor = function (settings, onChange) {
   const container = el('.js-code-editor');
   const editor = CodeMirror(
@@ -50,29 +58,45 @@ const createEditor = function (settings, onChange) {
       } catch (error) {
         console.error(error);
       }
-    },
-    async loadTheme() {
-      try {
-        const res = await fetch(`./vendor/codemirror/theme/${ settings.editor.theme }.css`);
-        const css = await res.text();
-
-        addStyleString(css);
-      } catch (error) {
-        console.log(error);
-      }
     }
   };
 };
+const loadEditorTheme = async function(settings) {
+  try {
+    const res = await fetch(`./vendor/codemirror/theme/${ settings.editor.theme }.css`);
+    const css = await res.text();
+
+    addStyleString(css);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// ********************************************************************************* OUTPUT
 const createOutput = function(settings) {
   const element = el('.output');
 
-  addStyleString(`.output { background-color: ${ settings.output.backgroundColor }}`)
+  addStyleString(`
+    .output {
+      background-color: ${ settings.output.backgroundColor };
+      font-size: ${ settings.output.fontSize };
+      line-height: ${ settings.output.lineHeight };
+    }
+  `)
+}
+// ********************************************************************************* SETTINGS
+const createSettingsPanel = function(settings) {
+  const toggler = el('.settings-button');
+  const panel = el('.settings');
+  let visible = false;
+
+  toggler.addEventListener('click', () => {
+    visible = !visible;
+    panel.style.display = visible ? 'block' : 'none';
+  });
 }
 
-const getSettings = async function (path) {
-  const res = await fetch(path);
-  return await res.json();
-}
+// ********************************************************************************* OTHER
 const initColumnResizer = function () {
   let resizable = ColumnResizer.default;
         
@@ -86,20 +110,36 @@ const initColumnResizer = function () {
     }
   );
 }
+const getSettings = async function (path) {
+  const res = await fetch(path);
+  return await res.json();
+}
+const getResources = async function (settings) {
+  settings.resources.forEach(resource => {
+    const extension = resource.split('.').pop().toLowerCase();
 
-var init = async function () {
+    if (extension === 'js') {
+      addJSFile(resource)
+    }
+  });
+}
 
-  initColumnResizer();
+// ********************************************************************************* INIT
+const initialize = async function (settings) {
+  await getResources(settings);
+  await loadEditorTheme(settings);
 
-  const settings = await getSettings(SETTINGS_PATH);
   const output = createOutput(settings);
+  const settingsPanel = createSettingsPanel(settings);
   const editor = createEditor(settings, text => {
-    // console.log(text);
+    console.log(text);
   });
 
-  await editor.loadTheme();
   await editor.showFrame();
 
 };
 
-window.onload = init;
+window.onload = async function () {
+  initColumnResizer();
+  initialize(await getSettings(SETTINGS_PATH));
+};

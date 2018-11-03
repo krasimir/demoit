@@ -1,13 +1,18 @@
 {
   "editor": {
-    "theme": "neat",
+    "theme": "material",
     "suitable themes": "dark: material, light: neat",
     "fontSize": "20px",
     "lineHeight": "28px"
   },
   "output": {
-    "backgroundColor": "#c7e2e5"
+    "backgroundColor": "#c7e2e5",
+    "fontSize": "16px",
+    "lineHeight": "22px"
   },
+  "resources": [
+    "./resources/react-16.7.0-alpha.0.js"
+  ],
   "demos": [
     {
       "frames": [
