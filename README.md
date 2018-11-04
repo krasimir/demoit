@@ -61,7 +61,7 @@ The tool requires a `settings.json` file in the same directory as the `index.htm
   * `fontSize` - self explanatory
   * `lineHeight` - self explanatory
 * `resources` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those first before running your demo files. The resources in the example above are coming with the library because you probably want to use them anyway. You probably want to write ES6+ and maybe plan to use React.
-* `demos` - probably the most interesting part and the bit which you'll touch the most. It contains an array of items representing your demos. Every item has `snippets` and `transform` properties. The first one contains list of files which are your code snippets. The `transform` field points to a function in the global scope (i.e. `window` object) that Demoit uses when running your snippet. The one used above is part of the `resources/transforms.js` file which we listed as a resource to be included.
+* `demos` - probably the most interesting part and the bit which you'll touch the most. It contains an array of items representing your demos. Every item has `snippets` and `transform` properties. The first one contains list of files which are your code snippets. The `transform` field points to a function in the global scope (i.e. `window` object) that Demoit uses when running your snippet. The one used above is part of the `resources/transforms.js` file which we listed as a resource to be included. The available values for now are `babelToCode`, `babelToConsole` and `babelToReact`.
 
 ## Transformations
 
