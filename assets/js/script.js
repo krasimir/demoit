@@ -11,19 +11,19 @@ const SETTINGS_FILE = 'settings.json';
 
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, onSave) {
-  const defaults = readDefaultDemoAndFrame();
+  const defaults = readDefaultDemoAndSnippet();
   const api = {
     saved: true,
     demo: defaults[0],
-    frame: defaults[1],
-    async showFrame(demo, frame) {
+    snippet: defaults[1],
+    async showFrame(demo, snippet) {
       if (typeof demo !== 'undefined') this.demo = demo;
-      if (typeof frame !== 'undefined') this.frame = frame;
+      if (typeof snippet !== 'undefined') this.snippet = snippet;
 
-      window.location.hash = this.demo + ',' + this.frame;
+      window.location.hash = this.demo + ',' + this.snippet;
 
       try {
-        const res = await fetch(settings.demos[this.demo].frames[this.frame]);
+        const res = await fetch(settings.demos[this.demo].snippets[this.snippet]);
         const code = await res.text();
 
         editor.setValue(code);
@@ -119,13 +119,13 @@ const createSettingsPanel = function(settings, editor) {
       return `
         <div class="demo">
           ${
-            demo.frames.map(
-              (frame, frameIdx) => {
-                const active = editor.demo === demoIdx && editor.frame === frameIdx ? ' active' : '';
-                const fileName = frame.split('/').pop();
+            demo.snippets.map(
+              (snippet, snippetIdx) => {
+                const active = editor.demo === demoIdx && editor.snippet === snippetIdx ? ' active' : '';
+                const fileName = snippet.split('/').pop();
 
                 return `
-                  <a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ frameIdx })">
+                  <a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ snippetIdx })">
                     ${ fileName }
                   </a>
                 `;
@@ -150,15 +150,15 @@ const createSettingsPanel = function(settings, editor) {
 
   toggler.addEventListener('click', toggle);
 
-  window.updateDemoFrame = function (demo, frame) {
-    editor.showFrame(demo, frame);
+  window.updateDemoFrame = function (demo, snippet) {
+    editor.showFrame(demo, snippet);
     renderSettings();
   }
 }
 
 
 // ********************************************************************************* OTHER
-const readDefaultDemoAndFrame = function () {
+const readDefaultDemoAndSnippet = function () {
   const hash = window.location.hash;
 
   if (hash && hash.split(',').length === 2) {

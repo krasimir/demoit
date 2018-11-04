@@ -20,7 +20,7 @@
   ],
   "demos": [
     {
-      "frames": [
+      "snippets": [
         "./demos/01/useHooks.js",
         "./demos/01/HoC.js",
         "./demos/01/FaCC.js"
