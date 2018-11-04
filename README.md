@@ -5,7 +5,7 @@
 * Dependency free.
 * No installation. Just copy/paste and open in a browser.
 * No server needed.
-* Uses Babel 6.26.0 to transpile your code.
+* Uses Babel to transpile your code.
 * Supports React
 * Supports multiple demos with multiple code snippets.
 
