@@ -19,7 +19,7 @@ const createEditor = function (settings, onSave) {
       if (typeof frame !== 'undefined') this.frame = frame;
 
       try {
-        const res = await fetch(settings.demos[this.demo].frames[this.frame].path);
+        const res = await fetch(settings.demos[this.demo].frames[this.frame]);
         const code = await res.text();
 
         editor.setValue(code);

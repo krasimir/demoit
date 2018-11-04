@@ -30,17 +30,12 @@ svg {
 table.container, table.container th, table.container td {
   border: none;
 }
-.left {
+.left, .right {
   vertical-align: top;
 }
 .js-code-editor {
   width: 100%;
   height: 100%;
-}
-.right {
-  border-left: solid 2px #999;
-  vertical-align: top;
-  border-spacing: 0px;
 }
 .output {
   padding: 1em;
@@ -65,11 +60,11 @@ table.container, table.container th, table.container td {
 /* SETTINGS */
 .settings {
   position: fixed;
-  right: 7px;
+  left: 7px;
   bottom: 63px;
   z-index: 10;
   display: block;
-  text-align: right;
+  text-align: left;
 }
 .settings .demo {
   margin: 0.4em;
@@ -93,7 +88,7 @@ table.container, table.container th, table.container td {
 }
 .settings-button {
   position: fixed;
-  right: 15px;
+  left: 15px;
   bottom: 28px;
   display: block;
   width: 30px;
@@ -109,7 +104,7 @@ table.container, table.container th, table.container td {
 }
 .pencil-button {
   position: fixed;
-  right: 52px;
+  left: 52px;
   bottom: 27px;
   cursor: pointer;
   display: block;

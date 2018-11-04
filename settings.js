@@ -19,14 +19,14 @@ function settings() {
       demos: [
         {
           frames: [
-            { name: 'FaCC 01', path: './demos/01/init.js' },
-            { name: 'FaCC 02', path: './demos/01/second.js' }
+            './demos/01/init.js',
+            './demos/01/second.js'
           ],
           transform: babelToReact
         },
         {
           frames: [
-            { name: 'A', path: './demos/01/second.js' }
+            './demos/01/second.js'
           ],
           transform: babelToConsole
         }
