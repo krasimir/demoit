@@ -7,7 +7,7 @@ const CODEMIRROR_SETTINGS = {
   foldGutter: false,
   gutters: []
 };
-const SETTINGS_FILE = './settings.json';
+const SETTINGS_FILE = 'settings.json';
 
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, onSave) {
