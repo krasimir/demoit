@@ -20,10 +20,16 @@ function settings() {
       demos: [
         {
           frames: [
-            { name: 'initial', path: './demos/01/init.js' },
-            { name: 'initial', path: './demos/01/second.js' }
+            { name: 'FaCC 01', path: './demos/01/init.js' },
+            { name: 'FaCC 02', path: './demos/01/second.js' }
           ],
           transform: babelToReact
+        },
+        {
+          frames: [
+            { name: 'A', path: './demos/01/second.js' }
+          ],
+          transform: babelToConsole
         }
       ]
     }

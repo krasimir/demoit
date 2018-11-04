@@ -13,7 +13,10 @@ const createEditor = function (settings, onChange) {
   const api = {
     demo: 0,
     frame: 0,
-    async showFrame() {
+    async showFrame(demo, frame) {
+      if (typeof demo !== 'undefined') this.demo = demo;
+      if (typeof frame !== 'undefined') this.frame = frame;
+
       try {
         const res = await fetch(settings.demos[this.demo].frames[this.frame].path);
         const code = await res.text();
@@ -34,9 +37,7 @@ const createEditor = function (settings, onChange) {
     onChange(settings.demos[api.demo].transform(editor.getValue()));
   }, settings.editor.changeDebounceTime));
   editor.setValue('');
-  container.addEventListener('click', function () {
-    editor.focus();
-  });
+  container.addEventListener('click', () => editor.focus());
 
   addStyleString(`
     .js-code-editor {
@@ -79,16 +80,48 @@ const createOutput = function(settings) {
   }
 }
 // ********************************************************************************* SETTINGS
-const createSettingsPanel = function(settings) {
+const createSettingsPanel = function(settings, editor) {
   const toggler = el('.settings-button');
   const panel = el('.settings');
-  let visible = false;
+  const renderSettings = function () {
+    panel.innerHTML = settings.demos.map((demo, demoIdx) => {
+      const idx = demoIdx + 1;
 
-  toggler.addEventListener('click', () => {
+      return `
+        <div class="demo">
+          ${
+            demo.frames.map(
+              (frame, frameIdx) => {
+                const active = editor.demo === demoIdx && editor.frame === frameIdx ? ' active' : '';
+
+                return `<a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ frameIdx })"></a>`;
+              }
+            ).join('')
+          }
+        </div>
+      `
+    }).join('');
+  }
+  const toggle = () => {
     visible = !visible;
     panel.style.display = visible ? 'block' : 'none';
-  });
+    if (visible) {
+      renderSettings();
+      toggler.setAttribute('src', './assets/img/close.svg');
+    } else {
+      toggler.setAttribute('src', './assets/img/laptop.svg');
+    }
+  }
+  let visible = false;
+
+  toggler.addEventListener('click', toggle);
+
+  window.updateDemoFrame = function (demo, frame) {
+    editor.showFrame(demo, frame);
+    renderSettings();
+  }
 }
+
 
 // ********************************************************************************* OTHER
 const initColumnResizer = function () {
@@ -124,8 +157,8 @@ const initialize = async function (settings) {
   await loadEditorTheme(settings);
 
   const output = createOutput(settings);
-  const settingsPanel = createSettingsPanel(settings);
   const editor = createEditor(settings, html => output.setValue(html));
+  const settingsPanel = createSettingsPanel(settings, editor);
 
   await editor.showFrame();
 

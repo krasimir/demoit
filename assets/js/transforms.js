@@ -17,7 +17,7 @@ function babelToCode(code) {
   `;
 }
 
-function babelToExecutedCodeConsole(code) {
+function babelToConsole(code) {
   const babelOptions = {
     presets: [ "react", ["es2015", { "modules": false }]]
   }
