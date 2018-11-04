@@ -98,7 +98,7 @@ There is only one key combination - `Ctrl + S`/`Cmd + S` which is basically trig
 
 ## UI
 
-There is really not much to say here. There are two buttons of the lower left side of the tool. The first one shows a menu with all of our demos and code snippets in them.
+There is really not much to say here. There are two buttons of the lower left side of the tool. The first one shows a menu with all of our demos and code snippets in them. The second button becomes solid black if there are unsaved changes to our code. It also works as a button for saving but I guess clicking `Ctrl + S` or `Cmd + S` is quicker.
 
 ## Troubleshooting
 
