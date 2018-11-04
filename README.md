@@ -9,7 +9,7 @@
 * Supports React
 * Supports multiple demos with multiple code snippets.
 
-:rocket: Check the demo here [https://krasimir.github.io/demoit/](https://krasimir.github.io/demoit/). :rocket:
+Check the demo here [https://krasimir.github.io/demoit/](https://krasimir.github.io/demoit/) :rocket:
 
 ---
 
