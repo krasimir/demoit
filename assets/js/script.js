@@ -8,21 +8,6 @@ const CODEMIRROR_SETTINGS = {
   gutters: []
 };
 
-const el = function (sel) { return document.querySelector(sel); };
-const addStyleString = function (str) {
-  const node = document.createElement('style');
-
-  node.innerHTML = str;
-  document.body.appendChild(node);
-}
-const addJSFile = function (path, done) {
-  const node = document.createElement('script');
-
-  node.src = path;
-  node.addEventListener('load', done);
-  document.body.appendChild(node);
-}
-
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, onChange) {
   const api = {
@@ -45,9 +30,9 @@ const createEditor = function (settings, onChange) {
     Object.assign({}, CODEMIRROR_SETTINGS, settings.editor)
   );
 
-  editor.on('change', function () {
+  editor.on('change', debounce(function () {
     onChange(settings.demos[api.demo].transform(editor.getValue()));
-  });
+  }, settings.editor.changeDebounceTime));
   editor.setValue('');
   container.addEventListener('click', function () {
     editor.focus();
@@ -106,20 +91,6 @@ const createSettingsPanel = function(settings) {
 }
 
 // ********************************************************************************* OTHER
-const debounce = function (func, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this, args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
-};
 const initColumnResizer = function () {
   let resizable = ColumnResizer.default;
         
@@ -154,7 +125,7 @@ const initialize = async function (settings) {
 
   const output = createOutput(settings);
   const settingsPanel = createSettingsPanel(settings);
-  const editor = createEditor(settings, debounce(html => output.setValue(html), settings.editor.changeDebounceTime));
+  const editor = createEditor(settings, html => output.setValue(html));
 
   await editor.showFrame();
 
