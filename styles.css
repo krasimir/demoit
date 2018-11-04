@@ -41,6 +41,12 @@ table.container, table.container th, table.container td {
 .output {
   padding: 1em;
   height: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.output p, .output pre {
+  margin: 0;
+  padding: 0;
 }
 .CodeMirror {
   height: 100%;
@@ -65,9 +71,9 @@ table.container, table.container th, table.container td {
   padding: 1em;
 }
 .settings-button {
-  position: absolute;
-  right: 1em;
-  top: 1em;
+  position: fixed;
+  right: 15px;
+  bottom: 28px;
   display: block;
   width: 30px;
   height: 30px;

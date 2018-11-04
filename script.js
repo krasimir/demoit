@@ -25,6 +25,20 @@ const addJSFile = function (path, done) {
 
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, onChange) {
+  const api = {
+    demo: 0,
+    frame: 0,
+    async showFrame() {
+      try {
+        const res = await fetch(settings.demos[this.demo].frames[this.frame].path);
+        const code = await res.text();
+
+        editor.setValue(code);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
   const container = el('.js-code-editor');
   const editor = CodeMirror(
     container,
@@ -32,7 +46,7 @@ const createEditor = function (settings, onChange) {
   );
 
   editor.on('change', function () {
-    onChange(editor.getValue());
+    onChange(settings.demos[api.demo].transform(editor.getValue()));
   });
   editor.setValue('');
   container.addEventListener('click', function () {
@@ -46,20 +60,7 @@ const createEditor = function (settings, onChange) {
     }
   `);
 
-  return {
-    demo: 0,
-    frame: 0,
-    async showFrame() {
-      try {
-        const res = await fetch(settings.demos[this.demo].frames[this.frame].path);
-        const code = await res.text();
-
-        editor.setValue(code);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  return api;
 };
 const loadEditorTheme = async function(settings) {
   try {
@@ -82,7 +83,15 @@ const createOutput = function(settings) {
       font-size: ${ settings.output.fontSize };
       line-height: ${ settings.output.lineHeight };
     }
-  `)
+  `);
+
+  return {
+    setValue(html) {
+      if (typeof html !== 'undefined') {
+        element.innerHTML = html;
+      }
+    }
+  }
 }
 // ********************************************************************************* SETTINGS
 const createSettingsPanel = function(settings) {
@@ -97,6 +106,20 @@ const createSettingsPanel = function(settings) {
 }
 
 // ********************************************************************************* OTHER
+const debounce = function (func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 const initColumnResizer = function () {
   let resizable = ColumnResizer.default;
         
@@ -131,9 +154,7 @@ const initialize = async function (settings) {
 
   const output = createOutput(settings);
   const settingsPanel = createSettingsPanel(settings);
-  const editor = createEditor(settings, code => {
-    settings.transform(code);
-  });
+  const editor = createEditor(settings, debounce(html => output.setValue(html), settings.editor.changeDebounceTime));
 
   await editor.showFrame();
 
