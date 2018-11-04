@@ -60,8 +60,8 @@ table.container, table.container th, table.container td {
 /* SETTINGS */
 .settings {
   position: fixed;
-  left: 7px;
-  bottom: 63px;
+  left: 14px;
+  bottom: 58px;
   z-index: 10;
   display: block;
   text-align: left;

@@ -7,6 +7,7 @@ const CODEMIRROR_SETTINGS = {
   foldGutter: false,
   gutters: []
 };
+const SETTINGS_FILE = './settings.json';
 
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, onSave) {
@@ -29,8 +30,13 @@ const createEditor = function (settings, onSave) {
       }
     },
     save() {
+      const transformFunc = window[settings.demos[api.demo].transform];
+
+      if (!transformFunc) {
+        throw new Error(`There is no global function ${ settings.demos[api.demo].transform }`);
+      }
       this.saved = true;
-      onSave(settings.demos[api.demo].transform(editor.getValue()));
+      onSave(transformFunc(editor.getValue()));
       saveButton.setAttribute('style', 'opacity:0.2;');
     }
   }
@@ -157,6 +163,10 @@ const initColumnResizer = function () {
     }
   );
 }
+const getSettings = async function () {
+  const res = await fetch(SETTINGS_FILE);
+  return await res.json();
+}
 const getResources = async function (settings) {
   return Promise.all(
     settings.resources.map(resource => {
@@ -172,7 +182,11 @@ const getResources = async function (settings) {
 }
 
 // ********************************************************************************* INIT
-const initialize = async function (settings) {
+window.onload = async function () {
+  initColumnResizer();
+
+  const settings = await getSettings();
+
   await getResources(settings);
   await loadEditorTheme(settings);
 
@@ -182,9 +196,4 @@ const initialize = async function (settings) {
 
   await editor.showFrame();
 
-};
-
-window.onload = async function () {
-  initColumnResizer();
-  initialize(settings());
 };
