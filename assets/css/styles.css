@@ -18,6 +18,10 @@ body {
   background: #fff;
   font-size: 16px;
   line-height: 20px;
+  fill: currentColor;
+}
+svg {
+  fill: currentColor;
 }
 .container {
   width: 100%;
@@ -93,7 +97,6 @@ table.container, table.container th, table.container td {
   bottom: 28px;
   display: block;
   width: 30px;
-  height: 30px;
   cursor: pointer;
   opacity: 0.2;
   transition: opacity 400ms, transform 400ms;
@@ -101,6 +104,21 @@ table.container, table.container th, table.container td {
   z-index: 11;
 }
 .settings-button:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+.pencil-button {
+  position: fixed;
+  right: 52px;
+  bottom: 27px;
+  cursor: pointer;
+  display: block;
+  opacity: 0.2;
+  transition: opacity 400ms, transform 400ms;
+  transform: scale(1);
+  z-index: 12;
+}
+.pencil-button:hover {
   opacity: 1;
   transform: scale(1.2);
 }

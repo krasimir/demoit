@@ -3,8 +3,7 @@ function settings() {
       editor: {
         theme: 'material', // dark: material, light: neat
         fontSize: '20px',
-        lineHeight: '28px',
-        changeDebounceTime: 800
+        lineHeight: '28px'
       },
       output: {
         backgroundColor: '#c7e2e5',

@@ -9,8 +9,9 @@ const CODEMIRROR_SETTINGS = {
 };
 
 // ********************************************************************************* EDITOR
-const createEditor = function (settings, onChange) {
+const createEditor = function (settings, onSave) {
   const api = {
+    saved: true,
     demo: 0,
     frame: 0,
     async showFrame(demo, frame) {
@@ -22,22 +23,41 @@ const createEditor = function (settings, onChange) {
         const code = await res.text();
 
         editor.setValue(code);
+        this.save();
       } catch (error) {
         console.error(error);
       }
+    },
+    save() {
+      this.saved = true;
+      onSave(settings.demos[api.demo].transform(editor.getValue()));
+      saveButton.setAttribute('style', 'opacity:0.2;');
     }
   }
   const container = el('.js-code-editor');
+  const saveButton = el('.pencil-button');
   const editor = CodeMirror(
     container,
     Object.assign({}, CODEMIRROR_SETTINGS, settings.editor)
   );
 
-  editor.on('change', debounce(function () {
-    onChange(settings.demos[api.demo].transform(editor.getValue()));
-  }, settings.editor.changeDebounceTime));
+  editor.on('change', function () {
+    api.saved = false;
+    saveButton.setAttribute('style', 'opacity:1;');
+  });
   editor.setValue('');
+  editor.setOption("extraKeys", {
+    'Ctrl-S': function(cm) {
+      api.save();
+    },
+    'Cmd-S': function(cm) {
+      api.save();
+    }
+  });
+  CodeMirror.normalizeKeyMap();
+
   container.addEventListener('click', () => editor.focus());
+  saveButton.addEventListener('click', () => api.save());
 
   addStyleString(`
     .js-code-editor {
