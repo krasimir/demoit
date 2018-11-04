@@ -1,4 +1,4 @@
-// React hooks: using `useState`
+// React useState hook
 
 const useState = React.useState;
 const App = function () {
@@ -6,10 +6,10 @@ const App = function () {
   
   return (
   	<section>
+      <h1>Counter: { count }</h1>
       <button onClick={ () => change(count + 1) }>
         Click me
       </button>
-      <p>{ count }</p>
     </section>
   )
 }

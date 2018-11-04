@@ -13,11 +13,14 @@ const addJSFile = function (path, done) {
   document.body.appendChild(node);
 }
 const addCSSFile = function (path, done) {
-  // const node = document.createElement('script');
+	// <link rel="stylesheet" type="text/css" href="./assets/css/styles.css" />
+  const node = document.createElement('link');
 
-  // node.src = path;
-  // node.addEventListener('load', done);
-  // document.body.appendChild(node);
+  node.setAttribute('rel', 'stylesheet');
+  node.setAttribute('type', 'text/css');
+  node.setAttribute('href', path);
+  node.addEventListener('load', done);
+  document.body.appendChild(node);
 }
 const debounce = function (func, wait, immediate) {
 	var timeout;

@@ -11,13 +11,16 @@ const SETTINGS_FILE = './settings.json';
 
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, onSave) {
+  const defaults = readDefaultDemoAndFrame();
   const api = {
     saved: true,
-    demo: 0,
-    frame: 0,
+    demo: defaults[0],
+    frame: defaults[1],
     async showFrame(demo, frame) {
       if (typeof demo !== 'undefined') this.demo = demo;
       if (typeof frame !== 'undefined') this.frame = frame;
+
+      window.location.hash = this.demo + ',' + this.frame;
 
       try {
         const res = await fetch(settings.demos[this.demo].frames[this.frame]);
@@ -119,8 +122,13 @@ const createSettingsPanel = function(settings, editor) {
             demo.frames.map(
               (frame, frameIdx) => {
                 const active = editor.demo === demoIdx && editor.frame === frameIdx ? ' active' : '';
+                const fileName = frame.split('/').pop();
 
-                return `<a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ frameIdx })" title="${ frame }"></a>`;
+                return `
+                  <a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ frameIdx })">
+                    ${ fileName }
+                  </a>
+                `;
               }
             ).join('')
           }
@@ -150,18 +158,21 @@ const createSettingsPanel = function(settings, editor) {
 
 
 // ********************************************************************************* OTHER
-const initColumnResizer = function () {
-  let resizable = ColumnResizer.default;
-        
-  new resizable(
-    document.querySelector(".container"),
-    {
-      resizeMode: 'fit',
-      liveDrag: true,
-      draggingClass: 'rangeDrag',
-      minWidth: 8
-    }
-  );
+const readDefaultDemoAndFrame = function () {
+  const hash = window.location.hash;
+
+  if (hash && hash.split(',').length === 2) {
+    return hash.split(',')
+      .map(value => value.replace('#', ''))
+      .map(Number);
+  }
+  return [0, 0];
+}
+const setSplitting = function () {
+  Split(['.left', '.right'], {
+      sizes: [25, 75],
+      gutterSize: 4
+  })
 }
 const getSettings = async function () {
   const res = await fetch(SETTINGS_FILE);
@@ -176,7 +187,7 @@ const getResources = async function (settings) {
         if (extension === 'js') {
           addJSFile(resource, done)
         } else if (extension === 'css') {
-          console.log(resource);
+          addCSSFile(resource);
           done();
         } else {
           done();
@@ -188,7 +199,7 @@ const getResources = async function (settings) {
 
 // ********************************************************************************* INIT
 window.onload = async function () {
-  initColumnResizer();
+  setSplitting();
 
   const settings = await getSettings();
 
