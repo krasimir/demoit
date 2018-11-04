@@ -12,6 +12,13 @@ const addJSFile = function (path, done) {
   node.addEventListener('load', done);
   document.body.appendChild(node);
 }
+const addCSSFile = function (path, done) {
+  // const node = document.createElement('script');
+
+  // node.src = path;
+  // node.addEventListener('load', done);
+  // document.body.appendChild(node);
+}
 const debounce = function (func, wait, immediate) {
 	var timeout;
 	return function() {

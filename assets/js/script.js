@@ -120,7 +120,7 @@ const createSettingsPanel = function(settings, editor) {
               (frame, frameIdx) => {
                 const active = editor.demo === demoIdx && editor.frame === frameIdx ? ' active' : '';
 
-                return `<a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ frameIdx })"></a>`;
+                return `<a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ frameIdx })" title="${ frame }"></a>`;
               }
             ).join('')
           }
@@ -175,6 +175,11 @@ const getResources = async function (settings) {
 
         if (extension === 'js') {
           addJSFile(resource, done)
+        } else if (extension === 'css') {
+          console.log(resource);
+          done();
+        } else {
+          done();
         }
       });
     })

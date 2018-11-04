@@ -15,13 +15,13 @@
     "./resources/babel-polyfill@6.26.0.js",
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
-    "./resources/transforms.js"
+    "./resources/transforms.js",
+    "./demos/demo-styles.css"
   ],
   "demos": [
     {
       "frames": [
-        "./demos/01/init.js",
-        "./demos/01/second.js"
+        "./demos/01/useHooks.js"
       ],
       "transform": "babelToReact"
     }
