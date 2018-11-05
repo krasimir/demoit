@@ -38,12 +38,6 @@
         "./demos/BabelToConsole.js"
       ],
       "render": "babelToConsole"
-    },
-    {
-      "snippets": [
-        "./demos/BabelToConsole.js"
-      ],
-      "render": "babelToConsole"
     }
   ]
 }
