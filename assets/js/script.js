@@ -10,7 +10,7 @@ const CODEMIRROR_SETTINGS = {
 const SETTINGS_FILE = 'settings.json';
 
 // ********************************************************************************* EDITOR
-const createEditor = function (settings, onSave) {
+const createEditor = function (settings, outputElement) {
   const defaults = readDefaultDemoAndSnippet();
   const api = {
     saved: true,
@@ -26,6 +26,7 @@ const createEditor = function (settings, onSave) {
         const res = await fetch(settings.demos[this.demo].snippets[this.snippet]);
         const code = await res.text();
 
+        outputElement.innerHTML = '';
         editor.setValue(code);
         this.save();
       } catch (error) {
@@ -36,10 +37,10 @@ const createEditor = function (settings, onSave) {
       const transformFunc = window[settings.demos[api.demo].transform];
 
       if (!transformFunc) {
-        throw new Error(`There is no global function ${ settings.demos[api.demo].transform }`);
+        throw new Error(`There is no global function ${ settings.demos[api.demo].transform } available. There should be window.${ settings.demos[api.demo].transform } but it is missing.`);
       }
+      transformFunc(editor.getValue(), outputElement);
       this.saved = true;
-      onSave(transformFunc(editor.getValue()));
       saveButton.setAttribute('style', 'opacity:0.2;');
     }
   }
@@ -90,8 +91,6 @@ const loadEditorTheme = async function(settings) {
 
 // ********************************************************************************* OUTPUT
 const createOutput = function(settings) {
-  const element = el('.output');
-
   addStyleString(`
     .output {
       background-color: ${ settings.output.backgroundColor };
@@ -100,13 +99,7 @@ const createOutput = function(settings) {
     }
   `);
 
-  return {
-    setValue(html) {
-      if (typeof html !== 'undefined') {
-        element.innerHTML = html;
-      }
-    }
-  }
+  return el('.output');
 }
 // ********************************************************************************* SETTINGS
 const createSettingsPanel = function(settings, editor) {
@@ -153,6 +146,7 @@ const createSettingsPanel = function(settings, editor) {
   window.updateDemoFrame = function (demo, snippet) {
     editor.showFrame(demo, snippet);
     renderSettings();
+    toggle();
   }
 }
 
@@ -206,8 +200,8 @@ window.onload = async function () {
   await getResources(settings);
   await loadEditorTheme(settings);
 
-  const output = createOutput(settings);
-  const editor = createEditor(settings, html => output.setValue(html));
+  const outputElement = createOutput(settings);
+  const editor = createEditor(settings, outputElement);
   const settingsPanel = createSettingsPanel(settings, editor);
 
   await editor.showFrame();

@@ -1,6 +1,7 @@
 .output p {
-  font-size: 1.4em;
-  padding: 0.5em 0;
+	font-size: 1.4em;
+	margin: 0;
+  padding: 0 0 0.5em 0;
 }
 section {
   text-align: center;

@@ -4,7 +4,7 @@
 
 * Dependency free.
 * No installation. Just copy/paste and open in a browser.
-* No server needed.
+* No server needed. Works offline.
 * Uses Babel to transpile your code.
 * Supports React
 * Supports multiple demos with multiple code snippets.

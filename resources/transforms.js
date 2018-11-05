@@ -1,5 +1,6 @@
-const preStyle = 'style="font-size:0.8em;line-height:1.2em;"';
-const preStyleError = 'style="font-size:0.8em;line-height:1.2em;color:#9e0000;font-weight:bold;"';
+const babelOptions = {
+  presets: [ "react", ["es2015", { "modules": false }]]
+}
 const runJsCode = (code, onError) => {
   try {
     (new Function(code))()
@@ -8,18 +9,15 @@ const runJsCode = (code, onError) => {
   }
 };
 
-function babelToCode(code) {
-  const babelOptions = {
-    presets: [ "react", ["es2015", { "modules": false }]]
-  }
-  return `
-    <pre style="${ preStyle }">${ Babel.transform(code, babelOptions).code }</pre>
+function babelToCode(code, outputElement) {
+  outputElement.innerHTML = `
+    <pre>${ Babel.transform(code, babelOptions).code }</pre>
   `;
 }
 
-function babelToConsole(code) {
-  const babelOptions = {
-    presets: [ "react", ["es2015", { "modules": false }]]
+function babelToConsole(code, outputElement) {
+  const onError = error => {
+    outputElement.innerHTML = `<pre>${ error.toString() + error.stack }</pre>`
   }
 
   try {
@@ -28,39 +26,35 @@ function babelToConsole(code) {
     const consoleOutput = [];
     
     console.log = what => consoleOutput.push(what);
-    runJsCode(transpiled);
+    runJsCode(transpiled, onError);
     console.log = originalLog;
 
-    return consoleOutput.map(what => `<p>${ what }</p>`).join('');
+    outputElement.innerHTML = consoleOutput.map(what => `<p>${ what }</p>`).join('');
   } catch (error) {
-    return `<pre ${ preStyleError }>${ error.toString() + error.stack }</pre>`;
+    onError(error);
   }
 }
 
-function babelToReact(str) {
-  const babelOptions = {
-    presets: [ "react", ["es2015", { "modules": false }]]
-  }
+function babelToReact(str, outputElement) {
   const renderAppComponent = `
     if (typeof App === 'undefined') {
       App = function() { return 'Please define an <App> component.'; }
     }
-    const output =  document.querySelector('.output');
-    ReactDOM.render(React.createElement(App, null), document.querySelector('.output'));
+    ReactDOM.render(React.createElement(App, null), outputElement);
   `;
   let code;
   let onError = error => {
-    (new Function(`
+    (new Function('outputElement', `
       function App() {
         return React.createElement('pre', null, \`${ error.toString() + error.stack }\`);
       }
       ${ renderAppComponent }
-    `))();
+    `))(outputElement);
   }
 
   try {
     code = Babel.transform(str, babelOptions).code;
-    runJsCode(code + renderAppComponent, onError);
+    (new Function('outputElement', code + renderAppComponent))(outputElement);
   } catch(error) {
     onError(error);
   }

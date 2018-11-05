@@ -21,9 +21,27 @@
   "demos": [
     {
       "snippets": [
-        "./demos/01/useHooks.js",
-        "./demos/01/HoC.js",
-        "./demos/01/FaCC.js"
+        "./demos/BabelToCode.js"
+      ],
+      "transform": "babelToCode"
+    },
+    {
+      "snippets": [
+        "./demos/BabelToConsole.js"
+      ],
+      "transform": "babelToConsole"
+    },
+    {
+      "snippets": [
+        "./demos/BabelToConsole.js"
+      ],
+      "transform": "babelToConsole"
+    },
+    {
+      "snippets": [
+        "./demos/useHooks.js",
+        "./demos/HoC.js",
+        "./demos/FaCC.js"
       ],
       "transform": "babelToReact"
     }
