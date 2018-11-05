@@ -40,7 +40,7 @@ The tool requires a `settings.json` file in the same directory as the `index.htm
     "./resources/babel-polyfill@6.26.0.js",
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
-    "./resources/transforms.js",
+    "./resources/renderers.js",
     "./demos/demo-styles.css"
   ],
   "demos": [
@@ -50,7 +50,7 @@ The tool requires a `settings.json` file in the same directory as the `index.htm
         "./demos/01/HoC.js",
         "./demos/01/FaCC.js"
       ],
-      "transform": "babelToReact"
+      "render": "babelToReact"
     }
   ]
 }
@@ -65,11 +65,20 @@ The tool requires a `settings.json` file in the same directory as the `index.htm
   * `fontSize` - self explanatory
   * `lineHeight` - self explanatory
 * `resources` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those first before running your demo files. The resources in the example above are coming with the library because you probably want to use them anyway. You probably want to write ES6+ and maybe plan to use React.
-* `demos` - probably the most interesting part and the bit which you'll touch the most. It contains an array of items representing your demos. Every item has `snippets` and `transform` properties. The first one contains list of files which are your code snippets. The `transform` field points to a function in the global scope (i.e. `window` object) that Demoit uses when running your snippet. The one used above is part of the `resources/transforms.js` file which we listed as a resource to be included. The available values for now are `babelToCode`, `babelToConsole` and `babelToReact`.
+* `demos` - probably the most interesting part and the bit which you'll touch the most. It contains an array of items representing your demos. Every item has `snippets` and `render` properties. The first one contains list of files which are your code snippets. The `render` field points to a function in the global scope (i.e. `window` object) that Demoit uses when running your snippet. The one used above is part of the `resources/renderers.js` file which we listed as a resource to be included. The available values for now are `babelToCode`, `babelToConsole` and `babelToReact`.
 
-## Transformations
+## Rendering the result
 
-When you register a code snippet Demoit runs a transformation function before executing your code. This is the place where we have to transpile or do some other operation to get our code properly running. The transformation function is listed in `settings.json` as a string and must be available in the global scope of the page. There are couple of build-in ones as part of `resources/transform.js`:
+When you register a code snippet Demoit runs a render function. The same happens when you _save_ your changes. The function receives your code as a first argument and a DOM element as second argument:
+
+```js
+function render(code, outputElement) {
+  outputElement.innerHTML = `<pre>${ code }</pre>`;
+}
+
+```
+
+This is the place where we have to decide what our demo is doing. We may only need to transpiler the code or in some other cases to actually run it. There are couple of build-in renderers:
 
 * `babelToCode` - transpiles the code and shows the transpiled string. It is not actually running the code.
 * `babelToConsole` - same as `babelToCode` but it runs the code and it shows all the `console.log`s.
@@ -78,27 +87,25 @@ When you register a code snippet Demoit runs a transformation function before ex
 Let's see some pseudo code based on the real `babelToReact` implementation and see what it does:
 
 ```js
-function babelToReact(str) {
+function babelToReact(str, outputElement) {
   const babelOptions = {
     presets: [ "react", ["es2015", { "modules": false }]]
   }
-  const renderAppComponent = `
-    // ... a check if we have <App> component
-    const output =  document.querySelector('.output');
-    ReactDOM.render(React.createElement(App, null), document.querySelector('.output'));
-  `;
   let code = Babel.transform(str, babelOptions).code;
-  let func = new Function(code + renderAppComponent);
+  let func = new Function('output', `
+    ${ code }
+    ReactDOM.render(React.createElement(App, null), output);
+  `);
 
-  func();
+  func(outputElement);
 }
 ```
 
-The input of the transformation function is a raw string. That's the code that write on the right side of the screen. If the function returns HTML that HTML gets placed on left section. That section has a CSS class `output` so we may directly write something there. As it happens with `babelToReact`. We have no HTML string returned but we use `ReactDOM.render` to add content on the same place. In order to dynamically execute our code we form a valid JavaScript expression and pass it to the `Function` constructor. Then we execute it. At the moment of `func()` we have to have all the resources loaded and the page needs to have all the dependencies that our code needs.
+It's pretty much composing our program in the form of a string and passing it to the `Function` constructor. At the end we simply run the newly created function.
 
 ## Key combinations
 
-There is only one key combination - `Ctrl + S`/`Cmd + S` which is basically triggering the transformation and execution of our code.
+There is only one key combination - `Ctrl + S`/`Cmd + S` which is basically triggering the `render` function.
 
 ## UI
 

@@ -15,35 +15,35 @@
     "./resources/babel-polyfill@6.26.0.js",
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
-    "./resources/transforms.js",
+    "./resources/renderers.js",
     "./demos/demo-styles.css"
   ],
   "demos": [
-    {
-      "snippets": [
-        "./demos/BabelToCode.js"
-      ],
-      "transform": "babelToCode"
-    },
-    {
-      "snippets": [
-        "./demos/BabelToConsole.js"
-      ],
-      "transform": "babelToConsole"
-    },
-    {
-      "snippets": [
-        "./demos/BabelToConsole.js"
-      ],
-      "transform": "babelToConsole"
-    },
     {
       "snippets": [
         "./demos/useHooks.js",
         "./demos/HoC.js",
         "./demos/FaCC.js"
       ],
-      "transform": "babelToReact"
+      "render": "babelToReact"
+    },
+    {
+      "snippets": [
+        "./demos/BabelToCode.js"
+      ],
+      "render": "babelToCode"
+    },
+    {
+      "snippets": [
+        "./demos/BabelToConsole.js"
+      ],
+      "render": "babelToConsole"
+    },
+    {
+      "snippets": [
+        "./demos/BabelToConsole.js"
+      ],
+      "render": "babelToConsole"
     }
   ]
 }

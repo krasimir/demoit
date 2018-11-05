@@ -8,10 +8,12 @@ const CODEMIRROR_SETTINGS = {
   gutters: []
 };
 const SETTINGS_FILE = 'settings.json';
+const LOCAL_STORAGE_SPLIT_SIZES_KEY = 'demoit-split-sizes';
 
 // ********************************************************************************* EDITOR
 const createEditor = function (settings, outputElement) {
   const defaults = readDefaultDemoAndSnippet();
+  const currentSnippet = el('.current-snippet');
   const api = {
     saved: true,
     demo: defaults[0],
@@ -23,10 +25,12 @@ const createEditor = function (settings, outputElement) {
       window.location.hash = this.demo + ',' + this.snippet;
 
       try {
-        const res = await fetch(settings.demos[this.demo].snippets[this.snippet]);
+        const snippetPath = settings.demos[this.demo].snippets[this.snippet];
+        const res = await fetch(snippetPath);
         const code = await res.text();
 
         outputElement.innerHTML = '';
+        currentSnippet.innerHTML = basename(snippetPath);
         editor.setValue(code);
         this.save();
       } catch (error) {
@@ -34,12 +38,12 @@ const createEditor = function (settings, outputElement) {
       }
     },
     save() {
-      const transformFunc = window[settings.demos[api.demo].transform];
+      const renderFunc = window[settings.demos[api.demo].render];
 
-      if (!transformFunc) {
-        throw new Error(`There is no global function ${ settings.demos[api.demo].transform } available. There should be window.${ settings.demos[api.demo].transform } but it is missing.`);
+      if (!renderFunc) {
+        throw new Error(`There is no global function ${ settings.demos[api.demo].render } available. There should be window.${ settings.demos[api.demo].render } but it is missing.`);
       }
-      transformFunc(editor.getValue(), outputElement);
+      renderFunc(editor.getValue(), outputElement);
       this.saved = true;
       saveButton.setAttribute('style', 'opacity:0.2;');
     }
@@ -53,7 +57,7 @@ const createEditor = function (settings, outputElement) {
 
   editor.on('change', function () {
     api.saved = false;
-    saveButton.setAttribute('style', 'opacity:1;');
+    saveButton.setAttribute('style', 'opacity:0.8;');
   });
   editor.setValue('');
   editor.setOption("extraKeys", {
@@ -105,6 +109,9 @@ const createOutput = function(settings) {
 const createSettingsPanel = function(settings, editor) {
   const toggler = el('.settings-button');
   const panel = el('.settings');
+  const openNewSnippet = hash => {
+    return `javascript:window.location.hash='${ hash }';window.location.reload();`;
+  }
   const renderSettings = function () {
     panel.innerHTML = settings.demos.map((demo, demoIdx) => {
       const idx = demoIdx + 1;
@@ -115,10 +122,10 @@ const createSettingsPanel = function(settings, editor) {
             demo.snippets.map(
               (snippet, snippetIdx) => {
                 const active = editor.demo === demoIdx && editor.snippet === snippetIdx ? ' active' : '';
-                const fileName = snippet.split('/').pop();
+                const fileName = basename(snippet);
 
                 return `
-                  <a class="${ active }" href="javascript:updateDemoFrame(${ demoIdx }, ${ snippetIdx })">
+                  <a class="${ active }" href="${ openNewSnippet(`#${ demoIdx },${ snippetIdx }`) }">
                     ${ fileName }
                   </a>
                 `;
@@ -142,12 +149,6 @@ const createSettingsPanel = function(settings, editor) {
   let visible = false;
 
   toggler.addEventListener('click', toggle);
-
-  window.updateDemoFrame = function (demo, snippet) {
-    editor.showFrame(demo, snippet);
-    renderSettings();
-    toggle();
-  }
 }
 
 
@@ -163,10 +164,27 @@ const readDefaultDemoAndSnippet = function () {
   return [0, 0];
 }
 const setSplitting = function () {
-  Split(['.left', '.right'], {
-      sizes: [25, 75],
+  const isLocalStorageAvailable = typeof window.localStorage !== 'undefined';
+  const getSizes = () => {
+    if (isLocalStorageAvailable) {
+      let valueInStorage = localStorage.getItem(LOCAL_STORAGE_SPLIT_SIZES_KEY);
+
+      if (valueInStorage) {
+        valueInStorage = valueInStorage.split(',');
+        if (valueInStorage.length === 2) {
+          return valueInStorage.map(Number);
+        }
+      }
+    }
+    return [25, 75];
+  }
+  const split = Split(['.left', '.right'], {
+      sizes: getSizes(),
       gutterSize: 4
-  })
+  });
+  isLocalStorageAvailable && setInterval(() => {
+    localStorage.setItem(LOCAL_STORAGE_SPLIT_SIZES_KEY, split.getSizes().join(','))
+  }, 1000);
 }
 const getSettings = async function () {
   const res = await fetch(SETTINGS_FILE);
@@ -190,6 +208,9 @@ const getResources = async function (settings) {
     })
   );
 }
+function basename(path) {
+  return path.split('/').reverse()[0];
+}
 
 // ********************************************************************************* INIT
 window.onload = async function () {
@@ -205,5 +226,4 @@ window.onload = async function () {
   const settingsPanel = createSettingsPanel(settings, editor);
 
   await editor.showFrame();
-
 };

@@ -111,7 +111,11 @@ svg {
 }
 .pencil-button:hover {
   opacity: 1;
-  transform: scale(1.2);
+}
+.pencil-button span {
+  font-size: 0.8em;
+  display: inline-block;
+  transform: translateY(-4px);
 }
 /* split.js */
 .gutter.gutter-horizontal {
