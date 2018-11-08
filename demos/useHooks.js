@@ -1,3 +1,5 @@
+const useState = React.useState;
+
 const App = function () {
   const [ count, change ] = useState(0);
   
@@ -11,4 +13,4 @@ const App = function () {
   )
 }
 
-ReactDom.render(<App />, document.querySelector('.output'));
+ReactDOM.render(<App />, document.querySelector('.output'));
