@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/krasimir/demoit.git"
   },
+  "scripts": {
+    "watch": "webpack"
+  },
   "keywords": [
     "demo",
     "code",
@@ -18,5 +21,14 @@
   "bugs": {
     "url": "https://github.com/krasimir/demoit/issues"
   },
-  "homepage": "https://github.com/krasimir/demoit#readme"
+  "homepage": "https://github.com/krasimir/demoit#readme",
+  "devDependencies": {
+    "@babel/core": "7.1.5",
+    "@babel/plugin-transform-runtime": "7.1.0",
+    "@babel/preset-env": "7.1.5",
+    "@babel/runtime": "7.1.5",
+    "babel-loader": "8.0.4",
+    "webpack": "4.25.1",
+    "webpack-cli": "3.1.2"
+  }
 }
