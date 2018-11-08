@@ -1,8 +1,9 @@
-import { el, basename } from './utils';
+import { el, basename, getDemoAndSnippetIdx } from './utils';
 
-export const createSettingsPanel = function(settings, editor) {
+export const createSettingsPanel = function(settings) {
   const toggler = el('.settings-button');
   const panel = el('.settings');
+  const [ editorDemoIdx, editorSnippetIdx ] = getDemoAndSnippetIdx();
   const openNewSnippet = hash => {
     return `javascript:window.location.hash='${ hash }';window.location.reload();`;
   }
@@ -15,7 +16,7 @@ export const createSettingsPanel = function(settings, editor) {
           ${
             demo.snippets.map(
               (snippet, snippetIdx) => {
-                const active = editor.demo === demoIdx && editor.snippet === snippetIdx ? ' active' : '';
+                const active = editorDemoIdx === demoIdx && editorSnippetIdx === snippetIdx ? ' active' : '';
                 const fileName = basename(snippet);
 
                 return `

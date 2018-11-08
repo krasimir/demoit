@@ -11,11 +11,8 @@
     "lineHeight": "1.2em"
   },
   "resources": [
-    "./resources/babel-6.26.0.js",
-    "./resources/babel-polyfill@6.26.0.js",
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
-    "./resources/renderers.js",
     "./demos/demo-styles.css"
   ],
   "demos": [
@@ -24,20 +21,7 @@
         "./demos/useHooks.js",
         "./demos/HoC.js",
         "./demos/FaCC.js"
-      ],
-      "render": "babelToReact"
-    },
-    {
-      "snippets": [
-        "./demos/BabelToCode.js"
-      ],
-      "render": "babelToCode"
-    },
-    {
-      "snippets": [
-        "./demos/BabelToConsole.js"
-      ],
-      "render": "babelToConsole"
+      ]
     }
   ]
 }

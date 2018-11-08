@@ -1,6 +1,6 @@
 import { addStyleString, el } from './utils';
 
-export const createOutput = function(settings) {
+export const setOutputStyles = function(settings) {
   addStyleString(`
     .output {
       background-color: ${ settings.output.backgroundColor };
@@ -8,6 +8,4 @@ export const createOutput = function(settings) {
       line-height: ${ settings.output.lineHeight };
     }
   `);
-
-  return el('.output');
 }

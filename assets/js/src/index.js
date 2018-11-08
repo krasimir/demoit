@@ -1,23 +1,29 @@
 import {
   setSplitting,
+  getResources,
   getSettings,
-  getResources
+  getDemo
 } from './utils';
 import { loadEditorTheme, createEditor } from './editor';
-import { createOutput } from './output';
+import { setOutputStyles } from './output';
 import { createSettingsPanel } from './settingsPanel';
+import transpile from './transpile';
 
 window.onload = async function () {
   setSplitting();
 
   const settings = await getSettings();
+  const demo = await getDemo(settings);
 
   await getResources(settings);
   await loadEditorTheme(settings);
-
-  const outputElement = createOutput(settings);
-  const editor = createEditor(settings, outputElement);
-  const settingsPanel = createSettingsPanel(settings, editor);
-
-  await editor.showFrame();
+  setOutputStyles(settings);
+  createSettingsPanel(settings);
+  createEditor(settings, code => {
+    try {
+      (new Function(transpile(code)))();
+    } catch (error) {
+      console.error('Ops, error', error);
+    }
+  });
 };

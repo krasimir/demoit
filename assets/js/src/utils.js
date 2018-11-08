@@ -7,6 +7,12 @@ export const addStyleString = function (str) {
   node.innerHTML = str;
   document.body.appendChild(node);
 }
+export const addScriptString = function (str) {
+  const node = document.createElement('script');
+
+  node.innerHTML = str;
+  document.body.appendChild(node);
+}
 export const addJSFile = function (path, done) {
   const node = document.createElement('script');
 
@@ -38,7 +44,7 @@ export const debounce = function (func, wait, immediate) {
 		if (callNow) func.apply(context, args);
 	};
 };
-export const readDefaultDemoAndSnippet = function () {
+export const getDemoAndSnippetIdx = function () {
   const hash = window.location.hash;
 
   if (hash && hash.split(',').length === 2) {
@@ -47,6 +53,11 @@ export const readDefaultDemoAndSnippet = function () {
       .map(Number);
   }
   return [0, 0];
+}
+export const getDemo = function (settings) {
+  const [ demoIdx ] = getDemoAndSnippetIdx();
+
+  return settings.demos[demoIdx];
 }
 export const setSplitting = function () {
   const isLocalStorageAvailable = typeof window.localStorage !== 'undefined';

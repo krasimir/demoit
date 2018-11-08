@@ -1,43 +1,9 @@
-import { addStyleString, readDefaultDemoAndSnippet, el, basename } from './utils';
+import { addStyleString, getDemoAndSnippetIdx, el, basename } from './utils';
 import { CODEMIRROR_SETTINGS } from './config';
 
-export const createEditor = function (settings, outputElement) {
-  const defaults = readDefaultDemoAndSnippet();
+export const createEditor = function (settings, onSave) {
+  const [ demoIdx, snippetIdx ] = getDemoAndSnippetIdx();
   const currentSnippet = el('.current-snippet');
-  const api = {
-    saved: true,
-    demo: defaults[0],
-    snippet: defaults[1],
-    async showFrame(demo, snippet) {
-      if (typeof demo !== 'undefined') this.demo = demo;
-      if (typeof snippet !== 'undefined') this.snippet = snippet;
-
-      window.location.hash = this.demo + ',' + this.snippet;
-
-      try {
-        const snippetPath = settings.demos[this.demo].snippets[this.snippet];
-        const res = await fetch(snippetPath);
-        const code = await res.text();
-
-        outputElement.innerHTML = '';
-        currentSnippet.innerHTML = basename(snippetPath);
-        editor.setValue(code);
-        this.save();
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    save() {
-      const renderFunc = window[settings.demos[api.demo].render];
-
-      if (!renderFunc) {
-        throw new Error(`There is no global function ${ settings.demos[api.demo].render } available. There should be window.${ settings.demos[api.demo].render } but it is missing.`);
-      }
-      renderFunc(editor.getValue(), outputElement);
-      this.saved = true;
-      saveButton.setAttribute('style', 'opacity:0.2;');
-    }
-  }
   const container = el('.js-code-editor');
   const saveButton = el('.pencil-button');
   const editor = CodeMirror(
@@ -45,23 +11,41 @@ export const createEditor = function (settings, outputElement) {
     Object.assign({}, CODEMIRROR_SETTINGS, settings.editor)
   );
 
-  editor.on('change', function () {
-    api.saved = false;
-    saveButton.setAttribute('style', 'opacity:0.8;');
-  });
+  const showFrame = async function () {
+    window.location.hash = demoIdx + ',' + snippetIdx;
+
+    try {
+      const snippetPath = settings.demos[demoIdx].snippets[snippetIdx];
+      const res = await fetch(snippetPath);
+      const code = await res.text();
+
+      currentSnippet.innerHTML = basename(snippetPath);
+      editor.setValue(code);
+      save();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const save = function () {
+    onSave(editor.getValue());
+    saveButton.setAttribute('style', 'opacity:0.2;');
+  }
+
+  editor.on('change', () => saveButton.setAttribute('style', 'opacity:0.8;'));
   editor.setValue('');
   editor.setOption("extraKeys", {
-    'Ctrl-S': function() {
-      api.save();
+    'Ctrl-S': () => {
+      save();
     },
-    'Cmd-S': function() {
-      api.save();
+    'Cmd-S': () => {
+      save();
     }
   });
   CodeMirror.normalizeKeyMap();
 
   container.addEventListener('click', () => editor.focus());
-  saveButton.addEventListener('click', () => api.save());
+  saveButton.addEventListener('click', save);
 
   addStyleString(`
     .js-code-editor {
@@ -70,7 +54,7 @@ export const createEditor = function (settings, outputElement) {
     }
   `);
 
-  return api;
+  showFrame();
 };
 export const loadEditorTheme = async function(settings) {
   try {
