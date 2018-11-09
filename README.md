@@ -9,9 +9,10 @@
 * Supports external libs and styles. Like React for example.
 * Supports multiple demos with multiple code snippets.
 
-## Demo
+## Demo :rocket:
 
-Check the demo here [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist) :rocket:
+* [Empty editor](https://krasimir.github.io/demoit/dist/#0,1)
+* [Example that shows React's `useState` hook]((https://krasimir.github.io/demoit/dist/#0,0))
 
 ---
 
