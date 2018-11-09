@@ -96,6 +96,9 @@ section {
 	background: #141b1f;
 	border-bottom: solid 2px #000;
 }
+.files .demos {
+	float: right;
+}
 .files ul li a {
 	display: inline-block;
 	color: #FFF;
