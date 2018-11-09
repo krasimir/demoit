@@ -35,7 +35,10 @@ export const createEditor = async function (settings, onSave, onChange) {
   editor.setOption("extraKeys", { 'Ctrl-S': save, 'Cmd-S': save });
   CodeMirror.normalizeKeyMap();
   container.addEventListener('click', () => editor.focus());
-  isLocalStorageAvailable && restoreElement.addEventListener('click', () => editor.setValue(loadFromLocalStorage()));
+  isLocalStorageAvailable && restoreElement.addEventListener('click', () => {
+    editor.setValue(loadFromLocalStorage());
+    editor.focus();
+  });
   
   if (settings.demos && settings.demos[demoIdx] && settings.demos[demoIdx].snippets && settings.demos[demoIdx].snippets[snippetIdx]) {
     const res = await fetch(settings.demos[demoIdx].snippets[snippetIdx]);
