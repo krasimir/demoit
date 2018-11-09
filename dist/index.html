@@ -4,87 +4,7 @@
   <meta charset="UTF-8">
   <title>demoit</title>
   <link rel="stylesheet" href="./vendor/codemirror/codemirror.css">
-  <style>
-      html {
-        box-sizing: border-box;
-        width: 100%;
-        height: 100%;
-      }
-      *, *:before, *:after {
-        box-sizing: inherit;
-      }
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        font-family: Arial, Verdana;
-        color: #000;
-        background: #fff;
-        font-size: 20px;
-        line-height: 20px;
-        fill: currentColor;
-      }
-      svg {
-        fill: currentColor;
-      }
-      .container {
-        width: 100%;
-        height: 100%;
-      }
-      .left, .right {
-        vertical-align: top;
-        float: left;
-        height: 100%;
-      }
-      .js-code-editor {
-        width: 100%;
-        height: calc(100% - 30px);
-        overflow: auto;
-      }
-      .CodeMirror {
-        height: 100%;
-        transition: opacity 300ms;
-        -webkit-transition: opacity 300ms;
-        opacity: 1;
-      }
-      .CodeMirror-lines {
-        padding: 1em;
-      }
-      .output {
-        position: relative;
-      }
-      .output .hint {
-        font-size: 1em;
-        position: absolute;
-        top: calc(50% - 15px);
-        left: calc(50% - 96px);
-        opacity: 0.4;
-      }
-      .console {
-        position: relative;
-      }
-      .console .hint {
-        font-size: 1em;
-        position: absolute;
-        top: calc(50% - 8px);
-        left: calc(50% - 52px);
-        opacity: 0.4;
-      }
-      .files {
-        height: 30px;
-      }
-      .files ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-      .files ul li {
-        margin: 0;
-        padding: 0;
-        float: left;
-      }
-  </style>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
@@ -98,7 +18,23 @@
       </div>
     </div>
     <div class="right">
-      <div class="files"></div>
+      <div class="files">
+        <div class="nav"></div>
+        <div class="options">
+          <ul>
+            <li class="restore">
+              <a href="javascript:void(0);" title="Restore from local storage">
+                <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M128 1408h1024v-128h-1024v128zm0-512h1024v-128h-1024v128zm1568 448q0-40-28-68t-68-28-68 28-28 68 28 68 68 28 68-28 28-68zm-1568-960h1024v-128h-1024v128zm1568 448q0-40-28-68t-68-28-68 28-28 68 28 68 68 28 68-28 28-68zm0-512q0-40-28-68t-68-28-68 28-28 68 28 68 68 28 68-28 28-68zm96 832v384h-1792v-384h1792zm0-512v384h-1792v-384h1792zm0-512v384h-1792v-384h1792z"/></svg>
+              </a>
+            </li>
+            <li class="reset">
+              <a href="javascript:void(0);" title="Complete reset">
+                <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1664 896q0 156-61 298t-164 245-245 164-298 61-298-61-245-164-164-245-61-298q0-182 80.5-343t226.5-270q43-32 95.5-25t83.5 50q32 42 24.5 94.5t-49.5 84.5q-98 74-151.5 181t-53.5 228q0 104 40.5 198.5t109.5 163.5 163.5 109.5 198.5 40.5 198.5-40.5 163.5-109.5 109.5-163.5 40.5-198.5q0-121-53.5-228t-151.5-181q-42-32-49.5-84.5t24.5-94.5q31-43 84-50t95 25q146 109 226.5 270t80.5 343zm-640-768v640q0 52-38 90t-90 38-90-38-38-90v-640q0-52 38-90t90-38 90 38 38 90z"/></svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="js-code-editor"></div>
     </div>
   </div>

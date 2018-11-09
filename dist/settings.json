@@ -5,8 +5,7 @@
   },
   "resources": [
     "./resources/react-16.7.0-alpha.0.js",
-    "./resources/react-dom.16.7.0-alpha.0.js",
-    "./resources/styles.css"
+    "./resources/react-dom.16.7.0-alpha.0.js"
   ],
   "demos": [
     {

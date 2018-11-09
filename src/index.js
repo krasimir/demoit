@@ -31,4 +31,6 @@ window.onload = async function () {
       indicateFileEditing(true);
     }
   );
+
+  document.querySelector('.container').style.opacity = 1;
 };
