@@ -42,13 +42,6 @@ The configuration for the tool is set in `dist/settings.json` file. Here is an e
         "./demos/HoC.js",
         "./demos/FaCC.js"
       ]
-    },
-    {
-      "snippets": [
-        "./demos/useHooks.js",
-        "./demos/HoC.js",
-        "./demos/FaCC.js"
-      ]
     }
   ]
 }
