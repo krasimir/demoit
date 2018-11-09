@@ -2,14 +2,12 @@
 
 # **Demoit** is a small tool for live coding exercises <!-- omit in toc -->
 
-* Dependency free.
 * No installation.
 * No server needed. Works offline.
 * No building process.
-* Uses Babel to transpile your code.
-* Supports React.
+* Build-in babel transpilation
+* Supports external libs and styles. Like React for example.
 * Supports multiple demos with multiple code snippets.
-* Custom execution and rendering of the result.
 
 ## Demo
 
