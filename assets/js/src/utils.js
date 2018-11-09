@@ -79,6 +79,11 @@ export const setSplitting = function () {
       sizes: getSizes(),
       gutterSize: 4
   });
+  const split2 = Split(['.output', '.console'], {
+    sizes: getSizes(),
+    gutterSize: 4,
+    direction: 'vertical'
+});
   isLocalStorageAvailable && setInterval(() => {
     localStorage.setItem(LOCAL_STORAGE_SPLIT_SIZES_KEY, split.getSizes().join(','))
   }, 4000);

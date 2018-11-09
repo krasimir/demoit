@@ -8,13 +8,15 @@ import { loadEditorTheme, createEditor } from './editor';
 import { setOutputStyles } from './output';
 import { createSettingsPanel } from './settingsPanel';
 import transpile from './transpile';
+import logger from './logger';
 
 window.onload = async function () {
+  logger();
   setSplitting();
 
   const settings = await getSettings();
-  const demo = await getDemo(settings);
 
+  await getDemo(settings);
   await getResources(settings);
   await loadEditorTheme(settings);
   setOutputStyles(settings);
@@ -23,7 +25,7 @@ window.onload = async function () {
     try {
       (new Function(transpile(code)))();
     } catch (error) {
-      console.error('Ops, error', error);
+      console.error(error);
     }
   });
 };

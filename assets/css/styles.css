@@ -38,9 +38,8 @@ svg {
 }
 .output {
   padding: 1em;
-  height: 100%;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  /* overflow-x: scroll;
+  overflow-y: hidden; */
 }
 .output pre {
   margin: 0;
@@ -122,5 +121,10 @@ svg {
   cursor: ew-resize;
   float: left;
   height: 100%;
+  background: #fff;
+}
+.gutter.gutter-vertical {
+  cursor: ns-resize;
+  width: 100%;
   background: #fff;
 }
