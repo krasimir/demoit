@@ -3,9 +3,7 @@ import { CODEMIRROR_SETTINGS } from './config';
 
 export const createEditor = function (settings, onSave) {
   const [ demoIdx, snippetIdx ] = getDemoAndSnippetIdx();
-  const currentSnippet = el('.current-snippet');
   const container = el('.js-code-editor');
-  const saveButton = el('.pencil-button');
   const editor = CodeMirror(
     container,
     Object.assign({}, CODEMIRROR_SETTINGS, settings.editor)
@@ -19,7 +17,6 @@ export const createEditor = function (settings, onSave) {
       const res = await fetch(snippetPath);
       const code = await res.text();
 
-      currentSnippet.innerHTML = basename(snippetPath);
       editor.setValue(code);
       save();
     } catch (error) {
@@ -29,10 +26,9 @@ export const createEditor = function (settings, onSave) {
 
   const save = function () {
     onSave(editor.getValue());
-    saveButton.setAttribute('style', 'opacity:0.2;');
   }
 
-  editor.on('change', () => saveButton.setAttribute('style', 'opacity:0.8;'));
+  editor.on('change', () => {});
   editor.setValue('');
   editor.setOption("extraKeys", {
     'Ctrl-S': () => {
@@ -43,17 +39,7 @@ export const createEditor = function (settings, onSave) {
     }
   });
   CodeMirror.normalizeKeyMap();
-
   container.addEventListener('click', () => editor.focus());
-  saveButton.addEventListener('click', save);
-
-  addStyleString(`
-    .js-code-editor {
-      font-size: ${ settings.editor.fontSize };
-      line-height: ${ settings.editor.lineHeight };
-    }
-  `);
-
   showFrame();
 };
 export const loadEditorTheme = async function(settings) {

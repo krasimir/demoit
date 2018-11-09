@@ -8,4 +8,3 @@ export const CODEMIRROR_SETTINGS = {
   gutters: []
 };
 export const SETTINGS_FILE = 'settings.json';
-export const LOCAL_STORAGE_SPLIT_SIZES_KEY = 'demoit-split-sizes';

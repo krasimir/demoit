@@ -1,7 +1,22 @@
+/*************************** EDITOR */
+.js-code-editor {
+	font-size: 20px;
+	line-height: 28px;
+}
+
+/*************************** OUTPUT PANEL */
+.output {
+	background-color: #c7e2e5;
+	font-size: 1em;
+	line-height: 1.2em;
+	color: #000;
+	padding: 1em;
+	overflow: auto;
+}
 .output p {
 	font-size: 1.4em;
 	margin: 0;
-  padding: 0 0 0.5em 0;
+	padding: 0 0 0.5em 0;
 }
 section {
   text-align: center;
@@ -43,4 +58,35 @@ section {
 .output button:active {
 	position:relative;
 	top:1px;
+}
+
+/*************************** CONSOLE PANEL */
+.console {
+	font-family: monospace;
+  overflow: auto;
+	background-color: #ccd7d8;
+	font-size: 0.8em;
+	line-height: 1em;
+	color: #000;
+}
+.console p {
+  margin: 0;
+  padding: 0.5em;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  border-bottom: solid 1px #bbb;
+}
+
+/*************************** GRID */
+.gutter.gutter-horizontal {
+  cursor: ew-resize;
+  float: left;
+  height: 100%;
+  background: #fff;
+}
+.gutter.gutter-vertical {
+  cursor: ns-resize;
+  width: 100%;
+  background: #fff;
 }

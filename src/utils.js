@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_SPLIT_SIZES_KEY, SETTINGS_FILE } from './config';
+import { SETTINGS_FILE } from './config';
 
 export const el = function (sel) { return document.querySelector(sel); };
 export const addStyleString = function (str) {
@@ -58,35 +58,6 @@ export const getDemo = function (settings) {
   const [ demoIdx ] = getDemoAndSnippetIdx();
 
   return settings.demos[demoIdx];
-}
-export const setSplitting = function () {
-  const isLocalStorageAvailable = typeof window.localStorage !== 'undefined';
-  const defaultValues = [25, 75];
-  const getSizes = () => {
-    if (isLocalStorageAvailable) {
-      let valueInStorage = localStorage.getItem(LOCAL_STORAGE_SPLIT_SIZES_KEY);
-
-      if (valueInStorage) {
-        valueInStorage = valueInStorage.split(',');
-        if (valueInStorage.length === 2) {
-          return valueInStorage.map(Number);
-        }
-      }
-    }
-    return defaultValues;
-  }
-  const split = Split(['.left', '.right'], {
-      sizes: getSizes(),
-      gutterSize: 4
-  });
-  const split2 = Split(['.output', '.console'], {
-    sizes: getSizes(),
-    gutterSize: 4,
-    direction: 'vertical'
-});
-  isLocalStorageAvailable && setInterval(() => {
-    localStorage.setItem(LOCAL_STORAGE_SPLIT_SIZES_KEY, split.getSizes().join(','))
-  }, 4000);
 }
 export const getSettings = async function () {
   const res = await fetch(SETTINGS_FILE);

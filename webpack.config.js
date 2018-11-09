@@ -1,9 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: './assets/js/src/index.js',
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'assets/js'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'demoit.js'
   },
   mode: 'development',

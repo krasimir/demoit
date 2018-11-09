@@ -1,19 +1,12 @@
 {
   "editor": {
     "theme": "material",
-    "nice themes": "dark: material, light: neat",
-    "fontSize": "20px",
-    "lineHeight": "28px"
-  },
-  "output": {
-    "backgroundColor": "#c7e2e5",
-    "fontSize": "1em",
-    "lineHeight": "1.2em"
+    "<nice themes>": "dark: material, light: neat"
   },
   "resources": [
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
-    "./demos/demo-styles.css"
+    "./resources/demo-styles.css"
   ],
   "demos": [
     {
