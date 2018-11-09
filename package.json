@@ -1,6 +1,6 @@
 {
   "name": "demoit",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "A live coding tool",
   "main": "index.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/krasimir/demoit.git"
   },
   "scripts": {
-    "watch": "webpack"
+    "dev": "webpack"
   },
   "keywords": [
     "demo",

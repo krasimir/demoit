@@ -15,13 +15,6 @@
         "./demos/HoC.js",
         "./demos/FaCC.js"
       ]
-    },
-    {
-      "snippets": [
-        "./demos/useHooks.js",
-        "./demos/HoC.js",
-        "./demos/FaCC.js"
-      ]
     }
   ]
 }

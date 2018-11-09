@@ -51,6 +51,26 @@
       .CodeMirror-lines {
         padding: 1em;
       }
+      .output {
+        position: relative;
+      }
+      .output .hint {
+        font-size: 1em;
+        position: absolute;
+        top: calc(50% - 15px);
+        left: calc(50% - 96px);
+        opacity: 0.4;
+      }
+      .console {
+        position: relative;
+      }
+      .console .hint {
+        font-size: 1em;
+        position: absolute;
+        top: calc(50% - 8px);
+        left: calc(50% - 52px);
+        opacity: 0.4;
+      }
       .files {
         height: 30px;
       }
@@ -70,8 +90,12 @@
 
   <div class="container">
     <div class="left">
-      <div class="output"></div>
-      <div class="console"></div>
+      <div class="output" id="output">
+        <div class="hint">&lt;div id="output" /&gt;</div>
+      </div>
+      <div class="console">
+          <div class="hint">console.log</div>
+      </div>
     </div>
     <div class="right">
       <div class="files"></div>
