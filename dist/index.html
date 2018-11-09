@@ -39,7 +39,7 @@
       }
       .js-code-editor {
         width: 100%;
-        height: 100%;
+        height: calc(100% - 30px);
         overflow: auto;
       }
       .CodeMirror {
@@ -51,6 +51,19 @@
       .CodeMirror-lines {
         padding: 1em;
       }
+      .files {
+        height: 30px;
+      }
+      .files ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .files ul li {
+        margin: 0;
+        padding: 0;
+        float: left;
+      }
   </style>
 </head>
 <body>
@@ -61,6 +74,7 @@
       <div class="console"></div>
     </div>
     <div class="right">
+      <div class="files"></div>
       <div class="js-code-editor"></div>
     </div>
   </div>

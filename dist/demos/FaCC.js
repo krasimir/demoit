@@ -27,3 +27,5 @@ function App() {
     </TodoList>
   );
 }
+
+ReactDOM.render(<App />, document.querySelector('.output'));

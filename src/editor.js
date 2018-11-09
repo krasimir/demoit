@@ -1,7 +1,7 @@
 import { addStyleString, getDemoAndSnippetIdx, el, basename } from './utils';
 import { CODEMIRROR_SETTINGS } from './config';
 
-export const createEditor = function (settings, onSave) {
+export const createEditor = function (settings, onSave, onChange) {
   const [ demoIdx, snippetIdx ] = getDemoAndSnippetIdx();
   const container = el('.js-code-editor');
   const editor = CodeMirror(
@@ -28,7 +28,7 @@ export const createEditor = function (settings, onSave) {
     onSave(editor.getValue());
   }
 
-  editor.on('change', () => {});
+  editor.on('change', () => onChange(editor.getValue()));
   editor.setValue('');
   editor.setOption("extraKeys", {
     'Ctrl-S': () => {

@@ -6,9 +6,16 @@
   "resources": [
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
-    "./resources/demo-styles.css"
+    "./resources/styles.css"
   ],
   "demos": [
+    {
+      "snippets": [
+        "./demos/useHooks.js",
+        "./demos/HoC.js",
+        "./demos/FaCC.js"
+      ]
+    },
     {
       "snippets": [
         "./demos/useHooks.js",

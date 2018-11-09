@@ -54,11 +54,6 @@ export const getDemoAndSnippetIdx = function () {
   }
   return [0, 0];
 }
-export const getDemo = function (settings) {
-  const [ demoIdx ] = getDemoAndSnippetIdx();
-
-  return settings.demos[demoIdx];
-}
 export const getSettings = async function () {
   const res = await fetch(SETTINGS_FILE);
   return await res.json();
@@ -83,4 +78,7 @@ export const getResources = async function (settings) {
 }
 export const basename = function (path) {
   return path.split('/').reverse()[0];
+}
+export const cleanOutput = function () {
+  document.querySelector('.output').innerHTML = '';
 }
