@@ -55,8 +55,12 @@ export const getDemoAndSnippetIdx = function () {
   return [0, 0];
 }
 export const getSettings = async function () {
-  const res = await fetch(SETTINGS_FILE);
-  return await res.json();
+  try {
+    const res = await fetch(SETTINGS_FILE);
+    return await res.json();
+  } catch (error) {
+    return { editor: { theme: 'material' }, resources: [] };
+  }
 }
 export const getResources = async function (settings) {
   return Promise.all(

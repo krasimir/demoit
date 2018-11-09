@@ -8,7 +8,7 @@ import files from './files';
 
 window.onload = async function () {
   screenSplit();
-  
+
   const settings = await getSettings();
   const consolePanel = createConsolePanel(settings);
   const { indicateFileEditing } = files(settings);

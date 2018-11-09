@@ -8,11 +8,16 @@ function htmlEncode(str) {
 
 export default function logger(settings) {
   const element = el('.console');
+  let empty = true;
   const add = something => {
     const node = document.createElement('div');
     const text = htmlEncode(something.toString());
 
     node.innerHTML = '<p>' + text + '</p>';
+    if (empty) {
+      element.innerHTML = '';
+      empty = false;
+    }
     element.appendChild(node);
   }
 
@@ -46,6 +51,9 @@ export default function logger(settings) {
   })();
 
   return {
-    clear: () => (element.innerHTML = '')
+    clear: () => {
+      empty = true;
+      element.innerHTML = '<div class="hint">console.log</div>';
+    }
   }
 }

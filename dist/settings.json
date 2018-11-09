@@ -11,8 +11,7 @@
     {
       "snippets": [
         "./demos/useHooks.js",
-        "./demos/HoC.js",
-        "./demos/FaCC.js"
+        "./demos/empty.js"
       ]
     }
   ]
