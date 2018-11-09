@@ -1,12 +1,11 @@
 ![demoit](./demoit.png)
 
-# **Demoit** is a small tool for live coding exercises <!-- omit in toc -->
+# **Demoit** is a tiny JavaScript playground
 
 * No installation.
-* No server needed. Works offline.
-* No building process.
-* Build-in babel transpilation
-* Supports external libs and styles. Like React for example.
+* No server needed. It works offline.
+* No building process. Babel translates your code at runtime.
+* Supports external libraries and styles. Like React for example.
 * Supports multiple demos with multiple code snippets.
 
 ## Demo :rocket:
