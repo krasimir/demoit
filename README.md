@@ -11,7 +11,7 @@
 ## Demo :rocket:
 
 * [Empty editor](https://krasimir.github.io/demoit/dist/#0,1)
-* [Example that shows React's `useState` hook]((https://krasimir.github.io/demoit/dist/#0,0))
+* [Example that shows React's `useState` hook](https://krasimir.github.io/demoit/dist/#0,0)
 
 ---
 
