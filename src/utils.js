@@ -84,11 +84,22 @@ export const basename = function (path) {
 export const cleanOutput = function () {
   document.querySelector('.output').innerHTML = '';
 }
-export const getCurrentDemo = async function (settings) {
+export const getCurrentSnippet = async function (settings) {
   const [ demoIdx, snippetIdx ] = getDemoAndSnippetIdx();
 
   if (settings.demos && settings.demos[demoIdx] && settings.demos[demoIdx].snippets && settings.demos[demoIdx].snippets[snippetIdx]) {
     const res = await fetch(settings.demos[demoIdx].snippets[snippetIdx]);
     return await res.text();    
+  }
+}
+const snippetsCache = {};
+export const getSnippet = async function (settings, demoIdx, snippetIdx) {
+  const cacheKey = demoIdx + '_' + snippetIdx;
+
+  if (snippetsCache[cacheKey]) return snippetsCache[cacheKey];
+
+  if (settings.demos && settings.demos[demoIdx] && settings.demos[demoIdx].snippets && settings.demos[demoIdx].snippets[snippetIdx]) {
+    const res = await fetch(settings.demos[demoIdx].snippets[snippetIdx]);
+    return snippetsCache[cacheKey] = await res.text();    
   }
 }
