@@ -10,6 +10,7 @@ export const createEditor = async function (settings, value, onSave, onChange) {
     autofocus: true,
     foldGutter: false,
     gutters: [],
+    styleSelectedText: true,
     ...settings.editor
   });
   const save = () => onSave(editor.getValue());

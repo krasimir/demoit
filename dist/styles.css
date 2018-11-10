@@ -44,6 +44,12 @@ svg {
 .CodeMirror-lines {
   padding: 1em;
 }
+.CodeMirror-selected  {
+  background-color: #fff !important;
+}
+.CodeMirror-selectedtext {
+  color: #000 !important;
+}
 /*************************** OUTPUT PANEL */
 .output {
   background-color: #c7e2e5;
