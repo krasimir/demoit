@@ -1,36 +1,45 @@
-import { getResources, getSettings, cleanOutput } from './utils';
+import { getResources, getSettings, getCurrentDemo } from './utils';
 import { loadEditorTheme, createEditor } from './editor';
-import { createSettingsPanel } from './settingsPanel';
-import transpile from './transpile';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
-import files from './files';
+import navigation from './navigation';
+import execute from './execute';
 
 window.onload = async function () {
   screenSplit();
 
-  const settings = await getSettings();
-  const consolePanel = createConsolePanel(settings);
-  const { indicateFileEditing } = files(settings);
-  
+  let editor;
+  const settings = await getSettings(window.SETTINGS_PATH);
+  const initialEditorValue = await getCurrentDemo(settings);
+  const { clear: clearConsole } = createConsolePanel(settings);
+  const { indicateFileEditing, saveLatestChangeInLocalStorage, onRestoreFromLocalStorage } = navigation(settings);
+
   await getResources(settings);
   await loadEditorTheme(settings);
-  createSettingsPanel(settings);
-  createEditor(
+
+  editor = await createEditor(
     settings,
-    code => {
-      consolePanel.clear();
+    initialEditorValue,
+    function onSave(code) {
+      clearConsole();
+      execute(code);
+      saveLatestChangeInLocalStorage(code);
       indicateFileEditing(false);
-      try {
-        (new Function(transpile(code)))();
-      } catch (error) {
-        console.error(error);
-      }
     },
-    () => {
+    function onChange(code) {
       indicateFileEditing(true);
     }
   );
 
+  onRestoreFromLocalStorage(code => {
+    editor.setValue(code);
+    editor.focus();
+  });
+
   document.querySelector('.container').style.opacity = 1;
+
+  if (initialEditorValue) {
+    clearConsole();
+    execute(initialEditorValue);
+  }
 };

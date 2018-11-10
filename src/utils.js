@@ -1,5 +1,3 @@
-import { SETTINGS_FILE } from './config';
-
 export const el = function (sel) { return document.querySelector(sel); };
 export const addStyleString = function (str) {
   const node = document.createElement('style');
@@ -54,9 +52,9 @@ export const getDemoAndSnippetIdx = function () {
   }
   return [0, 0];
 }
-export const getSettings = async function () {
+export const getSettings = async function (file) {
   try {
-    const res = await fetch(SETTINGS_FILE);
+    const res = await fetch(file);
     return await res.json();
   } catch (error) {
     return { editor: { theme: 'material' }, resources: [] };
@@ -85,4 +83,12 @@ export const basename = function (path) {
 }
 export const cleanOutput = function () {
   document.querySelector('.output').innerHTML = '';
+}
+export const getCurrentDemo = async function (settings) {
+  const [ demoIdx, snippetIdx ] = getDemoAndSnippetIdx();
+
+  if (settings.demos && settings.demos[demoIdx] && settings.demos[demoIdx].snippets && settings.demos[demoIdx].snippets[snippetIdx]) {
+    const res = await fetch(settings.demos[demoIdx].snippets[snippetIdx]);
+    return await res.text();    
+  }
 }
