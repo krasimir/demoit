@@ -8,7 +8,6 @@ import execute from './execute';
 window.onload = async function () {
   screenSplit();
 
-  let editor;
   const settings = await getSettings(window.SETTINGS_PATH);
   const initialEditorValue = await getCurrentDemo(settings);
   const { clear: clearConsole } = createConsolePanel(settings);
@@ -17,14 +16,14 @@ window.onload = async function () {
   await getResources(settings);
   await loadEditorTheme(settings);
 
-  editor = await createEditor(
+  const editor = await createEditor(
     settings,
     initialEditorValue,
     function onSave(code) {
       clearConsole();
-      execute(code);
       saveLatestChangeInLocalStorage(code);
       indicateFileEditing(false);
+      execute(code);
     },
     function onChange(code) {
       indicateFileEditing(true);
@@ -36,10 +35,10 @@ window.onload = async function () {
     editor.focus();
   });
 
-  document.querySelector('.container').style.opacity = 1;
-
   if (initialEditorValue) {
     clearConsole();
     execute(initialEditorValue);
   }
+
+  document.querySelector('.container').style.opacity = 1;
 };
