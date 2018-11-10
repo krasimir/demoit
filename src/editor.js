@@ -1,4 +1,4 @@
-import { addStyleString, el } from './utils';
+import { addStyleString, el, getDistFolderURL } from './utils';
 
 export const createEditor = async function (settings, value, onSave, onChange) {
   const container = el('.js-code-editor');
@@ -25,7 +25,7 @@ export const createEditor = async function (settings, value, onSave, onChange) {
 };
 export const loadEditorTheme = async function(settings) {
   try {
-    const res = await fetch(`./vendor/codemirror/theme/${ settings.editor.theme }.css`);
+    const res = await fetch(`${ getDistFolderURL() }vendor/codemirror/theme/${ settings.editor.theme }.css`);
     const css = await res.text();
 
     addStyleString(css);

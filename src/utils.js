@@ -71,3 +71,13 @@ export const loadResources = async function (settings) {
 export const basename = function (path) {
   return path.split('/').reverse()[0];
 }
+export const getDistFolderURL = function () {
+  try {
+    return [].slice.call(document.querySelectorAll('script[src]'))
+      .map(({ src }) => src)
+      .find(url => url.match('demoit.js'))
+      .replace('demoit.js', '');
+  } catch(error) {
+    return './';
+  }
+}
