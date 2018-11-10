@@ -42,16 +42,6 @@ export const debounce = function (func, wait, immediate) {
 		if (callNow) func.apply(context, args);
 	};
 };
-export const getDemoAndSnippetIdx = function () {
-  const hash = window.location.hash;
-
-  if (hash && hash.split(',').length === 2) {
-    return hash.split(',')
-      .map(value => value.replace('#', ''))
-      .map(Number);
-  }
-  return [0, 0];
-}
 export const getSettings = async function (file) {
   try {
     const res = await fetch(file);
@@ -60,7 +50,7 @@ export const getSettings = async function (file) {
     return { editor: { theme: 'material' }, resources: [] };
   }
 }
-export const getResources = async function (settings) {
+export const loadResources = async function (settings) {
   return Promise.all(
     settings.resources.map(resource => {
       return new Promise(done => {
@@ -80,26 +70,4 @@ export const getResources = async function (settings) {
 }
 export const basename = function (path) {
   return path.split('/').reverse()[0];
-}
-export const cleanOutput = function () {
-  document.querySelector('.output').innerHTML = '';
-}
-export const getCurrentSnippet = async function (settings) {
-  const [ demoIdx, snippetIdx ] = getDemoAndSnippetIdx();
-
-  if (settings.demos && settings.demos[demoIdx] && settings.demos[demoIdx].snippets && settings.demos[demoIdx].snippets[snippetIdx]) {
-    const res = await fetch(settings.demos[demoIdx].snippets[snippetIdx]);
-    return await res.text();    
-  }
-}
-const snippetsCache = {};
-export const getSnippet = async function (settings, demoIdx, snippetIdx) {
-  const cacheKey = demoIdx + '_' + snippetIdx;
-
-  if (snippetsCache[cacheKey]) return snippetsCache[cacheKey];
-
-  if (settings.demos && settings.demos[demoIdx] && settings.demos[demoIdx].snippets && settings.demos[demoIdx].snippets[snippetIdx]) {
-    const res = await fetch(settings.demos[demoIdx].snippets[snippetIdx]);
-    return snippetsCache[cacheKey] = await res.text();    
-  }
 }

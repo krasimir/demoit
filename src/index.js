@@ -1,4 +1,5 @@
-import { getResources, getSettings, getCurrentSnippet, getSnippet } from './utils';
+import { loadResources, getSettings } from './utils';
+import { getCurrentSnippet, getSnippet, newSnippet, updateSnippetCache } from './storage';
 import { loadEditorTheme, createEditor } from './editor';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
@@ -11,17 +12,17 @@ window.onload = async function () {
 
   const settings = await getSettings(window.SETTINGS_PATH);
   const initialEditorValue = await getCurrentSnippet(settings);
-  const console = createConsolePanel(settings);
-  const cleanUp = teardown(console);
+  const cleanUp = teardown(createConsolePanel(settings));
   const {
     indicateFileEditing,
     saveLatestChangeInLocalStorage,
     onRestoreFromLocalStorage,
     onShowSnippet,
+    onNewSnippet,
     initNavigation
   } = navigation(settings);
 
-  await getResources(settings);
+  await loadResources(settings);
   await loadEditorTheme(settings);
 
   const editor = await createEditor(
@@ -32,6 +33,7 @@ window.onload = async function () {
       saveLatestChangeInLocalStorage(code);
       indicateFileEditing(false);
       execute(code);
+      updateSnippetCache(code);
     },
     function onChange(code) {
       indicateFileEditing(true);
@@ -42,14 +44,23 @@ window.onload = async function () {
     editor.setValue(code);
     editor.focus();
   });
-  onShowSnippet(async (demoIdx, snippetIdx) => {
-    const code = await getSnippet(settings, demoIdx, snippetIdx);
-    
+  onShowSnippet(async () => {
+    const code = await getSnippet(settings);
+
     await cleanUp();
     editor.setValue(code);
     editor.focus();
     initNavigation();
     execute(code);
+  });
+  onNewSnippet(async () => {
+    const [ demoIdx, snippetIdx ] = newSnippet(settings);
+
+    await cleanUp();
+    editor.setValue('');
+    editor.focus();
+    initNavigation();
+    execute('');
   });
 
   if (initialEditorValue) {

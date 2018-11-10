@@ -1,4 +1,5 @@
-import { getDemoAndSnippetIdx, basename, el } from './utils';
+import { basename, el } from './utils';
+import { getDemoAndSnippetIdx, updateDemoAndSnippetIdx } from './storage';
 
 const isLocalStorageAvailable = typeof window.localStorage !== 'undefined';
 
@@ -20,8 +21,7 @@ const getFilesLinkId = (demoIdx, snippetIdx) => {
   return `s_${ demoIdx + '-' + snippetIdx }`;
 }
 const getFilesLinkURL = (demoIdx, snippetIdx) => {
-  return `javascript:window.location.hash='${ demoIdx },${ snippetIdx}';` +
-  `window.showSnippet(${ demoIdx },${ snippetIdx});`;
+  return `javascript:window.showSnippet(${ demoIdx },${ snippetIdx});`;
 }
 
 export default function files(settings) {
@@ -33,6 +33,7 @@ export default function files(settings) {
   var currentSnippets, demoIdx, snippetIdx;
   var restoreFromLocalStorageCallback = () => {};
   var showSnippetCallback = () => {};
+  var newSnippetCallback = () => {};
 
   const init = () => {
     const idxs = getDemoAndSnippetIdx();
@@ -48,7 +49,8 @@ export default function files(settings) {
         }).join('') + '<li><span>&#8594;</span></li></ul>' : '',
         '<ul>' + currentSnippets.map((path, idx) => {
           return `<li><a href="${ getFilesLinkURL(demoIdx, idx) }" ${ snippetIdx === idx ? 'class="active"' : '' } id="${ getFilesLinkId(demoIdx, idx) }">${ basename(path) }</a></li>`;
-        }).join('') + '</ul>'
+        }).join('') + '</ul>',
+        '<ul class="with-icons"><li><a href="javascript:window.newSnippet()"><svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1600 736v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"/></svg></a></li></ul>'
       ].join('');
     }
   }
@@ -68,7 +70,11 @@ export default function files(settings) {
   }
 
   window.showSnippet = (demoIdx, snippetIdx) => {
-    showSnippetCallback(demoIdx, snippetIdx);
+    updateDemoAndSnippetIdx(demoIdx, snippetIdx);
+    showSnippetCallback();
+  }
+  window.newSnippet = () => {
+    newSnippetCallback();
   }
 
   return {
@@ -97,6 +103,9 @@ export default function files(settings) {
     },
     onShowSnippet(callback) {
       showSnippetCallback = callback;
+    },
+    onNewSnippet(callback) {
+      newSnippetCallback = callback;
     },
     initNavigation: init
   }
