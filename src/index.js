@@ -1,6 +1,5 @@
 import createStorage from './storage';
 import { loadResources } from './utils';
-import { getCurrentFileContent, getSnippet, newSnippet, updateSnippetCache } from './storage';
 import { loadEditorTheme, createEditor } from './editor';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
@@ -30,7 +29,6 @@ window.onload = async function () {
       storage.editCurrentFile({ content: code, editing: false  });
       renderNavigation();
       execute(code);
-      updateSnippetCache(code);
     },
     function onChange(code) {
       storage.editCurrentFile({ editing: true  });
