@@ -3,7 +3,7 @@ const babelOptions = {
 }
 
 export default function preprocess(str) {
-  const { code } = Babel.transform(str, babelOptions);
+  const { code, ast } = Babel.transform(str, babelOptions);
 
   return code;
 }
