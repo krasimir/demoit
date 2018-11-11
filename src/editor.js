@@ -1,6 +1,6 @@
 import { addStyleString, el, getDistFolderURL } from './utils';
 
-export const createEditor = async function (settings, value, onSave, onChange) {
+export const createEditor = async function (editorSettings, value, onSave, onChange) {
   const container = el('.js-code-editor');
   const editor = CodeMirror(container, {
     value: value || '',
@@ -11,7 +11,7 @@ export const createEditor = async function (settings, value, onSave, onChange) {
     foldGutter: false,
     gutters: [],
     styleSelectedText: true,
-    ...settings.editor
+    ...editorSettings
   });
   const save = () => onSave(editor.getValue());
   const change = () => onChange(editor.getValue());
@@ -19,14 +19,13 @@ export const createEditor = async function (settings, value, onSave, onChange) {
   editor.on('change', change);
   editor.setOption("extraKeys", { 'Ctrl-S': save, 'Cmd-S': save });
   CodeMirror.normalizeKeyMap();
-  container.addEventListener('click', () => editor.focus());
   editor.focus();
 
   return editor;
 };
-export const loadEditorTheme = async function(settings) {
+export const loadEditorTheme = async function({ theme }) {
   try {
-    const res = await fetch(`${ getDistFolderURL() }vendor/codemirror/theme/${ settings.editor.theme }.css`);
+    const res = await fetch(`${ getDistFolderURL() }vendor/codemirror/theme/${ theme }.css`);
     const css = await res.text();
 
     addStyleString(css);

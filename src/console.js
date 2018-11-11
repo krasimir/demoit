@@ -1,4 +1,4 @@
-import { el, addStyleString } from './utils';
+import { el } from './utils';
 
 function htmlEncode(str) {
   return str.replace(/[&<>"']/g, function($0) {
@@ -6,7 +6,7 @@ function htmlEncode(str) {
   });
 }
 
-export default function logger(settings) {
+export default function logger() {
   const element = el('.console');
   let empty = true;
   const add = something => {
@@ -22,32 +22,32 @@ export default function logger(settings) {
   }
 
   (function(){
-      const originalError = console.error;
-      const originalLog = console.log;
-      const originalWarning = console.warn;
-      const originalInfo = console.info;
-      const originalClear = console.clear;
+    const originalError = console.error;
+    const originalLog = console.log;
+    const originalWarning = console.warn;
+    const originalInfo = console.info;
+    const originalClear = console.clear;
 
-      console.error = function (error) {
-        add(error.toString() + error.stack);
-        originalError.apply(console, arguments);
-      };
-      console.log = function (...args) {
-        args.forEach(add);
-        originalLog.apply(console, args);
-      };
-      console.warn = function (...args) {
-        args.forEach(add);
-        originalWarning.apply(console, args);
-      };
-      console.info = function (...args) {
-        args.forEach(add);
-        originalInfo.apply(console, args);
-      };
-      console.clear = function (...args) {
-        element.innerHTML = '';
-        originalClear.apply(console, args);
-      };
+    console.error = function (error) {
+      add(error.toString() + error.stack);
+      originalError.apply(console, arguments);
+    };
+    console.log = function (...args) {
+      args.forEach(add);
+      originalLog.apply(console, args);
+    };
+    console.warn = function (...args) {
+      args.forEach(add);
+      originalWarning.apply(console, args);
+    };
+    console.info = function (...args) {
+      args.forEach(add);
+      originalInfo.apply(console, args);
+    };
+    console.clear = function (...args) {
+      element.innerHTML = '';
+      originalClear.apply(console, args);
+    };
   })();
 
   return {

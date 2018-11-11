@@ -1,5 +1,3 @@
-import { addScriptString } from './utils';
-
 const babelOptions = {
   presets: [ "react", ["es2015", { "modules": false }]]
 }
