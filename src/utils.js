@@ -50,9 +50,9 @@ export const getSettings = async function (file) {
     return { editor: { theme: 'material' }, resources: [] };
   }
 }
-export const loadResources = async function (settings) {
+export const loadResources = async function (resources) {
   return Promise.all(
-    settings.resources.map(resource => {
+    resources.map(resource => {
       return new Promise(done => {
         const extension = resource.split('.').pop().toLowerCase();
 
@@ -79,5 +79,16 @@ export const getDistFolderURL = function () {
       .replace('demoit.js', '');
   } catch(error) {
     return './';
+  }
+}
+export const isLocalStorageAvailable = function () {
+  const test = 'test';
+
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch(e) {
+    return false;
   }
 }

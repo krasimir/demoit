@@ -1,6 +1,6 @@
 import { el } from './utils';
 
-export default function editFile(storage, callback) {
+export default function editFile(storage) {
   const panel = el('.edit-file');
   const filenameInput = el('.edit-file input[name="filename"]');
   const saveButton = el('.edit-file .save');
@@ -15,7 +15,7 @@ export default function editFile(storage, callback) {
     });
     filenameInput.value = '';
     panel.style.display = 'none';
-    callback();
+    callback('rename');
   });
   cancelButton.addEventListener('click', () => {
     filenameInput.value = '';
@@ -25,13 +25,12 @@ export default function editFile(storage, callback) {
     storage.deleteFile(currentEditedFileIndex);
     filenameInput.value = '';
     panel.style.display = 'none';
-    callback();
+    callback('delete');
   });
-
-  // hide the delete button if there's only one file
-
   return (index, cb) => {
     const currentFile = storage.getFileAt(index);
+
+    deleteButton.style.display = storage.getFiles().length > 1 ? 'block' : 'none';
 
     currentEditedFileIndex = index;
     callback = cb;
