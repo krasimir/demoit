@@ -19,7 +19,6 @@ export const createEditor = async function (settings, value, onSave, onChange) {
   editor.on('change', change);
   editor.setOption("extraKeys", { 'Ctrl-S': save, 'Cmd-S': save });
   CodeMirror.normalizeKeyMap();
-  container.addEventListener('click', () => editor.focus());
   editor.focus();
 
   return editor;

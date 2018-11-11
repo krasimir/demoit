@@ -1,26 +1,22 @@
-import { loadResources, getSettings } from './utils';
-import { getCurrentSnippet, getSnippet, newSnippet, updateSnippetCache } from './storage';
+import createStorage from './storage';
+import { loadResources } from './utils';
+import { getCurrentFileContent, getSnippet, newSnippet, updateSnippetCache } from './storage';
 import { loadEditorTheme, createEditor } from './editor';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
 import navigation from './navigation';
 import execute from './execute';
 import teardown from './teardown';
+import createEditFilePanel from './editFile';
 
 window.onload = async function () {
   screenSplit();
 
-  const settings = await getSettings(window.SETTINGS_PATH);
-  const initialEditorValue = await getCurrentSnippet(settings);
-  const cleanUp = teardown(createConsolePanel(settings));
-  const {
-    indicateFileEditing,
-    saveLatestChangeInLocalStorage,
-    onRestoreFromLocalStorage,
-    onShowSnippet,
-    onNewSnippet,
-    initNavigation
-  } = navigation(settings);
+  const storage = await createStorage();
+  const settings = storage.settings;
+  const { content: initialEditorValue } = storage.getCurrentFile();
+  const cleanUp = teardown(createConsolePanel());
+  const editFilePanel = createEditFilePanel(storage);
 
   await loadResources(settings);
   await loadEditorTheme(settings);
@@ -30,38 +26,45 @@ window.onload = async function () {
     initialEditorValue,
     async function onSave(code) {
       await cleanUp();
-      saveLatestChangeInLocalStorage(code);
-      indicateFileEditing(false);
+      storage.editCurrentFile({ content: code, editing: false  });
+      renderNavigation();
       execute(code);
       updateSnippetCache(code);
     },
     function onChange(code) {
-      indicateFileEditing(true);
+      storage.editCurrentFile({ editing: true  });
+      renderNavigation();
     }
   );
+  const renderNavigation = navigation(
+    storage,
+    async function showFile(index) {
+      const file = storage.changeActiveFile(index);
 
-  onRestoreFromLocalStorage(code => {
-    editor.setValue(code);
-    editor.focus();
-  });
-  onShowSnippet(async () => {
-    const code = await getSnippet(settings);
+      await cleanUp();
+      editor.setValue(file.content);
+      editor.focus();
+       // we have to do this because we fire the onChange handler of the editor which sets editing=true;
+      storage.editCurrentFile({ editing: false  });
+      renderNavigation();
+      execute(file.content);
+    },
+    async function newFile() {
+      const file = storage.addNewFile();
 
-    await cleanUp();
-    editor.setValue(code);
-    editor.focus();
-    initNavigation();
-    execute(code);
-  });
-  onNewSnippet(async () => {
-    const [ demoIdx, snippetIdx ] = newSnippet(settings);
-
-    await cleanUp();
-    editor.setValue('');
-    editor.focus();
-    initNavigation();
-    execute('');
-  });
+      await cleanUp();
+      editor.setValue(file.content);
+      editor.focus();
+      renderNavigation();
+      execute(file.content);
+    },
+    function editFile(index) {
+      editFilePanel(index, () => {
+        renderNavigation();
+        editor.focus();
+      });
+    }
+  );
 
   if (initialEditorValue) {
     execute(initialEditorValue);

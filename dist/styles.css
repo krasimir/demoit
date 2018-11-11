@@ -171,3 +171,63 @@ svg {
   width: 100%;
   background: #fff;
 }
+/*************************** EDIT FILE */
+.edit-file {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  color: #FFF;
+  display: none;
+  z-index: 8000;
+}
+.edit-file section {
+  width: 400px;
+  margin: 0em auto;
+  padding-top: 2em;
+}
+.edit-file h1 {
+  padding: 0 0 1em 0;
+  margin: 0;
+}
+.edit-file input[name="filename"] {
+  width: 100%;
+  border: none;
+  font-size: 1em;
+  padding: 0.6em;
+  display: block;
+  border-radius: 4px;
+  outline: none;
+  margin-bottom: 1em;
+}
+.edit-file button {
+  font-size: 1em;
+  padding: 0.6em 1em;
+  background: #44565f;
+  cursor: pointer;
+  border-radius: 4px;
+  border: solid 2px #758c98;
+  color: #000;
+  outline: none;
+  display: inline-block;
+}
+.edit-file button:hover {
+  background: #c0d7e2;
+}
+.edit-file .cancel {
+  float: right;
+}
+.edit-file .cancel, .edit-file .delete {
+  border: none;
+  background: none;
+  color: #999;
+}
+.edit-file .cancel:hover {
+  color: #000;
+}
+.edit-file hr {
+  margin: 2em 0;
+    border-color: #313131;
+}
