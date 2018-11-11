@@ -10,7 +10,7 @@ export default function navigation(storage, showFile, newFile, editFile) {
     items.push('<ul>');
     storage.getFiles().forEach(({ filename, editing }, idx) => {
       items.push(
-        `<li><a href="javascript:window.showFile(${ idx });" ${ storage.activeFileIndex === idx ? 'class="active"' : '' }" oncontextmenu="javascript:window.editFile(${ idx });return false;">${ filename }${ editing ? ' *' : ''}</a></li>`
+        `<li><a href="javascript:window.showFile(${ idx });void(0);" ${ storage.activeFileIndex === idx ? 'class="active"' : '' }" oncontextmenu="javascript:window.editFile(${ idx });void(0);">${ filename }${ editing ? ' *' : ''}</a></li>`
       );
     });
     items.push('</ul>');
