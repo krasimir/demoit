@@ -3,3 +3,4 @@ src
 webpack.config.js
 *.log
 yarn.lock
+scripts

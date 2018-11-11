@@ -8,8 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'demoit.js'
   },
-  mode: 'development',
-  watch: true,
+  mode: 'production',
   module: {
     rules: [
       {
