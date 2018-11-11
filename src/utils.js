@@ -11,21 +11,32 @@ export const addScriptString = function (str) {
   node.innerHTML = str;
   document.body.appendChild(node);
 }
+
+const LOADED_FILES_CACHE = {};
 export const addJSFile = function (path, done) {
+  if (LOADED_FILES_CACHE[path]) return done();
+
   const node = document.createElement('script');
 
   node.src = path;
-  node.addEventListener('load', done);
+  node.addEventListener('load', () => {
+    LOADED_FILES_CACHE[path] = true;
+    done();
+  });
   document.body.appendChild(node);
 }
 export const addCSSFile = function (path, done) {
-	// <link rel="stylesheet" type="text/css" href="./assets/css/styles.css" />
+  if (LOADED_FILES_CACHE[path]) return done();
+
   const node = document.createElement('link');
 
   node.setAttribute('rel', 'stylesheet');
   node.setAttribute('type', 'text/css');
   node.setAttribute('href', path);
-  node.addEventListener('load', done);
+  node.addEventListener('load', () => {
+    LOADED_FILES_CACHE[path] = true;
+    done();
+  });
   document.body.appendChild(node);
 }
 export const debounce = function (func, wait, immediate) {
@@ -47,12 +58,12 @@ export const getSettings = async function (file) {
     const res = await fetch(file);
     return await res.json();
   } catch (error) {
-    return { editor: { theme: 'material' }, resources: [] };
+    return { editor: { theme: 'material' }, dependencies: [] };
   }
 }
-export const loadResources = async function (resources) {
+export const loadDependencies = async function (dependencies) {
   return Promise.all(
-    resources.map(resource => {
+    dependencies.map(resource => {
       return new Promise(done => {
         const extension = resource.split('.').pop().toLowerCase();
 

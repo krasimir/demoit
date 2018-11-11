@@ -9,7 +9,7 @@ const EMPTY_FILE = {
 };
 const DEFAULT_SETTINGS = {
   editor: { theme: 'material' },
-  resources: [],
+  dependencies: [],
   files: []
 };
 
@@ -45,8 +45,11 @@ export default async function createStorage() {
     dump() {
       return settings;
     },
-    getResources() {
-      return settings.resources;
+    getDependencies() {
+      return settings.dependencies;
+    },
+    setDependencies(dependencies) {
+      settings.dependencies = dependencies;
     },
     getEditorSettings() {
       return settings.editor;

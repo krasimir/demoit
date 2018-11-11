@@ -259,8 +259,12 @@ svg {
   right: 2em;
 }
 /*************************** STORAGE */
-.storage span {
+.storage span, .dependencies span {
   display: inline-block;
   transform: translateY(-3px);
   margin-left: 7px;
+}
+/*************************** DEPENDENCIES */
+.manage-dependencies textarea.dependencies-list {
+  height: 300px;
 }

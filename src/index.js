@@ -1,5 +1,5 @@
 import createStorage from './storage';
-import { loadResources } from './utils';
+import { loadDependencies } from './utils';
 import { loadEditorTheme, createEditor } from './editor';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
@@ -8,6 +8,7 @@ import execute from './execute';
 import teardown from './teardown';
 import createEditFilePanel from './editFile';
 import storageManager from './storageManager';
+import dependenciesManager from './dependenciesManager';
 
 window.onload = async function () {
   screenSplit();
@@ -18,7 +19,7 @@ window.onload = async function () {
   const editFilePanel = createEditFilePanel(storage);
 
   storageManager(storage);
-  await loadResources(storage.getResources());
+  await loadDependencies(storage.getDependencies());
   await loadEditorTheme(storage.getEditorSettings());
 
   const editor = await createEditor(
@@ -62,6 +63,10 @@ window.onload = async function () {
       });
     }
   );
+
+  dependenciesManager(storage, async () => {
+    await loadDependencies(storage.getDependencies());
+  });
 
   if (initialEditorValue) {
     execute(initialEditorValue);
