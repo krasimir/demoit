@@ -4,55 +4,52 @@
 
 * No installation.
 * No server needed. It works offline.
-* No building process. Babel translates your code at runtime.
+* No building process needed. Built-in Babel support. It translates your code at runtime.
 * Supports external libraries and styles. Like React for example.
-* Supports multiple demos with multiple code snippets.
+* Persistent via localStorage (for now)
+* Easy export of the current code
 
 ## Demo :rocket:
 
-* [Empty editor](https://krasimir.github.io/demoit/dist/#0,1)
-* [Example that shows React's `useState` hook](https://krasimir.github.io/demoit/dist/#0,0)
+[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist)
 
 ---
 
 ## Installation
 
-Just clone/download this repository and use the content of the `dist` folder. There's a `index.html` which you can load in a browser.
+Download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip). Unzip. There's a `index.html` which you can load in a browser.
 
 ## Configuration
 
-The configuration for the tool is set in `dist/settings.json` file. Here is an example:
+The configuration for the tool is set in `settings.json` file. Here is an example:
 
 ```json
 {
   "editor": {
     "theme": "material"
   },
-  "resources": [
+  "dependencies": [
     "./resources/react-16.7.0-alpha.0.js",
     "./resources/react-dom.16.7.0-alpha.0.js",
     "./resources/styles.css"
   ],
-  "demos": [
+  "files": [
     {
-      "snippets": [
-        "./demos/useHooks.js",
-        "./demos/HoC.js",
-        "./demos/FaCC.js"
-      ]
+      "filename": "script.js",
+      "content": "const message = 'Hello world';\nconsole.log(message);"
     }
   ]
 }
 ```
 
-* `editor` - settings for the right side of the screen - the editor.
+* `editor`
   * `theme` - Demoit uses CodeMirror as an editor so here you can place some of its build-in themes. Check them out [here](https://codemirror.net/demo/theme.html).
-* `resources` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those first before running your demo files.
-* `demos` - It contains an array of items representing your demos.
+* `dependencies` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those resources before running your code files.
+* `files` - It contains an array of items representing your scripts.
 
 ## Key combinations
 
-There are only two key combination - `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your function.
+There are only two key combination - `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your current file.
 
 ## Troubleshooting
 
