@@ -51,6 +51,10 @@ The configuration for the tool is set in `settings.json` file. Here is an exampl
 
 There are only two key combination - `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your current file.
 
+## Editing filenames and deleting files
+
+Right mouse click on the file's tab.
+
 ## Troubleshooting
 
 ### Error `URL scheme must be "http" or "https" for CORS request.`
