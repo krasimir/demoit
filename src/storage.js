@@ -36,12 +36,32 @@ const resolveSettings = async function () {
   return DEFAULT_SETTINGS;
 }
 
+const resolveActiveFileIndex = function (files) {
+  const hash = location.hash.replace(/^#/, '');
+
+  if (hash !== '') {
+    const found = files.findIndex(({ filename }) => filename === hash);
+
+    if (found >= 0) {
+      return found;
+    }
+  }
+  return 0;
+}
+
 export default async function createStorage() {
   const localStorageAvailable = isLocalStorageAvailable();
   const settings = await resolveSettings();
+  var activeFileIndex = resolveActiveFileIndex(settings.files);
   
   const api = {
-    activeFileIndex: 0,
+    setCurrentIndex(idx) {
+      activeFileIndex = idx;
+      location.hash = settings.files[idx].filename;
+    },
+    isCurrentIndex(idx) {
+      return activeFileIndex === idx;
+    },
     dump() {
       return settings;
     },
@@ -58,7 +78,7 @@ export default async function createStorage() {
       return settings.files;
     },
     getCurrentFile() {
-      return this.getFiles()[this.activeFileIndex];
+      return this.getFiles()[activeFileIndex];
     },
     getFileAt(index) {
       return this.getFiles()[index];
@@ -66,7 +86,7 @@ export default async function createStorage() {
     makeSureOneFileAtLeast() {
       if (this.getFiles().length === 0) {
         settings.files.push(EMPTY_FILE);
-        this.activeFileIndex = 0;
+        this.setCurrentIndex(0);
       }
     },
     editFile(index, updates) {
@@ -79,10 +99,10 @@ export default async function createStorage() {
       }
     },
     editCurrentFile(updates) {
-      this.editFile(this.activeFileIndex, updates);
+      this.editFile(activeFileIndex, updates);
     },
     changeActiveFile(index) {
-      this.activeFileIndex = index;
+      this.setCurrentIndex(index);
       return this.getCurrentFile();
     },
     addNewFile() {
@@ -90,13 +110,13 @@ export default async function createStorage() {
       return this.changeActiveFile(settings.files.length - 1);
     },
     deleteFile(index) {
-      if (index === this.activeFileIndex) {
-        this.activeFileIndex = 0;
+      if (index === activeFileIndex) {
+        this.setCurrentIndex(0);
         settings.files.splice(index, 1);
       } else {
         const currentFile = this.getCurrentFile();
         settings.files.splice(index, 1);
-        this.activeFileIndex = this.getFiles().findIndex(file => file === currentFile) || 0;
+        this.setCurrentIndex(this.getFiles().findIndex(file => file === currentFile) || 0);
       }
     }
   }
