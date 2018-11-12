@@ -11,7 +11,7 @@ export default function logger() {
   let empty = true;
   const add = something => {
     const node = document.createElement('div');
-    const text = htmlEncode(something.toString());
+    const text = something ? htmlEncode(something.toString()) : something;
 
     node.innerHTML = '<p>' + text + '</p>';
     if (empty) {

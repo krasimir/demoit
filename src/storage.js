@@ -55,12 +55,21 @@ export default async function createStorage() {
   var activeFileIndex = resolveActiveFileIndex(settings.files);
   
   const api = {
+    getCurrentIndex() {
+      return activeFileIndex;
+    },
     setCurrentIndex(idx) {
       activeFileIndex = idx;
       location.hash = settings.files[idx].filename;
     },
     isCurrentIndex(idx) {
       return activeFileIndex === idx;
+    },
+    getCurrentFile() {
+      return this.getFiles()[activeFileIndex];
+    },
+    getFiles() {
+      return settings.files;
     },
     dump() {
       return settings;
@@ -73,12 +82,6 @@ export default async function createStorage() {
     },
     getEditorSettings() {
       return settings.editor;
-    },
-    getFiles() {
-      return settings.files;
-    },
-    getCurrentFile() {
-      return this.getFiles()[activeFileIndex];
     },
     getFileAt(index) {
       return this.getFiles()[index];

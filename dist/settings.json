@@ -9,17 +9,17 @@
   "files": [
     {
       "filename": "ReactHooks.js",
-      "content": "const useState = React.useState;\n\nconst App = function () {\n  const [ count, change ] = useState(0);\n  console.log(`count is: ${ count }`);\n  return (\n  \t<section>\n      <h1>Counter: { count }</h1>\n      <button onClick={ () => change(count + 1) }>\n        Click me\n      </button>\n    </section>\n  )\n}\n\nReactDOM.render(<App />, document.querySelector('.output'));\n",
+      "content": "import Title from 'Title.js';\n\nconst useState = React.useState;\n\nconst App = function () {\n  const [ count, change ] = useState(0);\n  console.log(`count is: ${ count }`);\n  return (\n  \t<section>\n      <Title count={ count } />\n      <button onClick={ () => change(count + 1) }>\n        Click me\n      </button>\n    </section>\n  )\n}\n\nReactDOM.render(<App />, document.querySelector('.output'));\n",
       "editing": false
     },
     {
-      "content": "const useEffect = React.useEffect;\nconst useState = React.useState;\n\nconst withAnswer = Component => function (props) {\n  const [ answer, setAnswer ] = useState(null);\n  \n  useEffect(() => {\n    setTimeout(() => setAnswer(42), 1000);\n  }, []);\n  \n  return <Component {...props } answer={ answer }/>;\n}\n\nconst WrappedTitle = withAnswer(function Title({ answer }) {\n  return <h1>Answer: { answer ? answer : '...' }</h1>;\n});\nfunction Header() {\n \treturn <header><WrappedTitle /></header>; \n}\nfunction App() {\n  return <Header />;\n}\n\nReactDOM.render(<App />, document.querySelector('.output'));",
+      "content": "const useEffect = React.useEffect;\nconst useState = React.useState;\n\nconst withAnswer = Component => function (props) {\n  const [ answer, setAnswer ] = useState(null);\n  \n  useEffect(() => {\n    setTimeout(() => setAnswer(42), 1000);\n  }, []);\n  \n  return <Component {...props } answer={ answer }/>;\n}\n\nconst WrappedTitle = withAnswer(function Title({ answer }) {\n  return <h1>Answer: { answer ? answer : '...' }</h1>;\n});\nfunction Header() {\n \treturn <header><WrappedTitle /></header>; \n}\nfunction App() {\n  return <Header />;\n}\n\nReactDOM.render(<App />, document.querySelector('.output'));\n\nconst answer = 42;\n\nexport default answer;",
       "filename": "HoC.js",
       "editing": false
     },
     {
-      "content": "// Let's hack together ...",
-      "filename": "empty.js",
+      "content": "export default function Title({ count }) {\n  return <h1>Counter: { count }</h1>;\n}",
+      "filename": "Title.js",
       "editing": false
     }
   ]

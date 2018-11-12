@@ -4,7 +4,7 @@ import { loadEditorTheme, createEditor } from './editor';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
 import navigation from './navigation';
-import execute from './execute';
+import executeCode from './execute';
 import teardown from './teardown';
 import createEditFilePanel from './editFile';
 import storageManager from './storageManager';
@@ -17,6 +17,7 @@ window.onload = async function () {
   const { content: initialEditorValue } = storage.getCurrentFile();
   const cleanUp = teardown(createConsolePanel());
   const editFilePanel = createEditFilePanel(storage);
+  const execute = () => executeCode(storage.getCurrentIndex(), storage.getFiles());
 
   storageManager(storage);
   await loadDependencies(storage.getDependencies());
@@ -29,7 +30,7 @@ window.onload = async function () {
       await cleanUp();
       storage.editCurrentFile({ content: code, editing: false  });
       renderNavigation();
-      execute(code);
+      execute();
     },
     function onChange(code) {
       storage.editCurrentFile({ editing: true  });
@@ -42,7 +43,7 @@ window.onload = async function () {
     editor.focus();
     // we have to do this because we fire the onChange handler of the editor which sets editing=true;
     storage.editCurrentFile({ editing: false  });
-    execute(file.content);
+    execute();
     renderNavigation();
   }
   const renderNavigation = navigation(
@@ -68,9 +69,7 @@ window.onload = async function () {
     await loadDependencies(storage.getDependencies());
   });
 
-  if (initialEditorValue) {
-    execute(initialEditorValue);
-  }
+  execute();
 
   document.querySelector('.container').style.opacity = 1;
 };

@@ -105,6 +105,8 @@ svg {
   margin: 0;
   padding: 0.5em;
   border-bottom: solid 1px #bbb;
+  white-space: pre-wrap;
+  font-size: 0.9em;
 }
 /*************************** JS EDITOR */
 .js-code-editor {

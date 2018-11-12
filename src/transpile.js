@@ -1,9 +1,17 @@
-const babelOptions = {
-  presets: [ "react", ["es2015", { "modules": false }]]
-}
+const OPTIONS = {
+  presets: [
+    'react',
+    ['es2015',
+      { 'modules': false }
+    ]
+  ],
+  plugins: [
+    'transform-es2015-modules-commonjs'
+  ]
+};
 
 export default function preprocess(str) {
-  const { code, ast } = Babel.transform(str, babelOptions);
+  const { code } = Babel.transform(str, OPTIONS);
 
   return code;
 }
