@@ -2,17 +2,15 @@ import transpile from './transpile';
 
 export default function execute(index, allFiles) {
   try {
-    const transpiledFiles = allFiles.map(({ filename, content }) => {
-      return `
-        {
-          filename: "${ filename }",
-          func: function (require, exports) {
-            ${ transpile(content) }
-          },
-          exports: {}
-        }
-      `;
-    });
+    const transpiledFiles = allFiles.map(({ filename, content }) => `
+      {
+        filename: "${ filename }",
+        func: function (require, exports) {
+          ${ transpile(content) }
+        },
+        exports: {}
+      }
+    `);
     const code = `
       const modules = [${ transpiledFiles.join(',') }];
       const require = function(file) {
@@ -26,7 +24,7 @@ export default function execute(index, allFiles) {
       };
       modules[${ index }].func(require, modules[${ index }].exports);
     `;
-
+      console.log(code);
     (new Function(transpile(code)))();
   } catch (error) {
     console.error(error);
