@@ -58,7 +58,7 @@ You may need to transfer your progress on your machine. In order to do that down
 
 Go to the storage manager. There is a link to it in the top right corner of the app. Then click on `Reset to the data in settings.json` button.
 
-## Key combinations
+## Keyboard shortcuts
 
 There are only two key combination - `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your current file.
 
