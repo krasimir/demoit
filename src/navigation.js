@@ -1,4 +1,4 @@
-import { basename, el } from './utils';
+import { el } from './utils';
 
 export default function navigation(storage, showFile, newFile, editFile) {
   const navigation = el('.files .nav');
@@ -29,5 +29,5 @@ export default function navigation(storage, showFile, newFile, editFile) {
   window.editFile = index => editFile(index);
   window.newFile = () => newFile();
 
-  return render;
+  storage.listen(render);
 }

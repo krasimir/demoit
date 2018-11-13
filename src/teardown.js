@@ -1,6 +1,6 @@
 import { el } from './utils';
 
-export default ({ clear: clearConsole }) => async function teardown() {
+export default clearConsole => async function teardown() {
   clearConsole();
   
   const output = el('.output');

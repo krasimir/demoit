@@ -50,10 +50,8 @@ export default function logger() {
     };
   })();
 
-  return {
-    clear: () => {
-      empty = true;
-      element.innerHTML = '<div class="hint">console.log</div>';
-    }
+  return function clearConsole() {
+    empty = true;
+    element.innerHTML = '<div class="hint">console.log</div>';
   }
 }

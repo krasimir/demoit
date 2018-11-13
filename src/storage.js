@@ -1,5 +1,4 @@
 import { isLocalStorageAvailable } from './utils';
-import storageManager from './storageManager';
 
 const LS_KEY = 'DEMOIT_v1';
 const EMPTY_FILE = {
@@ -51,6 +50,8 @@ const resolveActiveFileIndex = function (files) {
 export default async function createStorage() {
   const localStorageAvailable = isLocalStorageAvailable();
   const settings = await resolveSettings();
+  const onChangeListeners = [];
+  const notify = () => onChangeListeners.forEach(c => c());
   var activeFileIndex = resolveActiveFileIndex(settings.files);
   
   const api = {
@@ -60,6 +61,7 @@ export default async function createStorage() {
     setCurrentIndex(idx) {
       activeFileIndex = idx;
       location.hash = settings.files[idx].filename;
+      notify();
     },
     isCurrentIndex(idx) {
       return activeFileIndex === idx;
@@ -78,6 +80,7 @@ export default async function createStorage() {
     },
     setDependencies(dependencies) {
       settings.dependencies = dependencies;
+      notify();
     },
     getEditorSettings() {
       return settings.editor;
@@ -99,6 +102,7 @@ export default async function createStorage() {
       if (localStorageAvailable) {
         localStorage.setItem(LS_KEY, JSON.stringify(settings));
       }
+      notify();
     },
     editCurrentFile(updates) {
       this.editFile(activeFileIndex, updates);
@@ -113,8 +117,8 @@ export default async function createStorage() {
     },
     deleteFile(index) {
       if (index === activeFileIndex) {
-        this.setCurrentIndex(0);
         settings.files.splice(index, 1);
+        this.setCurrentIndex(0);
       } else {
         const currentFile = this.getCurrentFile();
         settings.files.splice(index, 1);
@@ -125,6 +129,10 @@ export default async function createStorage() {
       if (isLocalStorageAvailable) {
         localStorage.clear();
       }
+      notify();
+    },
+    listen(callback) {
+      onChangeListeners.push(callback);
     }
   }
 

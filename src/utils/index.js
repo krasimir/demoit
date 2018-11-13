@@ -1,3 +1,5 @@
+export * from './modals';
+
 export const el = function (sel) { return document.querySelector(sel); };
 export const addStyleString = function (str) {
   const node = document.createElement('style');
