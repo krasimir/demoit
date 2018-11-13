@@ -14,13 +14,6 @@ const DEFAULT_SETTINGS = {
 };
 
 const resolveSettings = async function () {
-
-  // loading `settings.json`
-  try {
-    const res = await fetch('./settings.json');
-    return await res.json();
-  } catch(error) {}
-
   // reading from local storage
   if (isLocalStorageAvailable()) {
     const settings = localStorage.getItem(LS_KEY);
@@ -31,6 +24,12 @@ const resolveSettings = async function () {
       return DEFAULT_SETTINGS;
     }
   }
+
+  // loading `settings.json`
+  try {
+    const res = await fetch('./settings.json');
+    return await res.json();
+  } catch(error) {}
 
   // fallback to default settings
   return DEFAULT_SETTINGS;
@@ -120,6 +119,11 @@ export default async function createStorage() {
         const currentFile = this.getCurrentFile();
         settings.files.splice(index, 1);
         this.setCurrentIndex(this.getFiles().findIndex(file => file === currentFile) || 0);
+      }
+    },
+    clear() {
+      if (isLocalStorageAvailable) {
+        localStorage.clear();
       }
     }
   }

@@ -15,13 +15,14 @@
 
 ---
 
-## Installation
+## Usage
 
-Download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip). Unzip. There's a `index.html` which you can load in a browser.
+* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist/)
+* Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip). Unzip. There's a `index.html` which you can load in a browser.
 
-## Configuration
+## Configuration and content
 
-The configuration for the tool is set in `settings.json` file. Here is an example:
+The configuration for the tool is set in `settings.json` file:
 
 ```json
 {
@@ -46,6 +47,16 @@ The configuration for the tool is set in `settings.json` file. Here is an exampl
   * `theme` - Demoit uses CodeMirror as an editor so here you can place some of its build-in themes. Check them out [here](https://codemirror.net/demo/theme.html).
 * `dependencies` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those resources before running your code files.
 * `files` - It contains an array of items representing your scripts.
+
+By default Demoit first tries to read its settings and content from the `localStorage`. Then it falls back to the `settings.json`. If that's also missing it uses default values.
+
+## Continuing your work offline
+
+You may need to transfer your progress on your machine. In order to do that download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip) and go to the storage manager. There is a button to it in the top right corner of the app. Then copy the content of the `settings.json` to your local folder.
+
+## Resetting your progress to `settings.json`
+
+Go to the storage manager. There is a link to it in the top right corner of the app. Then click on `Reset to the data in settings.json` button.
 
 ## Key combinations
 

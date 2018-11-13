@@ -25,13 +25,13 @@
             <li class="dependencies">
               <a href="javascript:void(0);" title="Manage your dependencies">
                 <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M896 1629l640-349v-636l-640 233v752zm-64-865l698-254-698-254-698 254zm832-252v768q0 35-18 65t-49 47l-704 384q-28 16-61 16t-61-16l-704-384q-31-17-49-47t-18-65v-768q0-40 23-73t61-47l704-256q22-8 44-8t44 8l704 256q38 14 61 47t23 73z"/></svg>
-                <span>Dependencies</span>
+                <!-- <span>Dependencies</span> -->
               </a>
             </li>
             <li class="storage">
-              <a href="javascript:void(0);">
+              <a href="javascript:void(0);" title="Storage">
                 <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M128 1408h1024v-128h-1024v128zm0-512h1024v-128h-1024v128zm1568 448q0-40-28-68t-68-28-68 28-28 68 28 68 68 28 68-28 28-68zm-1568-960h1024v-128h-1024v128zm1568 448q0-40-28-68t-68-28-68 28-28 68 28 68 68 28 68-28 28-68zm0-512q0-40-28-68t-68-28-68 28-28 68 28 68 68 28 68-28 28-68zm96 832v384h-1792v-384h1792zm0-512v384h-1792v-384h1792zm0-512v384h-1792v-384h1792z"/></svg>
-                <span>Local storage</span>
+                <!-- <span>Local storage</span> -->
               </a>
             </li>
             <li class="reset">
@@ -59,12 +59,15 @@
   <div class="modal manage-storage">
     <section>
       <h2>Type of storage</h2>
-      <p>Demoit uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage API</a> to save your progress.</p>
+      <p>At the moment Demoit uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage API</a> to save your progress.</p>
       <hr />
-      <h2>Working offline</h2>
+      <h2>Transfer your work</h2>
       <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in <i>settings.json</i> file.</p>
       <textarea class="settings-json"></textarea>
       <button class="cancel secondary"><svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg></button>
+      <hr />
+      <p>Your work is saved in the local storage by default. You can reset to the data in your <a href="./settings.json" target="_blank">settings.json</a> file.</p>
+      <button class="clear-storage secondary"><svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M704 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm-544-992h448l-48-117q-7-9-17-11h-317q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg><span>Reset to the data in settings.json</span></button>
     </section>
   </div>
 

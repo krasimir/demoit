@@ -229,6 +229,11 @@ svg {
   background: none;
   color: #999;
 }
+.modal .secondary span {
+  display: inline-block;
+  transform: translateY(-5px);
+  margin-left: 7px;
+}
 .modal .secondary:hover {
   color: #000;
 }
