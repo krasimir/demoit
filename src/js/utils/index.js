@@ -1,6 +1,6 @@
 export * from './modals';
+export * from './element';
 
-export const el = function (sel) { return document.querySelector(sel); };
 export const debounce = function (func, wait, immediate) {
 	var timeout;
 	return function() {

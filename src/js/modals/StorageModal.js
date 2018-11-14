@@ -5,10 +5,10 @@ export default function StoragePanel(storage) {
   const clearStorageButton = el('.clear-storage');
 
   modal(el('.storage'), el('.manage-storage'), () => {
-    settingsJSON.value = JSON.stringify(storage.dump(), null, 2);
+    settingsJSON.prop('value', JSON.stringify(storage.dump(), null, 2));
   });
   
-  clearStorageButton.addEventListener('click', () => {
+  clearStorageButton.onClick(() => {
     storage.clear();
     window.location.reload();
   });

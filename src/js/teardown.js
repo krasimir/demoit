@@ -6,8 +6,8 @@ export default clearConsole => async function teardown() {
   const output = el('.output');
 
   if (typeof ReactDOM !== 'undefined') {
-    ReactDOM.unmountComponentAtNode(output);
+    ReactDOM.unmountComponentAtNode(output.e);
   }
 
-  output.innerHTML = '<div class="hint">&lt;div id="output" /&gt;</div>';
+  output.content('<div class="hint">&lt;div id="output" /&gt;</div>');
 }

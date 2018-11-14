@@ -1,8 +1,7 @@
 import { el } from './utils';
 
 export default async function editor(editorSettings, value, onSave, onChange) {
-  const container = el('.js-code-editor');
-  const editor = CodeMirror(container, {
+  const editor = CodeMirror(el('.js-code-editor').e, {
     value: value || '',
     mode:  'jsx',
     tabSize: 2,

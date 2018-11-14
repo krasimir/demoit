@@ -90,15 +90,15 @@ export default async function dependencies(storage) {
     ...storage.getDependencies()
   ];
 
-  preloader.style.opacity = 1;
+  preloader.css('opacity', 1);
 
   await load(dependencies, index => {
-    progress.style.width = (100 * (index / dependencies.length)) + '%';
+    progress.css('width', (100 * (index / dependencies.length)) + '%');
     if (index < dependencies.length) {
-      currentFile.innerHTML = dependencies[index].split(/\//).pop();
+      currentFile.content(dependencies[index].split(/\//).pop());
     } else {
-      currentFile.style.display = 'none';
-      preloader.style.opacity = 0;
+      currentFile.hide();
+      preloader.css('opacity', 0);
     }
   });
 }

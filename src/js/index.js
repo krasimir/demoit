@@ -10,10 +10,16 @@ import FileModal from './modals/FileModal';
 import StorageModal from './modals/StorageModal';
 import DependenciesModal from './modals/DependenciesModal';
 import dependencies from './dependencies';
+import resolveSettings from './settings';
 
 window.onload = async function () {
 
-  const storage = await createStorage();
+  const settings = await resolveSettings();
+  const storage = createStorage(settings);
+
+  // loading initial resources
+  await dependencies(storage);
+
   const { content: initialEditorValue } = storage.getCurrentFile();
   const cleanUp = teardown(createConsolePanel());
   const execute = () => executeCode(storage.getCurrentIndex(), storage.getFiles());
@@ -22,9 +28,6 @@ window.onload = async function () {
   const showEditFileModal = FileModal(storage);
   StorageModal(storage);
   DependenciesModal(storage);
-
-  // loading initial resources
-  await dependencies(storage);
 
   // editor
   const editor = await createEditor(
@@ -67,8 +70,9 @@ window.onload = async function () {
     }
   );
 
-  el('.container').style.visibility = 'visible';
-  el('.container').style.opacity = 1;
+  el('.container')
+    .css('visibility', 'visible')
+    .css('opacity', 1);
 
   setTimeout(() => screenSplit(), 100);
 

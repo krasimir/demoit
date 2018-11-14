@@ -9,17 +9,17 @@ export default function FileModal(storage) {
   let currentEditedFileIndex;
   let callback;
 
-  saveButton.addEventListener('click', () => {
+  saveButton.onClick(() => {
     storage.editFile(currentEditedFileIndex, {
-      filename: filenameInput.value
+      filename: filenameInput.prop('value')
     });
-    filenameInput.value = '';
+    filenameInput.prop('value', '');
     close();
     callback('rename');
   });
-  deleteButton.addEventListener('click', () => {
+  deleteButton.onClick(() => {
     storage.deleteFile(currentEditedFileIndex);
-    filenameInput.value = '';
+    filenameInput.prop('value', '');
     close();
     callback('delete');
   });
@@ -28,10 +28,10 @@ export default function FileModal(storage) {
     const currentFile = storage.getFileAt(index);
 
     show();
-    deleteButton.style.display = storage.getFiles().length > 1 ? 'block' : 'none';
+    storage.getFiles().length > 1 ? deleteButton.show() : deleteButton.hide();
     currentEditedFileIndex = index;
     callback = cb;
-    filenameInput.value = currentFile.filename;
-    filenameInput.focus();
+    filenameInput.prop('value', currentFile.filename);
+    filenameInput.e.focus();
   }
 }

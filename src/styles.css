@@ -15,6 +15,11 @@ body {
   color: #000;
   font-size: 20px;
   line-height: 20px;
+  background: #000;
+}
+.centered {
+  text-align: center;
+  display: block;
 }
 svg {
   fill: currentColor;
@@ -288,23 +293,66 @@ svg {
   display: block;
   width: 100px;
   margin: 0 auto;
-  opacity: 0.8;
 }
 .preloader .progress {
   margin-top: 2em;
   margin-bottom: 0.5em;
   width: 200px;
   height: 10px;
-  background: rgb(126, 126, 126);
+  background: rgb(46, 46, 46);
 }
 .preloader .value {
   width: 0;
   height: 100%;
-  background: #000;
+  background: rgb(121, 121, 121);
 }
 .preloader .file {
   font-size: 0.6em;
   margin: 1em 0 0 0;
   padding: 0;
   color: rgb(177, 177, 177);
+}
+/*************************** preloader */
+.home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #FFF;
+  display: grid;
+  grid-template-columns: 1fr 250px 250px 250px 1fr;
+}
+.home .as-button {
+  height: 100%;
+  padding: 10em 2em 5em 2em;
+  cursor: pointer;
+}
+.home .as-button:hover {
+  background-color: rgb(14, 14, 14);
+}
+.home .as-button svg {
+  width: 48px;
+  display: block;
+  margin: 0 auto 1em auto;
+}
+.home h2 {
+  margin: 0 0 1em 0;
+  padding: 0;
+  line-height: 1em;
+  text-align: center;
+  color: inherit;
+}
+.home p {
+  color: inherit;
+  margin: 0 0 1em 0;
+  padding: 0;
+  font-size: 0.8em;
+  line-height: 1.2em;
+  color: #999;
+}
+.home hr {
+  margin-bottom: 1em;
+  border-top: none;
+  border-bottom: dotted 1px #404040
 }

@@ -8,18 +8,14 @@ export default function DependenciesModal(storage) {
   const { close } = modal(
     el('.dependencies'),
     el('.manage-dependencies'),
-    () => {
-      list.value = storage.getDependencies().join('\n');
-    }
+    () => list.prop('value', storage.getDependencies().join('\n'))
   );
 
-  saveButton.addEventListener('click', async () => {
-    storage.setDependencies(list.value.split(/\r?\n/).filter(dep => (dep !== '' || dep !== '\n')));
-    saveButton.innerHTML = 'loading dependencies ...'
-    saveButton.disabled = true;
+  saveButton.onClick(async () => {
+    storage.setDependencies(list.prop('value').split(/\r?\n/).filter(dep => (dep !== '' || dep !== '\n')));
+    saveButton.content('loading dependencies ...').prop('disabled', true);
     await load(storage.getDependencies());
     close();
-    saveButton.innerHTML = 'Save'
-    saveButton.disabled = false;
+    saveButton.content('Save').prop('disabled', false);
   });
 }

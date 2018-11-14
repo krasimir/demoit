@@ -1,38 +1,11 @@
 import { isLocalStorageAvailable } from './utils';
 
-const LS_KEY = 'DEMOIT_v1';
+export const LS_KEY = 'DEMOIT_v1';
 const EMPTY_FILE = {
   content: '',
   filename: 'untitled.js',
   editing: false
 };
-const DEFAULT_SETTINGS = {
-  editor: { theme: 'material' },
-  dependencies: [],
-  files: []
-};
-
-const resolveSettings = async function () {
-  // reading from local storage
-  if (isLocalStorageAvailable()) {
-    const settings = localStorage.getItem(LS_KEY);
-    try {
-      if (settings) return JSON.parse(settings);
-    } catch(error) {
-      console.error(`There is some data in the local storage under the ${ LS_KEY } key. However, it is not a valid JSON.`);
-      return DEFAULT_SETTINGS;
-    }
-  }
-
-  // loading `settings.json`
-  try {
-    const res = await fetch('./settings.json');
-    return await res.json();
-  } catch(error) {}
-
-  // fallback to default settings
-  return DEFAULT_SETTINGS;
-}
 
 const resolveActiveFileIndex = function (files) {
   const hash = location.hash.replace(/^#/, '');
@@ -47,9 +20,8 @@ const resolveActiveFileIndex = function (files) {
   return 0;
 }
 
-export default async function createStorage() {
+export default function createStorage(settings) {
   const localStorageAvailable = isLocalStorageAvailable();
-  const settings = await resolveSettings();
   const onChangeListeners = [];
   var activeFileIndex = resolveActiveFileIndex(settings.files);
 

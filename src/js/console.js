@@ -15,7 +15,7 @@ export default function logger() {
 
     node.innerHTML = '<p>' + text + '</p>';
     if (empty) {
-      element.innerHTML = '';
+      element.content('');
       empty = false;
     }
     element.appendChild(node);
@@ -45,13 +45,13 @@ export default function logger() {
       originalInfo.apply(console, args);
     };
     console.clear = function (...args) {
-      element.innerHTML = '';
+      element.content('');
       originalClear.apply(console, args);
     };
   })();
 
   return function clearConsole() {
     empty = true;
-    element.innerHTML = '<div class="hint">console.log</div>';
+    element.content('<div class="hint">console.log</div>');
   }
 }
