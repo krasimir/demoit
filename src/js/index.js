@@ -1,6 +1,6 @@
+import { el } from './utils';
 import createStorage from './storage';
-import { loadDependencies, el } from './utils';
-import { loadEditorTheme, createEditor } from './editor';
+import createEditor from './editor';
 import createConsolePanel from './console';
 import screenSplit from './screenSplit';
 import navigation from './navigation';
@@ -9,9 +9,9 @@ import teardown from './teardown';
 import FileModal from './modals/FileModal';
 import StorageModal from './modals/StorageModal';
 import DependenciesModal from './modals/DependenciesModal';
+import dependencies from './dependencies';
 
 window.onload = async function () {
-  screenSplit();
 
   const storage = await createStorage();
   const { content: initialEditorValue } = storage.getCurrentFile();
@@ -24,8 +24,7 @@ window.onload = async function () {
   DependenciesModal(storage);
 
   // loading initial resources
-  await loadDependencies(storage.getDependencies());
-  await loadEditorTheme(storage.getEditorSettings());
+  await dependencies(storage);
 
   // editor
   const editor = await createEditor(
@@ -68,8 +67,10 @@ window.onload = async function () {
     }
   );
 
-  execute();
-
+  el('.container').style.visibility = 'visible';
   el('.container').style.opacity = 1;
-  el('body').style.backgroundImage = 'none';
+
+  setTimeout(() => screenSplit(), 100);
+
+  execute();
 };

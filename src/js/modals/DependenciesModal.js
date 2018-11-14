@@ -1,4 +1,5 @@
-import { el, modal, loadDependencies } from '../utils';
+import { el, modal } from '../utils';
+import { load } from '../dependencies';
 
 export default function DependenciesModal(storage) {
   const saveButton = el('.manage-dependencies .save');
@@ -16,7 +17,7 @@ export default function DependenciesModal(storage) {
     storage.setDependencies(list.value.split(/\r?\n/).filter(dep => (dep !== '' || dep !== '\n')));
     saveButton.innerHTML = 'loading dependencies ...'
     saveButton.disabled = true;
-    await loadDependencies(storage.getDependencies());
+    await load(storage.getDependencies());
     close();
     saveButton.innerHTML = 'Save'
     saveButton.disabled = false;

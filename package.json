@@ -8,8 +8,8 @@
     "url": "git+https://github.com/krasimir/demoit.git"
   },
   "scripts": {
-    "dev": "webpack",
-    "release": "webpack --config ./webpack.config.prod.js && node ./scripts/zipit.js"
+    "dev": "concurrently \"webpack\" \"cpx ./src/index.html ./dist --watch\" \"cpx ./src/styles.css ./dist --watch\"",
+    "release": "webpack --config ./webpack.config.prod.js && cleancss ./src/styles.css -o ./dist/styles.css && cp ./src/index.html ./dist/index.html && node ./scripts/zipit.js"
   },
   "keywords": [
     "demo",
@@ -29,8 +29,13 @@
     "@babel/preset-env": "7.1.5",
     "@babel/runtime": "7.1.5",
     "babel-loader": "8.0.4",
+    "concurrently": "4.0.1",
+    "cpx": "1.5.0",
     "webpack": "4.25.1",
     "webpack-cli": "3.1.2",
     "zip-folder": "1.0.0"
+  },
+  "dependencies": {
+    "clean-css-cli": "4.2.1"
   }
 }

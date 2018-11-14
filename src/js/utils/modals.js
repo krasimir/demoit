@@ -35,10 +35,7 @@ export function modal(trigger, container, onShow) {
     }
   }
 
-  trigger && trigger.addEventListener('click', () => {
-    api.show();
-    list.value = storage.getDependencies().join('\n');
-  });
+  trigger && trigger.addEventListener('click', () => api.show());
   closeButton && closeButton.addEventListener('click', () => api.close());
   
   return api;

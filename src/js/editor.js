@@ -1,6 +1,6 @@
-import { addStyleString, el, getDistFolderURL } from './utils';
+import { el } from './utils';
 
-export const createEditor = async function (editorSettings, value, onSave, onChange) {
+export default async function editor(editorSettings, value, onSave, onChange) {
   const container = el('.js-code-editor');
   const editor = CodeMirror(container, {
     value: value || '',
@@ -23,13 +23,3 @@ export const createEditor = async function (editorSettings, value, onSave, onCha
 
   return editor;
 };
-export const loadEditorTheme = async function({ theme }) {
-  try {
-    const res = await fetch(`${ getDistFolderURL() }vendor/codemirror/theme/${ theme }.css`);
-    const css = await res.text();
-
-    addStyleString(css);
-  } catch (error) {
-    console.log(error);
-  }
-}
