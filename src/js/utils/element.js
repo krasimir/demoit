@@ -1,5 +1,5 @@
 export function el(selector, parent = document) {
-  const e = parent.querySelector(selector);
+  var e = parent.querySelector(selector);
 
   if (!e) {
     throw new Error(`Ops! There is no DOM element matching "${ selector }" selector.`);
@@ -7,14 +7,6 @@ export function el(selector, parent = document) {
 
   return {
     e,
-    show() {
-      e.style.display = 'block';
-      return this;
-    },
-    hide() {
-      e.style.display = 'none';
-      return this;
-    },
     content(str) {
       e.innerHTML = str;
       return this;
@@ -49,6 +41,12 @@ export function el(selector, parent = document) {
     },
     find(selector) {
       return el(selector, e);
+    },
+    clone() {
+      const newNode = e.cloneNode(true);
+
+      e.parentNode.replaceChild(newNode, e);
+      e = newNode;
     }
   }
 }

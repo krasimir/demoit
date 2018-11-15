@@ -1,10 +1,16 @@
 import { isLocalStorageAvailable } from './utils';
 
-export const LS_KEY = 'DEMOIT_v1';
 const EMPTY_FILE = {
   content: '',
   filename: 'untitled.js',
   editing: false
+};
+
+export const LS_KEY = 'DEMOIT_v2';
+export const DEFAULT_SETTINGS = {
+  editor: { theme: 'material' },
+  dependencies: [],
+  files: [ EMPTY_FILE ]
 };
 
 const resolveActiveFileIndex = function (files) {
@@ -20,9 +26,10 @@ const resolveActiveFileIndex = function (files) {
   return 0;
 }
 
-export default function createStorage(settings) {
+export default function createStorage() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
+  var settings = DEFAULT_SETTINGS;
   var activeFileIndex = resolveActiveFileIndex(settings.files);
 
   const notify = () => onChangeListeners.forEach(c => c());
@@ -33,6 +40,11 @@ export default function createStorage(settings) {
   }
   
   const api = {
+    updateSettings(newSettings) {
+      settings = newSettings;
+      activeFileIndex = resolveActiveFileIndex(settings.files);
+      syncSettings();
+    },
     getCurrentIndex() {
       return activeFileIndex;
     },

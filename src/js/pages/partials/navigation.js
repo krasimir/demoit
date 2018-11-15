@@ -1,7 +1,9 @@
-import { el } from './utils';
+import { el } from '../../utils';
 
-export default function navigation(storage, showFile, newFile, editFile) {
+export default function navigation(storage, showFile, newFile, editFile, manageStorage, manageDependencies) {
   const navigation = el('.files .nav');
+  const manageStorageButton = el('.files .storage');
+  const manageDependenciesButton = el('.files .manageDependencies');
   
   const render = () => {
     const items  = [];
@@ -30,4 +32,7 @@ export default function navigation(storage, showFile, newFile, editFile) {
   window.newFile = () => newFile();
 
   storage.listen(render);
+
+  manageStorageButton.onClick(manageStorage);
+  manageDependenciesButton.onClick(manageDependencies);
 }

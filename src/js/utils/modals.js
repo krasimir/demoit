@@ -2,30 +2,18 @@ import { el } from '../utils';
 
 const ESC_KEY = 27;
 
-export function modal(trigger, container, onShow) {
-  let removeKeyUpListener;
+export function modal(container, onClose) {
   const body = el('body');
-  const closeButton = container.find('.cancel');
   const escHandler = e => {
     if (e.keyCode === ESC_KEY) {
       removeKeyUpListener();
-      api.close();
+      onClose();
     }
   }
-  const api = {
-    show() {
-      container.show();
-      removeKeyUpListener = body.onKeyUp(escHandler);
-      onShow && onShow();
-    },
-    close() {
-      container.hide();
-      removeKeyUpListener();
-    }
-  }
+  const removeKeyUpListener = body.onKeyUp(escHandler);
 
-  trigger && trigger.onClick(() => api.show());
-  closeButton && closeButton.onClick(() => api.close());
-  
-  return api;
+  container.find('.cancel').onClick(() => {
+    removeKeyUpListener();
+    onClose();
+  });
 }

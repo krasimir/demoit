@@ -1,6 +1,6 @@
 import transpile from './transpile';
 
-export default function execute(index, allFiles) {
+export function execute(index, allFiles) {
   try {
     const transpiledFiles = allFiles.map(({ filename, content }) => `
       {

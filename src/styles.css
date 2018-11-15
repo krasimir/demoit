@@ -24,12 +24,7 @@ body {
 svg {
   fill: currentColor;
 }
-.container {
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 500ms ease;
+.editor {
   background-color: #263238;
 }
 .left, .right {
@@ -176,8 +171,8 @@ svg {
   width: 100%;
   background: #fff;
 }
-/*************************** MODAL */
-.modal {
+/*************************** PAGE */
+.page {
   position: fixed;
   top: 0;
   left: 0;
@@ -187,27 +182,33 @@ svg {
   color: #FFF;
   display: none;
   z-index: 8000;
+  opacity: 0;
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  -webkit-transition: opacity 200ms ease-out, transform 200ms ease-out;
+  transform: translateY(-20px);
+  -webkit-transform: translateY(-20px);
 }
-.modal section {
+/*************************** OPTIONS TYPE OF PAGE */
+.options section {
   width: 600px;
   margin: 0em auto;
   padding-top: 2em;
 }
-.modal p {
+.options p {
   margin: 0 0 1em 0;
   padding: 0;
   font-size: 1em;
   line-height: 1.2em;
 }
-.modal h1 {
+.options h1 {
   padding: 0;
   margin: 1em 0;
 }
-.modal h2 {
+.options h2 {
   padding: 0;
   margin: 1em 0;
 }
-.modal button {
+.options button {
   font-size: 0.7em;
   padding: 0.6em 1em;
   background: #44565f;
@@ -220,30 +221,30 @@ svg {
   text-transform: uppercase;
   font-weight: bold;
 }
-.modal button:hover {
+.options button:hover {
   background: #c0d7e2;
 }
-.modal .right {
+.options .right {
   float: right;
 }
-.modal .secondary {
+.options .secondary {
   border: solid 1px #4a4a4a;
   background: none;
   color: #999;
 }
-.modal .secondary span {
+.options .secondary span {
   display: inline-block;
   transform: translateY(-5px);
   margin-left: 7px;
 }
-.modal .secondary:hover {
+.options .secondary:hover {
   color: #000;
 }
-.modal hr {
+.options hr {
   margin: 2em 0;
     border-color: #313131;
 }
-.modal input, .modal textarea {
+.options input, .options textarea {
   width: 100%;
   border: none;
   font-size: 1em;
@@ -253,16 +254,16 @@ svg {
   outline: none;
   margin-bottom: 1em;
 }
-.modal textarea {
+.options textarea {
   height: 162px;
 }
-.modal a {
+.options a {
   color: #fff;
 }
-.modal a:hover {
+.options a:hover {
   text-decoration: none;
 }
-.modal .cancel {
+.options .cancel {
   position: absolute;
   top: 2em;
   right: 2em;
@@ -277,8 +278,8 @@ svg {
 .manage-dependencies textarea.dependencies-list {
   height: 300px;
 }
-/*************************** preloader */
-.preloader {
+/*************************** PRELOADER */
+.dependencies {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -287,26 +288,25 @@ svg {
   margin-left: -100px;
   margin-top: -100px;
   opacity: 0;
-  transition: opacity 1000ms;
 }
-.preloader .logo {
+.dependencies .logo {
   display: block;
   width: 100px;
   margin: 0 auto;
 }
-.preloader .progress {
+.dependencies .progress {
   margin-top: 2em;
   margin-bottom: 0.5em;
   width: 200px;
   height: 10px;
   background: rgb(46, 46, 46);
 }
-.preloader .value {
+.dependencies .value {
   width: 0;
   height: 100%;
   background: rgb(121, 121, 121);
 }
-.preloader .file {
+.dependencies .file {
   font-size: 0.6em;
   margin: 1em 0 0 0;
   padding: 0;
@@ -314,13 +314,8 @@ svg {
 }
 /*************************** preloader */
 .home {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   color: #FFF;
-  display: grid;
+  /* display: grid; */
   grid-template-columns: 1fr 250px 250px 250px 1fr;
 }
 .home .as-button {

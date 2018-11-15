@@ -1,4 +1,4 @@
-import { el } from './utils';
+import { el } from '../utils';
 
 const LOADED_FILES_CACHE = {};
 
@@ -73,32 +73,34 @@ export const load = async function (dependencies, status = () => {}) {
   });
 }
 
-export default async function dependencies(storage) {
-  const preloader = el('.preloader');
-  const progress = el('.value');
-  const currentFile = el('.file');
-  const dependencies = [
-    './vendor/codemirror/codemirror.js',
-    './vendor/codemirror/javascript.js',
-    './vendor/codemirror/xml.js',
-    './vendor/codemirror/jsx.js',
-    './vendor/codemirror/mark-selection.js',
-    './vendor/split.js',
-    './vendor/babel-6.26.0.min.js',
-    './vendor/babel-polyfill@6.26.0.js',
-    `./vendor/codemirror/theme/${ storage.getEditorSettings().theme }.css`,
-    ...storage.getDependencies()
-  ];
+export default function dependencies({ storage, changePage }) {
+  return {
+    name: 'dependencies',
+    async didMount({ el }) {
+      const progress = el('.value');
+      const currentFile = el('.file');
+      const dependencies = [
+        './vendor/codemirror/codemirror.js',
+        './vendor/codemirror/javascript.js',
+        './vendor/codemirror/xml.js',
+        './vendor/codemirror/jsx.js',
+        './vendor/codemirror/mark-selection.js',
+        './vendor/split.js',
+        './vendor/babel-6.26.0.min.js',
+        './vendor/babel-polyfill@6.26.0.js',
+        `./vendor/codemirror/theme/${ storage.getEditorSettings().theme }.css`,
+        ...storage.getDependencies()
+      ];
 
-  preloader.css('opacity', 1);
-
-  await load(dependencies, index => {
-    progress.css('width', (100 * (index / dependencies.length)) + '%');
-    if (index < dependencies.length) {
-      currentFile.content(dependencies[index].split(/\//).pop());
-    } else {
-      currentFile.hide();
-      preloader.css('opacity', 0);
+      await load(dependencies, index => {
+        progress.css('width', (100 * (index / dependencies.length)) + '%');
+        if (index < dependencies.length) {
+          currentFile.content(dependencies[index].split(/\//).pop());
+        } else {
+          currentFile.css('opacity', 0);
+          changePage('editor');
+        }
+      });
     }
-  });
+  }
 }

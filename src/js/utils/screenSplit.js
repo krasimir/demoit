@@ -1,6 +1,6 @@
 export const LOCAL_STORAGE_SPLIT_SIZES_KEY = 'demoit-split-sizes-v2';
 
-export default function screenSplit() {
+export function screenSplit() {
   const isLocalStorageAvailable = typeof window.localStorage !== 'undefined';
   const defaultValues = [ 25, 75, 75, 25 ];
   const getSizes = () => {
@@ -10,7 +10,11 @@ export default function screenSplit() {
       if (valueInStorage) {
         valueInStorage = valueInStorage.split(',');
         if (valueInStorage.length === 4) {
-          return valueInStorage.map(Number);
+          const valuesAsInt = valueInStorage.map(parseInt);
+
+          if (valuesAsInt.every(n => !isNaN(n))) {
+            return valuesAsInt;
+          }
         }
       }
     }
@@ -31,5 +35,5 @@ export default function screenSplit() {
       LOCAL_STORAGE_SPLIT_SIZES_KEY,
       mainSplit.getSizes().join(',') + ',' + leftSplit.getSizes().join(',')
     )
-  }, 4000);
+  }, 2000);
 }

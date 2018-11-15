@@ -1,4 +1,4 @@
-import { el } from './utils';
+import { el } from '../../utils';
 
 function htmlEncode(str) {
   return str.replace(/[&<>"']/g, function($0) {

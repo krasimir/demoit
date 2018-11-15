@@ -1,8 +1,13 @@
-export * from './modals';
+export * from './editor';
 export * from './element';
+export * from './execute';
+export * from './modals';
+export * from './screenSplit';
+export * from './teardown';
+export * from './transpile';
 
 export const debounce = function (func, wait, immediate) {
-	var timeout;
+	var timeout; 
 	return function() {
 		var context = this, args = arguments;
 		var later = function() {
@@ -25,4 +30,14 @@ export const isLocalStorageAvailable = function () {
   } catch(e) {
     return false;
   }
+}
+export const delay = async (amount = 1) => new Promise(done => setTimeout(done, amount));
+export const once = callback => {
+	let called = false;
+
+	return (...args) => {
+		if (called) return;
+		called = true;
+		callback(...args);
+	}
 }

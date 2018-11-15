@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <div class="container">
+  <div class="editor page">
     <div class="left">
       <div class="output" id="output">
         <div class="hint">&lt;div id="output" /&gt;</div>
@@ -23,7 +23,7 @@
         <div class="nav"></div>
         <div class="options">
           <ul>
-            <li class="dependencies">
+            <li class="manageDependencies">
               <a href="javascript:void(0);" title="Manage your dependencies">
                 <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M896 1629l640-349v-636l-640 233v752zm-64-865l698-254-698-254-698 254zm832-252v768q0 35-18 65t-49 47l-704 384q-28 16-61 16t-61-16l-704-384q-31-17-49-47t-18-65v-768q0-40 23-73t61-47l704-256q22-8 44-8t44 8l704 256q38 14 61 47t23 73z"/></svg>
                 <!-- <span>Dependencies</span> -->
@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  <div class="modal edit-file">
+  <div class="fileEdit options page">
     <section>
       <input name="filename"/>
       <button class="save">Save</button>
@@ -57,10 +57,10 @@
     </section>
   </div>
 
-  <div class="modal manage-storage">
+  <div class="manageStorage options page">
     <section>
       <h2>Type of storage</h2>
-      <p>At the moment Demoit uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage API</a> to save your progress.</p>
+      <p>At the moment Demoit uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage API</a> to save your progress.</p>
       <hr />
       <h2>Transfer your work</h2>
       <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in <i>settings.json</i> file.</p>
@@ -72,7 +72,7 @@
     </section>
   </div>
 
-  <div class="modal manage-dependencies">
+  <div class="manageDependencies options page">
     <section>
       <h2>Dependencies</h2>
       <button class="cancel secondary"><svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg></button>
@@ -82,7 +82,7 @@
     </section>
   </div>
 
-  <div class="preloader">
+  <div class="dependencies page">
     <img src="./img/demoit_100x100_white.png" alt="demoit" class="logo"/>
     <div class="progress">
       <div class="value"></div>
@@ -90,7 +90,7 @@
     <p class="file">...</p>
   </div>
 
-  <div class="home">
+  <div class="home page">
     <div></div>
     <div class="new-project as-button">
       <svg width="48" height="48" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1600 736v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"/></svg>
