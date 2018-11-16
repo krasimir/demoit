@@ -5,6 +5,7 @@ export * from './modals';
 export * from './screenSplit';
 export * from './teardown';
 export * from './transpile';
+export * from './icons';
 
 export const debounce = function (func, wait, immediate) {
 	var timeout; 
@@ -40,4 +41,15 @@ export const once = callback => {
 		called = true;
 		callback(...args);
 	}
+}
+export const getParam = (parameterName) => {
+	var result = null, tmp = [];
+	location.search
+		.substr(1)
+		.split("&")
+		.forEach(function (item) {
+			tmp = item.split("=");
+			if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+		});
+	return result;
 }

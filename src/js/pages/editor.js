@@ -7,8 +7,11 @@ import {
 import createConsolePanel from './partials/console';
 import navigation from './partials/navigation';
 
+let codeMirrorEditor;
+
 export default function editor({ storage, changePage }) {
   return {
+    editor: null,
     name: 'editor',
     permanentInDOM: true,
     async didMount({ el }) {
@@ -18,7 +21,7 @@ export default function editor({ storage, changePage }) {
       const cleanUp = teardown(createConsolePanel());
       const execute = () => executeCode(storage.getCurrentIndex(), storage.getFiles());
 
-      const editor = await createEditor(
+      codeMirrorEditor = await createEditor(
         storage.getEditorSettings(),
         initialEditorValue,
         async function onSave(code) {
@@ -33,8 +36,8 @@ export default function editor({ storage, changePage }) {
 
       const loadFileInEditor = async (file) => {
         await cleanUp();
-        editor.setValue(file.content);
-        editor.focus();
+        codeMirrorEditor.setValue(file.content);
+        codeMirrorEditor.focus();
         // we have to do this because we fire the onChange handler of the editor which sets editing=true;
         storage.editCurrentFile({ editing: false  });
         execute();
@@ -60,6 +63,9 @@ export default function editor({ storage, changePage }) {
       );
 
       execute();
+    },
+    didShow() {
+      codeMirrorEditor && codeMirrorEditor.focus();
     }
   }
 }

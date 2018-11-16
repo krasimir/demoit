@@ -7,7 +7,7 @@ const EMPTY_FILE = {
 };
 
 export const LS_KEY = 'DEMOIT_v2';
-export const DEFAULT_SETTINGS = {
+export const DEFAULT_STATE = {
   editor: { theme: 'material' },
   dependencies: [],
   files: [ EMPTY_FILE ]
@@ -29,28 +29,28 @@ const resolveActiveFileIndex = function (files) {
 export default function createStorage() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
-  var settings = DEFAULT_SETTINGS;
-  var activeFileIndex = resolveActiveFileIndex(settings.files);
+  var state = DEFAULT_STATE;
+  var activeFileIndex = resolveActiveFileIndex(state.files);
 
   const notify = () => onChangeListeners.forEach(c => c());
-  const syncSettings = () => {
+  const syncState = () => {
     if (localStorageAvailable) {
-      localStorage.setItem(LS_KEY, JSON.stringify(settings));
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
     }
   }
   
   const api = {
-    updateSettings(newSettings) {
-      settings = newSettings;
-      activeFileIndex = resolveActiveFileIndex(settings.files);
-      syncSettings();
+    setState(newState) {
+      state = newState;
+      activeFileIndex = resolveActiveFileIndex(state.files);
+      syncState();
     },
     getCurrentIndex() {
       return activeFileIndex;
     },
     setCurrentIndex(idx) {
       activeFileIndex = idx;
-      location.hash = settings.files[idx].filename;
+      location.hash = state.files[idx].filename;
       notify();
     },
     isCurrentIndex(idx) {
@@ -60,38 +60,38 @@ export default function createStorage() {
       return this.getFiles()[activeFileIndex];
     },
     getFiles() {
-      return settings.files;
+      return state.files;
     },
     dump() {
-      return settings;
+      return state;
     },
     getDependencies() {
-      return settings.dependencies;
+      return state.dependencies;
     },
     setDependencies(dependencies) {
-      settings.dependencies = dependencies;
-      syncSettings();
+      state.dependencies = dependencies;
+      syncState();
       notify();
     },
     getEditorSettings() {
-      return settings.editor;
+      return state.editor;
     },
     getFileAt(index) {
       return this.getFiles()[index];
     },
     makeSureOneFileAtLeast() {
       if (this.getFiles().length === 0) {
-        settings.files.push(EMPTY_FILE);
+        state.files.push(EMPTY_FILE);
         this.setCurrentIndex(0);
-        syncSettings();
+        syncState();
       }
     },
     editFile(index, updates) {
-      settings.files[index] = {
-        ...settings.files[index],
+      state.files[index] = {
+        ...state.files[index],
         ...updates
       };
-      syncSettings();
+      syncState();
       notify();
       this.setCurrentIndex(activeFileIndex);
     },
@@ -103,19 +103,19 @@ export default function createStorage() {
       return this.getCurrentFile();
     },
     addNewFile() {
-      settings.files.push(EMPTY_FILE);
-      syncSettings();
-      return this.changeActiveFile(settings.files.length - 1);
+      state.files.push(EMPTY_FILE);
+      syncState();
+      return this.changeActiveFile(state.files.length - 1);
     },
     deleteFile(index) {
       if (index === activeFileIndex) {
-        settings.files.splice(index, 1);
-        syncSettings();
+        state.files.splice(index, 1);
+        syncState();
         this.setCurrentIndex(0);
       } else {
         const currentFile = this.getCurrentFile();
-        settings.files.splice(index, 1);
-        syncSettings();
+        state.files.splice(index, 1);
+        syncState();
         this.setCurrentIndex(this.getFiles().findIndex(file => file === currentFile) || 0);
       }
     },

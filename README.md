@@ -11,18 +11,18 @@
 
 ## Demo :rocket:
 
-[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist)
+[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../_samples/React.json)
 
 ---
 
 ## Usage
 
-* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist/)
+* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist?state=../_samples/React.json)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip). Unzip. There's a `index.html` which you can load in a browser.
 
 ## Configuration and content
 
-The configuration for the tool is set in `settings.json` file:
+The configuration for the tool is in a JSON format:
 
 ```json
 {
@@ -48,19 +48,15 @@ The configuration for the tool is set in `settings.json` file:
 * `dependencies` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those resources before running your code files.
 * `files` - It contains an array of items representing your scripts.
 
-By default Demoit first tries to read its settings and content from the `localStorage`. Then it falls back to the `settings.json`. If that's also missing it uses default values.
+You may create a JSON file and give the path to it via a GET parameter. For example: `http://localhost/demoit?state=./mycode.json`.
 
 ## Continuing your work offline
 
-You may need to transfer your progress on your machine. In order to do that download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip) and go to the storage manager. There is a button to it in the top right corner of the app. Then copy the content of the `settings.json` to your local folder.
-
-## Resetting your progress to `settings.json`
-
-Go to the storage manager. There is a link to it in the top right corner of the app. Then click on `Reset to the data in settings.json` button.
+You may need to transfer your progress on your machine. In order to do that go to the storage manager (there is a button in the top right corner of the app). Then copy the content of the text area into a JSON file on your machine. After that download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip), unzip it and move the newly created JSON file inside the folder. The last step is to open Demoit and give the name of your JSON file. For example: `http://localhost/demoit?state=./mycode.json`
 
 ## Keyboard shortcuts
 
-There are only two key combination - `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your current file.
+* `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your current file.
 
 ## Editing filenames and deleting files
 

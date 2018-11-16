@@ -1,15 +1,17 @@
 export function el(selector, parent = document) {
-  var e = parent.querySelector(selector);
-
+  var e = typeof selector === 'string' ? parent.querySelector(selector) : selector;
+  
   if (!e) {
     throw new Error(`Ops! There is no DOM element matching "${ selector }" selector.`);
   }
+  
+  var initialNode = e.cloneNode(true);
 
   return {
     e,
     content(str) {
       e.innerHTML = str;
-      return this;
+      return Array.prototype.slice.call(e.querySelectorAll('[data-export]')).map(element => el(element, e));
     },
     appendChild(child) {
       e.appendChild(child);
@@ -31,6 +33,14 @@ export function el(selector, parent = document) {
         return e[name];
       }
     },
+    attr(attr, value) {
+      if (typeof value !== 'undefined') {
+        e.setAttribute(attr, value);
+        return this;
+      } else {
+        return e.getAttribute(attr);
+      }
+    },
     onClick(callback) {
       e.addEventListener('click', callback);
       return () => e.removeEventListener('click', callback);
@@ -42,11 +52,10 @@ export function el(selector, parent = document) {
     find(selector) {
       return el(selector, e);
     },
-    clone() {
-      const newNode = e.cloneNode(true);
-
-      e.parentNode.replaceChild(newNode, e);
-      e = newNode;
+    restoreToInitialDOM() {
+      const clone = initialNode.cloneNode(true);
+      e.parentNode.replaceChild(clone, e);
+      e = clone;
     }
   }
 }

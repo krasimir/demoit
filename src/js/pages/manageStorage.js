@@ -4,10 +4,10 @@ export default function manageStorage({ storage, changePage }) {
   return {
     name: 'manageStorage',
     didMount({ el, pageDOMElement }) {
-      const settingsJSON = el('.settings-json');
+      const stateJSON = el('.state-json');
       const clearStorageButton = el('.clear-storage');
 
-      settingsJSON.prop('value', JSON.stringify(storage.dump(), null, 2));
+      stateJSON.prop('value', JSON.stringify(storage.dump(), null, 2));
       
       clearStorageButton.onClick(() => {
         storage.clear();

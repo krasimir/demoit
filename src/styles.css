@@ -315,21 +315,32 @@ svg {
 /*************************** preloader */
 .home {
   color: #FFF;
-  /* display: grid; */
-  grid-template-columns: 1fr 250px 250px 250px 1fr;
 }
 .home .as-button {
   height: 100%;
   padding: 10em 2em 5em 2em;
   cursor: pointer;
 }
-.home .as-button:hover {
+.home .notClickable {
+  height: 100%;
+  padding: 10em 2em 5em 2em;
+}
+.home .as-button:hover, .home .notClickable:hover {
   background-color: rgb(14, 14, 14);
 }
-.home .as-button svg {
+.home .as-button svg, .home .notClickable svg {
   width: 48px;
   display: block;
   margin: 0 auto 1em auto;
+}
+.home .notClickable a {
+  color: #FFF;
+  display: block;
+  margin: 0 0 0.4em 0;
+  font-size: 1.2em;
+}
+.home .notClickable a:hover {
+  color: #44565f;
 }
 .home h2 {
   margin: 0 0 1em 0;
@@ -342,9 +353,10 @@ svg {
   color: inherit;
   margin: 0 0 1em 0;
   padding: 0;
-  font-size: 0.8em;
+  font-size: 0.7em;
   line-height: 1.2em;
   color: #999;
+  text-align: center;
 }
 .home hr {
   margin-bottom: 1em;
