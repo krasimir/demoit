@@ -93,11 +93,16 @@ export default function home({ storage, changePage }) {
       }
 
       if (autoOpenCodeSample) {
-        try {
-          storage.setState(await readFromJSONFile(autoOpenCodeSample));
+        if (autoOpenCodeSample === 'LOCALSTORAGE') {
+          storage.setState(localStorageData);
           changePage('dependencies');
-        } catch(error) {
-          codeSamplesColumn = CODE_SAMPLE_ERROR_LOADING(autoOpenCodeSample);
+        } else {
+          try {
+            storage.setState(await readFromJSONFile(autoOpenCodeSample));
+            changePage('dependencies');
+          } catch(error) {
+            codeSamplesColumn = CODE_SAMPLE_ERROR_LOADING(autoOpenCodeSample);
+          }
         }
       }
 

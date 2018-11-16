@@ -2,7 +2,7 @@ import { el } from '../utils';
 
 const LOADED_FILES_CACHE = {};
 
-export const addJSFile = function (path, done) {
+const addJSFile = function (path, done) {
   if (LOADED_FILES_CACHE[path]) return done();
 
   const node = document.createElement('script');
@@ -14,7 +14,7 @@ export const addJSFile = function (path, done) {
   });
   document.body.appendChild(node);
 }
-export const addCSSFile = function (path, done) {
+const addCSSFile = function (path, done) {
   if (LOADED_FILES_CACHE[path]) return done();
 
   const node = document.createElement('link');
@@ -28,29 +28,7 @@ export const addCSSFile = function (path, done) {
   });
   document.body.appendChild(node);
 }
-export const addStyleString = function (str) {
-  const node = document.createElement('style');
-
-  node.innerHTML = str;
-  document.body.appendChild(node);
-}
-export const addScriptString = function (str) {
-  const node = document.createElement('script');
-
-  node.innerHTML = str;
-  document.body.appendChild(node);
-}
-export const getDistFolderURL = function () {
-  try {
-    return [].slice.call(document.querySelectorAll('script[src]'))
-      .map(({ src }) => src)
-      .find(url => url.match('demoit.js'))
-      .replace('demoit.js', '');
-  } catch(error) {
-    return './';
-  }
-}
-export const load = async function (dependencies, status = () => {}) {
+const load = async function (dependencies, status = () => {}) {
   return new Promise(done => {
     (function load(index) {
       status(index);

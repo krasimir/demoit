@@ -1,0 +1,23 @@
+{
+  "editor": {
+    "theme": "material"
+  },
+  "dependencies": [],
+  "files": [
+    {
+      "content": "import 'styles.css';\nimport 'markup.html';",
+      "filename": "app.js",
+      "editing": false
+    },
+    {
+      "content": "h1 {\n  color: purple;\n}",
+      "filename": "styles.css",
+      "editing": false
+    },
+    {
+      "content": "<h1>Hello app</h1>",
+      "filename": "markup.html",
+      "editing": false
+    }
+  ]
+}

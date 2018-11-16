@@ -11,13 +11,13 @@
 
 ## Demo :rocket:
 
-[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../_samples/React.json,../_samples/Vue.json)
+[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../_samples/React.json,../_samples/Vue.json,../_samples/HTML+CSS.json)
 
 ---
 
 ## Usage
 
-* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist?state=../_samples/React.json,../_samples/Vue.json)
+* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist??state=../_samples/React.json,../_samples/Vue.json,../_samples/HTML+CSS.json)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
 ## Configuration
@@ -53,7 +53,7 @@ The path to the JSON files is set via `state` GET parameter. For example: `http:
 ## GET Params
 
 * `?state=` - A comma separated list of configuration JSON files
-* `?autoOpenCodeSample=` - path to a configuration JSON file that will be loaded automatically
+* `?autoOpenCodeSample=` - path to a configuration JSON file that will be loaded automatically. Or if the value is `LOCALSTORAGE` it will always get the config from the local storage.
 
 ## Continuing your work offline
 
