@@ -86,11 +86,20 @@ export default function home({ storage, changePage }) {
       const localStorageData = readFromLocalStorage();
       let codeSamplesColumn = null;
       let localStorageColumn = null;
+      let autoOpenCodeSample = getParam('autoOpenCodeSample');
 
       if (stateFiles) {
         codeSamplesColumn = CODE_SAMPLES_LIST_FILES_COLUMN(stateFiles);
       }
-      
+
+      if (autoOpenCodeSample) {
+        try {
+          storage.setState(await readFromJSONFile(autoOpenCodeSample));
+          changePage('dependencies');
+        } catch(error) {
+          codeSamplesColumn = CODE_SAMPLE_ERROR_LOADING(autoOpenCodeSample);
+        }
+      }
 
       if (localStorageData) {
         localStorageColumn = LOCAL_STORAGE_COLUMN(localStorageData.files.map(({ filename }) => filename));

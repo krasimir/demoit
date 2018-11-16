@@ -11,18 +11,16 @@
 
 ## Demo :rocket:
 
-[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../_samples/React.json)
+[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../_samples/React.json,../_samples/Vue.json)
 
 ---
 
 ## Usage
 
-* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist?state=../_samples/React.json)
-* Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip). Unzip. There's a `index.html` which you can load in a browser.
+* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist?state=../_samples/React.json,../_samples/Vue.json)
+* Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
-## Configuration and content
-
-The configuration for the tool is in a JSON format:
+## Configuration
 
 ```json
 {
@@ -48,7 +46,14 @@ The configuration for the tool is in a JSON format:
 * `dependencies` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those resources before running your code files.
 * `files` - It contains an array of items representing your scripts.
 
-You may create a JSON file and give the path to it via a GET parameter. For example: `http://localhost/demoit?state=./mycode.json`.
+The configuration must be saved into a JSON file. The path of which needs to be passed to Demoit. If there is no such file (or files) the tool still works. There's just no predefined content on it.
+
+The path to the JSON files is set via `state` GET parameter. For example: `http://localhost/demoit?state=./mycode.json`. You may pass as many JSON files as you want. Separate them with commas.
+
+## GET Params
+
+* `?state=` - A comma separated list of configuration JSON files
+* `?autoOpenCodeSample=` - path to a configuration JSON file that will be loaded automatically
 
 ## Continuing your work offline
 

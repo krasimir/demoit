@@ -12,7 +12,6 @@ body {
   width: 100%;
   height: 100%;
   font-family: Arial, Verdana;
-  color: #000;
   font-size: 20px;
   line-height: 20px;
   background: #000;
@@ -179,7 +178,7 @@ svg {
   width: 100%;
   height: 100%;
   background: #000;
-  color: #FFF;
+  color: #fff;
   display: none;
   z-index: 8000;
   opacity: 0;
@@ -211,26 +210,21 @@ svg {
 .options button {
   font-size: 0.7em;
   padding: 0.6em 1em;
-  background: #44565f;
+  background: none;
   cursor: pointer;
   border-radius: 4px;
-  border: solid 2px #758c98;
-  color: #000;
+  border: solid 2px #525252;
+  color: #FFF;
   outline: none;
   display: inline-block;
   text-transform: uppercase;
   font-weight: bold;
 }
 .options button:hover {
-  background: #c0d7e2;
+  background: #313131;
 }
 .options .right {
   float: right;
-}
-.options .secondary {
-  border: solid 1px #4a4a4a;
-  background: none;
-  color: #999;
 }
 .options .secondary span {
   display: inline-block;
@@ -238,15 +232,15 @@ svg {
   margin-left: 7px;
 }
 .options .secondary:hover {
-  color: #000;
+  
 }
 .options hr {
   margin: 2em 0;
-    border-color: #313131;
+  border-color: #313131;
 }
 .options input, .options textarea {
   width: 100%;
-  border: none;
+  border: solid 1px #525252;
   font-size: 1em;
   padding: 0.6em;
   display: block;
@@ -258,7 +252,7 @@ svg {
   height: 162px;
 }
 .options a {
-  color: #fff;
+  color: inherit;
 }
 .options a:hover {
   text-decoration: none;
@@ -299,34 +293,33 @@ svg {
   margin-bottom: 0.5em;
   width: 200px;
   height: 10px;
-  background: rgb(46, 46, 46);
+  background: #525252;
 }
 .dependencies .value {
   width: 0;
   height: 100%;
-  background: rgb(121, 121, 121);
+  background: #FFF;
 }
 .dependencies .file {
   font-size: 0.6em;
   margin: 1em 0 0 0;
   padding: 0;
-  color: rgb(177, 177, 177);
+  color: rgb(109, 109, 109);
 }
 /*************************** preloader */
-.home {
-  color: #FFF;
-}
 .home .as-button {
   height: 100%;
   padding: 10em 2em 5em 2em;
   cursor: pointer;
+  transition: background-color 400ms ease;
+  background-color: #000;
 }
 .home .notClickable {
   height: 100%;
   padding: 10em 2em 5em 2em;
 }
 .home .as-button:hover, .home .notClickable:hover {
-  background-color: rgb(14, 14, 14);
+  background-color: #0e0e0e;
 }
 .home .as-button svg, .home .notClickable svg {
   width: 48px;
@@ -334,13 +327,18 @@ svg {
   margin: 0 auto 1em auto;
 }
 .home .notClickable a {
-  color: #FFF;
+  color: inherit;
   display: block;
   margin: 0 0 0.4em 0;
   font-size: 1.2em;
+  text-decoration: none;
+  padding: 0.6em 1em;
+  border-radius: 4px;
+  border: solid 2px #525252;
+  background: none;
 }
 .home .notClickable a:hover {
-  color: #44565f;
+  background: #525252;
 }
 .home h2 {
   margin: 0 0 1em 0;
@@ -355,7 +353,6 @@ svg {
   padding: 0;
   font-size: 0.7em;
   line-height: 1.2em;
-  color: #999;
   text-align: center;
 }
 .home hr {

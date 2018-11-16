@@ -1,0 +1,17 @@
+{
+  "editor": {
+    "theme": "material"
+  },
+  "dependencies": [
+    "./resources/vue@2.5.17.js",
+    "./resources/marked@0.3.6.js",
+    "./resources/lodash@4.16.0.js"
+  ],
+  "files": [
+    {
+      "content": "document.querySelector('.output').innerHTML = `\n  <div id=\"editor\">\n    <textarea :value=\"input\" @input=\"update\"></textarea>\n    <div v-html=\"compiledMarkdown\"></div>\n  </div>\n`;\n\nnew Vue({\n  el: '#editor',\n  data: {\n    input: '# hello'\n  },\n  computed: {\n    compiledMarkdown: function () {\n      return marked(this.input, { sanitize: true })\n    }\n  },\n  methods: {\n    update: _.debounce(function (e) {\n      this.input = e.target.value\n    }, 300)\n  }\n});",
+      "filename": "Vue.js",
+      "editing": false
+    }
+  ]
+}
