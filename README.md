@@ -11,13 +11,13 @@
 
 ## Demo :rocket:
 
-[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../_samples/React.json,../_samples/Vue.json,../_samples/HTML+CSS.json)
+[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/React.json,../samples/Vue.json,../samples/HTML+CSS.json)
 
 ---
 
 ## Usage
 
-* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist??state=../_samples/React.json,../_samples/Vue.json,../_samples/HTML+CSS.json)
+* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist??state=../samples/React.json,../samples/Vue.json,../samples/HTML+CSS.json)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
 ## Configuration
