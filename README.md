@@ -1,6 +1,6 @@
 ![demoit](./demoit.png)
 
-# **Demoit** is a tiny JavaScript playground
+# **Demoit** is a interactive JavaScript playground
 
 * No installation.
 * No server needed. It works offline.
