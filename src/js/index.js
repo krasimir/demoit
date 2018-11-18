@@ -1,7 +1,6 @@
 import dependenciesPage from './pages/dependencies';
 import homePage from './pages/home';
 import editorPage from './pages/editor';
-import fileEditPage from './pages/fileEdit';
 import manageStoragePage from './pages/manageStorage';
 import manageDependencies from './pages/manageDependencies';
 
@@ -12,7 +11,6 @@ window.onload = async function () {
     homePage,
     dependenciesPage,
     editorPage,
-    fileEditPage,
     manageStoragePage,
     manageDependencies
   ])('home');
