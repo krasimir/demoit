@@ -1,11 +1,13 @@
 import {
   teardown,
   screenSplit,
-  execute as executeCode,
-  editor as createEditor
+  execute as executeCode
 } from '../utils';
 import createConsolePanel from './partials/console';
 import navigation from './partials/navigation';
+import createEditor from './partials/editor';
+import newFilePopUp from './partials/newFilePopUp';
+import editFilePopUp from './partials/editFilePopUp';
 
 let codeMirrorEditor;
 
@@ -48,11 +50,18 @@ export default function editor({ storage, changePage }) {
         function showFile(index) {
           loadFileInEditor(storage.changeActiveFile(index))
         },
-        function newFile() {
-          loadFileInEditor(storage.addNewFile());
+        async function newFile() {
+          loadFileInEditor(storage.addNewFile(await newFilePopUp()));
         },
-        function editFile(index) {
-          changePage('fileEdit', index);
+        async function editFile(index) {
+          const result = await editFilePopUp(storage.getFileAt(index).filename, storage.getFiles().length);
+
+          if (result === null) {
+            storage.deleteFile(index);
+            loadFileInEditor(storage.getCurrentFile());
+          } else {
+            storage.editFile(index, { filename: result });
+          }
         },
         function manageStorage() {
           changePage('manageStorage');

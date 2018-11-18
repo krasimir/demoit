@@ -1,4 +1,5 @@
 import { isLocalStorageAvailable } from './utils';
+import { cleanUpExecutedCSS } from './utils/executeCSS';
 
 const EMPTY_FILE = {
   content: '',
@@ -102,12 +103,13 @@ export default function createStorage() {
       this.setCurrentIndex(index);
       return this.getCurrentFile();
     },
-    addNewFile() {
-      state.files.push(EMPTY_FILE);
+    addNewFile(filename = 'untitled.js') {
+      state.files.push({ ...EMPTY_FILE, filename });
       syncState();
       return this.changeActiveFile(state.files.length - 1);
     },
     deleteFile(index) {
+      cleanUpExecutedCSS(this.getFileAt(index).filename);
       if (index === activeFileIndex) {
         state.files.splice(index, 1);
         syncState();

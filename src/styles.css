@@ -149,13 +149,13 @@ svg {
 .files ul li a:hover {
 	border-bottom: solid 2px #fff;
 }
-.files .options {
+.files .buttons {
   float: right;
 }
-.files .options ul li a, .files .with-icons li a {
+.files .buttons ul li a, .files .with-icons li a {
   padding: 0.3em 1em;
 }
-.files .options svg, .files .with-icons svg {
+.files .buttons svg, .files .with-icons svg {
   transform: translateY(4px);
 }
 /*************************** GRID */
@@ -186,81 +186,6 @@ svg {
   -webkit-transition: opacity 200ms ease-out, transform 200ms ease-out;
   transform: translateY(-20px);
   -webkit-transform: translateY(-20px);
-}
-/*************************** OPTIONS TYPE OF PAGE */
-.options section {
-  width: 600px;
-  margin: 0em auto;
-  padding-top: 2em;
-}
-.options p {
-  margin: 0 0 1em 0;
-  padding: 0;
-  font-size: 1em;
-  line-height: 1.2em;
-}
-.options h1 {
-  padding: 0;
-  margin: 1em 0;
-}
-.options h2 {
-  padding: 0;
-  margin: 1em 0;
-}
-.options button {
-  font-size: 0.7em;
-  padding: 0.6em 1em;
-  background: none;
-  cursor: pointer;
-  border-radius: 4px;
-  border: solid 2px #525252;
-  color: #FFF;
-  outline: none;
-  display: inline-block;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.options button:hover {
-  background: #313131;
-}
-.options .right {
-  float: right;
-}
-.options .secondary span {
-  display: inline-block;
-  transform: translateY(-5px);
-  margin-left: 7px;
-}
-.options .secondary:hover {
-  
-}
-.options hr {
-  margin: 2em 0;
-  border-color: #313131;
-}
-.options input, .options textarea {
-  width: 100%;
-  border: solid 1px #525252;
-  font-size: 1em;
-  padding: 0.6em;
-  display: block;
-  border-radius: 4px;
-  outline: none;
-  margin-bottom: 1em;
-}
-.options textarea {
-  height: 162px;
-}
-.options a {
-  color: inherit;
-}
-.options a:hover {
-  text-decoration: none;
-}
-.options .cancel {
-  position: absolute;
-  top: 2em;
-  right: 2em;
 }
 /*************************** STORAGE */
 .storage span, .dependencies span {
@@ -306,7 +231,7 @@ svg {
   padding: 0;
   color: rgb(109, 109, 109);
 }
-/*************************** preloader */
+/*************************** HOME */
 .home .as-button {
   height: 100%;
   padding: 10em 2em 5em 2em;
@@ -359,4 +284,102 @@ svg {
   margin-bottom: 1em;
   border-top: none;
   border-bottom: dotted 1px #404040
+}
+/*************************** POPUP */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 8100;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.3);
+}
+.popup section {
+  position: relative;
+  width: 600px;
+  margin: 0em auto;
+  margin-top: 4em;
+  padding: 1em;
+  background: rgb(46, 46, 46);
+  border-radius: 0.2em;
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,1);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,1);
+  box-shadow: 0px 0px 5px 3px rgba(0,0,0,1);
+}
+.popup .close {
+  background: none;
+  color: #FFF;
+  border: none;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  cursor: pointer;
+  outline: none;
+}
+.popup .close:hover {
+  color: #999;
+  background: none;
+}
+.popup p {
+  margin: 0 0 1em 0;
+  padding: 0;
+  font-size: 1em;
+  line-height: 1.2em;
+}
+.popup h1 {
+  padding: 0;
+  margin: 1em 0;
+}
+.popup h2 {
+  padding: 0;
+  margin: 0 0 1em 0;
+}
+.popup button {
+  font-size: 0.7em;
+  padding: 0.6em 1em;
+  background: none;
+  cursor: pointer;
+  border-radius: 4px;
+  border: solid 2px #525252;
+  color: #FFF;
+  outline: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.popup button:hover {
+  background: #313131;
+}
+.popup .right {
+  float: right;
+}
+.popup .secondary span {
+  display: inline-block;
+  transform: translateY(-5px);
+  margin-left: 7px;
+}
+.popup hr {
+  margin: 1em 0;
+  border-color: #313131;
+}
+.popup input, .popup textarea {
+  width: 100%;
+  border: solid 1px #525252;
+  font-size: 1em;
+  padding: 0.6em;
+  display: block;
+  border-radius: 4px;
+  outline: none;
+  margin-bottom: 1em;
+}
+.popup textarea {
+  height: 162px;
+}
+.popup a {
+  color: inherit;
+}
+.popup a:hover {
+  text-decoration: none;
 }

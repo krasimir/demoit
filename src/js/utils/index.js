@@ -1,4 +1,3 @@
-export * from './editor';
 export * from './element';
 export * from './execute';
 export * from './modals';

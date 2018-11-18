@@ -11,7 +11,7 @@ export function el(selector, parent = document) {
     e,
     content(str) {
       e.innerHTML = str;
-      return Array.prototype.slice.call(e.querySelectorAll('[data-export]')).map(element => el(element, e));
+      return this.exports();
     },
     appendChild(child) {
       e.appendChild(child);
@@ -49,6 +49,14 @@ export function el(selector, parent = document) {
       e.addEventListener('keyup', callback);
       return () => e.removeEventListener('keyup', callback);
     },
+    onRightClick(callback) {
+      const handler = event => {
+        event.preventDefault();
+        callback();
+      };
+      e.addEventListener('contextmenu', handler);
+      return () => e.removeEventListener('oncontextmenu', handler);
+    },
     find(selector) {
       return el(selector, e);
     },
@@ -56,6 +64,30 @@ export function el(selector, parent = document) {
       const clone = initialNode.cloneNode(true);
       e.parentNode.replaceChild(clone, e);
       e = clone;
+    },
+    appendTo(parent) {
+      parent.e.appendChild(e);
+    },
+    exports() {
+      return Array
+        .prototype.slice.call(e.querySelectorAll('[data-export]'))
+        .map(element => el(element, e));
+    },
+    namedExports() {
+      return this.exports().reduce((result, exportedElement) => {
+        result[exportedElement.attr('data-export')] = exportedElement;
+        return result;
+      }, {});
+    },
+    detach() {
+      e.parentNode.removeChild(e);
     }
   }
+}
+
+el.fromString = str => {
+  const node = document.createElement('div');
+
+  node.innerHTML = str;
+  return el(node.firstChild);
 }
