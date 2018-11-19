@@ -1,4 +1,4 @@
-import { el } from '../../utils';
+import { el, delay } from '../../utils';
 
 const ESC_KEY = 27;
 const MARKUP = ({ title, content }) => `<div class="popup">
@@ -13,8 +13,12 @@ export default function popup(config) {
   const container = el.fromString(MARKUP(config));
   const body = el('body');
   const escHandler = e => (e.keyCode === ESC_KEY && close());
-  const close = () => (removeKeyUpListener(), container.detach());
   const removeKeyUpListener = body.onKeyUp(escHandler);
+  const close = () => {
+    removeKeyUpListener();
+    container.css('opacity', 0);
+    setTimeout(() => container.detach(), 200);
+  };
 
   container.exports().forEach(button => {
     if (button.attr('data-export') === 'close') {
@@ -23,6 +27,7 @@ export default function popup(config) {
   });
 
   container.appendTo(body);
+  setTimeout(() => container.css('opacity', 1), 1);
 
   return {
     closePopup: close,
