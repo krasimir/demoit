@@ -77,7 +77,7 @@ export default function editor({ storage, changePage }) {
             JSON.stringify(storage.dump(), null, 2),
             () => {
               storage.clear();
-              window.location.reload();
+              window.location = window.location.href.split("?")[0];
             }
           );
         },
