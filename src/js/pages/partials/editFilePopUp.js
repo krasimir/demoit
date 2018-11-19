@@ -12,7 +12,10 @@ export default function editFilePopUp(filename, totalNumOfFiles) {
         <button class="save" data-export="saveButton">Save</button>
         <hr />
         <button class="delete secondary" data-export="deleteButton">${ TRASH_ICON }</button>
-      `
+      `,
+      cleanUp() {
+        done(null);
+      }
     });
     const save = () => {
       filenameInput.e.value !== '' && done(filenameInput.e.value);

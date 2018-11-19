@@ -17,6 +17,7 @@ export default function popup(config) {
   const close = () => {
     removeKeyUpListener();
     container.css('opacity', 0);
+    config.cleanUp && config.cleanUp();
     setTimeout(() => container.detach(), 200);
   };
 

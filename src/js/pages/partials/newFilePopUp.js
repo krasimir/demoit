@@ -9,7 +9,10 @@ export default function newFilePopUp() {
       content: `
         <input name="filename" data-export="filenameInput" placeholder="untitled.js"/>
         <button class="save" data-export="saveButton">Save</button>
-      `
+      `,
+      cleanUp() {
+        done(null);
+      }
     });
     const save = () => {
       filenameInput.e.value !== '' && done(filenameInput.e.value);

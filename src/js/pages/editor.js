@@ -8,6 +8,8 @@ import navigation from './partials/navigation';
 import createEditor from './partials/codeMirror';
 import newFilePopUp from './partials/newFilePopUp';
 import editFilePopUp from './partials/editFilePopUp';
+import dependenciesPopUp from './partials/dependenciesPopUp';
+import storagePopUp from './partials/storagePopUp';
 
 let codeMirrorEditor;
 
@@ -51,7 +53,11 @@ export default function editor({ storage, changePage }) {
           loadFileInEditor(storage.changeActiveFile(index));
         },
         async function newFile() {
-          loadFileInEditor(storage.addNewFile(await newFilePopUp()));
+          const newFilename = await newFilePopUp();
+
+          if (newFilename !== null) {
+            loadFileInEditor(storage.addNewFile(newFilename));
+          }
         },
         async function editFile(index) {
           const result = await editFilePopUp(
@@ -67,10 +73,22 @@ export default function editor({ storage, changePage }) {
           }
         },
         function manageStorage() {
-          changePage('manageStorage');
+          storagePopUp(
+            JSON.stringify(storage.dump(), null, 2),
+            () => {
+              storage.clear();
+              window.location.reload();
+            }
+          );
         },
-        function manageDependencies() {
-          changePage('manageDependencies');
+        async function manageDependencies() {
+          const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
+          const newDeps = await dependenciesPopUp(filterDeps(storage.getDependencies()).join('\n'));
+
+          if (newDeps !== null) {
+            storage.setDependencies(newDeps);
+            changePage('dependencies');
+          }
         }
       );
 
