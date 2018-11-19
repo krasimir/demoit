@@ -55,7 +55,7 @@ export default function editor({ storage, changePage }) {
         async function newFile() {
           const newFilename = await newFilePopUp();
 
-          if (newFilename !== null) {
+          if (newFilename) {
             loadFileInEditor(storage.addNewFile(newFilename));
           }
         },
@@ -65,10 +65,10 @@ export default function editor({ storage, changePage }) {
             storage.getFiles().length
           );
 
-          if (result === null) {
+          if (result === 'delete') {
             storage.deleteFile(index);
             loadFileInEditor(storage.getCurrentFile());
-          } else {
+          } else if (result) {
             storage.editFile(index, { filename: result });
           }
         },
@@ -85,7 +85,7 @@ export default function editor({ storage, changePage }) {
           const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
           const newDeps = await dependenciesPopUp(filterDeps(storage.getDependencies()).join('\n'));
 
-          if (newDeps !== null) {
+          if (newDeps) {
             storage.setDependencies(newDeps);
             changePage('dependencies');
           }

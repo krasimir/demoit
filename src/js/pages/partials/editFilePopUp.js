@@ -32,6 +32,6 @@ export default function editFilePopUp(filename, totalNumOfFiles) {
     saveButton.onClick(save);
 
     totalNumOfFiles > 1 ? deleteButton.css('display', 'block') : deleteButton.css('display', 'none');
-    deleteButton.onClick(() => (done(null), closePopup()));
+    deleteButton.onClick(() => (done('delete'), closePopup()));
   });
 }

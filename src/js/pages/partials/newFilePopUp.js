@@ -11,7 +11,7 @@ export default function newFilePopUp() {
         <button class="save" data-export="saveButton">Save</button>
       `,
       cleanUp() {
-        done(null);
+        done();
       }
     });
     const save = () => {

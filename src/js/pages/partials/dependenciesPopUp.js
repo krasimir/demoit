@@ -12,7 +12,7 @@ export default function dependenciesPopUp(dependenciesList) {
         <button class="save" data-export="saveButton">Save</button>
       `,
       cleanUp() {
-        done(null);
+        done();
       }
     });
     const save = () => {

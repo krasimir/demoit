@@ -86,24 +86,23 @@ export default function home({ storage, changePage }) {
       const localStorageData = readFromLocalStorage();
       let codeSamplesColumn = null;
       let localStorageColumn = null;
-      let autoOpenCodeSample = getParam('autoOpenCodeSample');
 
-      if (stateFiles) {
-        codeSamplesColumn = CODE_SAMPLES_LIST_FILES_COLUMN(stateFiles);
-      }
-
-      if (autoOpenCodeSample) {
-        if (autoOpenCodeSample === 'LOCALSTORAGE') {
+      if (stateFiles && stateFiles.length === 1) {
+        if (stateFiles[0] === 'LOCALSTORAGE') {
           storage.setState(localStorageData);
           changePage('dependencies');
         } else {
           try {
-            storage.setState(await readFromJSONFile(autoOpenCodeSample));
+            storage.setState(await readFromJSONFile(stateFiles[0]));
             changePage('dependencies');
           } catch(error) {
-            codeSamplesColumn = CODE_SAMPLE_ERROR_LOADING(autoOpenCodeSample);
+            codeSamplesColumn = CODE_SAMPLE_ERROR_LOADING(stateFiles[0]);
           }
         }
+      }
+
+      if (stateFiles && stateFiles.length > 1) {
+        codeSamplesColumn = CODE_SAMPLES_LIST_FILES_COLUMN(stateFiles);
       }
 
       if (localStorageData) {

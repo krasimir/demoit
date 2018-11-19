@@ -52,8 +52,7 @@ The path to the JSON files is set via `state` GET parameter. For example: `http:
 
 ## GET Params
 
-* `?state=` - A comma separated list of configuration JSON files
-* `?autoOpenCodeSample=` - path to a configuration JSON file that will be loaded automatically. Or if the value is `LOCALSTORAGE` it will always get the config from the local storage.
+* `?state=` - A comma separated list of configuration JSON files. If you provide only one file then that file is automatically loaded. If there is more then one you'll see an entry page that gives you the option to choose which of the files to be processed.
 
 ## Continuing your work offline
 

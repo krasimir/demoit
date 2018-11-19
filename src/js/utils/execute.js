@@ -4,7 +4,7 @@ import './executeHTML';
 
 const getExt = file => file.split(/\./).pop().toLowerCase();
 const prepareExecution = ({ filename, content }) => {
-  const ext = getExt(filename);
+  const ext = getExt(filename || '');
 
   if (ext === 'css') {
     content = `imported && window.executeCSS("${ filename }", ${ JSON.stringify(content) });`;
