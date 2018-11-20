@@ -5,7 +5,11 @@ const LAYOUTS = {
     direction: 'horizontal',
     sizes: [30, 70],
     elements: [
-      'output',
+      {
+        direction: 'vertical',
+        sizes: [50, 50],
+        elements: [ 'output', 'log' ]
+      },
       'editor'
     ]
   }
