@@ -26,9 +26,8 @@ svg {
 .editor {
   background-color: #263238;
 }
-.left, .right {
+.editor-section {
   vertical-align: top;
-  float: left;
   height: 100%;
 }
 /*************************** CODE MIRROR */
@@ -113,22 +112,22 @@ svg {
   line-height: 28px;
 }
 /*************************** FILES */
-.files {
+.navigation {
   height: 40px;
   background: #141b1f;
 	border-bottom: solid 2px #000;
 }
-.files ul {
+.navigation ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.files ul li {
+.navigation ul li {
   margin: 0;
   padding: 0;
   float: left;
 }
-.files ul li a, .files ul li > span {
+.navigation ul li a, .navigation ul li > span {
 	display: inline-block;
 	color: #FFF;
 	text-decoration: none;
@@ -137,25 +136,25 @@ svg {
 	opacity: 0.3;
 	border-left: solid 2px #000;
 }
-.files ul li a.active {
+.navigation ul li a.active {
   opacity: 1;
   color: #bbb;
 	background: #263238;
 	border-bottom: solid 2px #263238;
 }
-.files ul li a.active:hover {
+.navigation ul li a.active:hover {
 	border-bottom: solid 2px #263238;
 }
-.files ul li a:hover {
+.navigation ul li a:hover {
 	border-bottom: solid 2px #fff;
 }
-.files .buttons {
+.navigation .buttons {
   float: right;
 }
-.files .buttons ul li a, .files .with-icons li a {
+.navigation .buttons ul li a, .navigation .with-icons li a {
   padding: 0.3em 1em;
 }
-.files .buttons svg, .files .with-icons svg {
+.navigation .buttons svg, .navigation .with-icons svg {
   transform: translateY(4px);
 }
 /*************************** GRID */

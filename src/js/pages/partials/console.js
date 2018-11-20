@@ -7,7 +7,7 @@ function htmlEncode(str) {
 }
 
 export default function logger() {
-  const element = el('.console');
+  const element = el.withFallback('.console');
   let empty = true;
   const add = something => {
     const node = document.createElement('div');

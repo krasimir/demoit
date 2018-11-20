@@ -4,7 +4,7 @@ export function teardown(clearConsole) {
   return async function teardown() {
     clearConsole();
     
-    const output = el('.output');
+    const output = el.withFallback('.output');
 
     if (typeof ReactDOM !== 'undefined') {
       ReactDOM.unmountComponentAtNode(output.e);

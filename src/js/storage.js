@@ -129,6 +129,10 @@ export default function createStorage() {
     },
     listen(callback) {
       onChangeListeners.push(callback);
+    },
+    updateLayout(newLayout) {
+      state.editor.layout = newLayout;
+      syncState();
     }
   }
 

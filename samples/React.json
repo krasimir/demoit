@@ -1,6 +1,27 @@
 {
   "editor": {
-    "theme": "material"
+    "theme": "material",
+    "layout": {
+      "direction": "horizontal",
+      "sizes": [
+        23.537678398550952,
+        76.46232160144905
+      ],
+      "elements": [
+        {
+          "direction": "vertical",
+          "sizes": [
+            50,
+            50
+          ],
+          "elements": [
+            "output",
+            "log"
+          ]
+        },
+        "editor"
+      ]
+    }
   },
   "dependencies": [
     "./resources/react-16.7.0-alpha.0.js",

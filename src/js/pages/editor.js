@@ -1,6 +1,6 @@
 import {
   teardown,
-  screenSplit,
+  editorLayout,
   execute as executeCode
 } from '../utils';
 import createConsolePanel from './partials/console';
@@ -18,8 +18,8 @@ export default function editor({ storage, changePage }) {
     editor: null,
     name: 'editor',
     permanentInDOM: true,
-    async didMount({ el }) {
-      screenSplit();
+    async didMount() {
+      editorLayout(storage.getEditorSettings().layout, storage.updateLayout);
 
       const { content: initialEditorValue } = storage.getCurrentFile();
       const cleanUp = teardown(createConsolePanel());
@@ -78,6 +78,7 @@ export default function editor({ storage, changePage }) {
             () => {
               storage.clear();
               window.location = window.location.href.split("?")[0];
+              window.location.reload(false);
             }
           );
         },
@@ -96,6 +97,9 @@ export default function editor({ storage, changePage }) {
     },
     didShow() {
       codeMirrorEditor && codeMirrorEditor.focus();
+    },
+    didUnmount() {
+
     }
   }
 }

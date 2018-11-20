@@ -1,8 +1,12 @@
-export function el(selector, parent = document) {
+export function el(selector, parent = document, fallbackToEmpty = false) {
   var e = typeof selector === 'string' ? parent.querySelector(selector) : selector;
   
   if (!e) {
-    throw new Error(`Ops! There is no DOM element matching "${ selector }" selector.`);
+    if (!fallbackToEmpty) {
+      throw new Error(`Ops! There is no DOM element matching "${ selector }" selector.`);
+    } else {
+      e = document.createElement('div');
+    }
   }
   
   var initialNode = e.cloneNode(true);
@@ -15,6 +19,10 @@ export function el(selector, parent = document) {
     },
     appendChild(child) {
       e.appendChild(child);
+      return this;
+    },
+    appendChildren(children) {
+      children.forEach(c => e.appendChild(c.e));
       return this;
     },
     css(prop, value) {
@@ -89,5 +97,14 @@ el.fromString = str => {
   const node = document.createElement('div');
 
   node.innerHTML = str;
-  return el(node.firstChild);
+
+  const filteredNodes = Array.prototype.slice.call(node.childNodes).filter(node => node.nodeType === 1);
+
+  if (filteredNodes.length > 0) {
+    return el(filteredNodes[0]);
+  }
+  throw new Error('fromString accepts HTMl with a single parent.');
 }
+el.wrap = elements => el(document.createElement('div')).appendChildren(elements);
+el.fromTemplate = selector => el.fromString(document.querySelector(selector).innerHTML);
+el.withFallback = selector => el(selector, document, true);

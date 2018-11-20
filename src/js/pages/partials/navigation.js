@@ -1,9 +1,9 @@
 import { el } from '../../utils';
 
 export default function navigation(storage, showFile, newFile, editFile, manageStorage, manageDependencies) {
-  const navigation = el('.files .nav');
-  const manageStorageButton = el('.files .storage');
-  const manageDependenciesButton = el('.files .manageDependencies');
+  const navigation = el.withFallback('.navigation .nav');
+  const manageStorageButton = el.withFallback('.navigation .storage');
+  const manageDependenciesButton = el.withFallback('.navigation .manageDependencies');
   
   const render = () => {
     const items  = [];
