@@ -17,7 +17,7 @@ const LAYOUTS = {
 
 export function editorLayout(l, onLayoutUpdate) {
   const layout = l || LAYOUTS.default;
-  const page = el('.editor.page');
+  const page = el('.editor.page .layout');
   const output = el.fromTemplate('#template-output');
   const log = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
@@ -53,6 +53,7 @@ export function editorLayout(l, onLayoutUpdate) {
   }
 
   page.appendChildren(build(layout));
+
   setTimeout(() => {
     const splits = splitFuncs.map(f => f());
 

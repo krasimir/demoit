@@ -108,3 +108,4 @@ el.fromString = str => {
 el.wrap = elements => el(document.createElement('div')).appendChildren(elements);
 el.fromTemplate = selector => el.fromString(document.querySelector(selector).innerHTML);
 el.withFallback = selector => el(selector, document, true);
+el.empty = () => el(document.createElement('div'));

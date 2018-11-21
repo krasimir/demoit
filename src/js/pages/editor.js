@@ -8,8 +8,7 @@ import navigation from './partials/navigation';
 import createEditor from './partials/codeMirror';
 import newFilePopUp from './partials/newFilePopUp';
 import editFilePopUp from './partials/editFilePopUp';
-import dependenciesPopUp from './partials/dependenciesPopUp';
-import storagePopUp from './partials/storagePopUp';
+import settings from './partials/settings';
 
 let codeMirrorEditor;
 
@@ -20,6 +19,7 @@ export default function editor({ storage, changePage }) {
     permanentInDOM: true,
     async didMount() {
       editorLayout(storage.getEditorSettings().layout, storage.updateLayout);
+      settings(storage, changePage);
 
       const { content: initialEditorValue } = storage.getCurrentFile();
       const cleanUp = teardown(createConsolePanel());
@@ -71,25 +71,6 @@ export default function editor({ storage, changePage }) {
           } else if (result) {
             storage.editFile(index, { filename: result });
           }
-        },
-        function manageStorage() {
-          storagePopUp(
-            JSON.stringify(storage.dump(), null, 2),
-            () => {
-              storage.clear();
-              window.location = window.location.href.split("?")[0];
-              window.location.reload(false);
-            }
-          );
-        },
-        async function manageDependencies() {
-          const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
-          const newDeps = await dependenciesPopUp(filterDeps(storage.getDependencies()).join('\n'));
-
-          if (newDeps) {
-            storage.setDependencies(newDeps);
-            changePage('dependencies');
-          }
         }
       );
 
@@ -97,9 +78,6 @@ export default function editor({ storage, changePage }) {
     },
     didShow() {
       codeMirrorEditor && codeMirrorEditor.focus();
-    },
-    didUnmount() {
-
     }
   }
 }
