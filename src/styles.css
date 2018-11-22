@@ -33,16 +33,14 @@ svg {
 .editor .settings {
   display: block;
   position: fixed;
-  bottom: -1.5em;
-  right: -1.3em;
+  bottom: 0.5em;
+  right: 0.5em;
   color: rgba(0, 0, 0, 0.3);
   transition: transform 300ms ease-out, bottom 300ms ease-out, right 300ms ease-out;
   transform: rotate(0deg);
 }
 .editor .settings:hover {
   color: #000;
-  bottom: -6px;
-  right: 0px;
   transform: rotate(45deg);
 }
 .editor-section {
@@ -208,12 +206,6 @@ svg {
   transform: translateY(-20px);
   -webkit-transform: translateY(-20px);
 }
-/*************************** STORAGE */
-.storage span, .dependencies span {
-  display: inline-block;
-  transform: translateY(-3px);
-  margin-left: 7px;
-}
 /*************************** DEPENDENCIES */
 .manage-dependencies textarea.dependencies-list {
   height: 300px;
@@ -316,8 +308,8 @@ svg {
   z-index: 8100;
   color: #fff;
   background: rgba(0, 0, 0, 0.8);
-  transition: opacity ease 200ms;
-  -webkit-transition: opacity ease 200ms;
+  transition: opacity ease 200ms, width ease-out 200ms;
+  -webkit-transition: opacity ease 200ms, width ease-out 200ms;
   opacity: 0;
 }
 .popup section {
@@ -447,4 +439,15 @@ svg {
 }
 .popup .content {
   padding: 1em;
+}
+.popup .layout a {
+  display: inline-block;
+  padding: 4px;
+  border: solid 2px #525252;
+  line-height: 0;
+  margin-right: 0.4em;
+  margin-bottom: 1em;
+}
+.popup .layout a:hover {
+  border-color: #000;
 }

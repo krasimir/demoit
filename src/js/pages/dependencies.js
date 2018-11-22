@@ -51,7 +51,7 @@ const load = async function (dependencies, status = () => {}) {
   });
 }
 
-export default function dependencies({ storage, changePage }) {
+export default function dependencies({ state, changePage }) {
   return {
     name: 'dependencies',
     async didMount({ el }) {
@@ -66,8 +66,8 @@ export default function dependencies({ storage, changePage }) {
         './vendor/split.js',
         './vendor/babel-6.26.0.min.js',
         './vendor/babel-polyfill@6.26.0.js',
-        `./vendor/codemirror/theme/${ storage.getEditorSettings().theme }.css`,
-        ...storage.getDependencies()
+        `./vendor/codemirror/theme/${ state.getEditorSettings().theme }.css`,
+        ...state.getDependencies()
       ];
 
       await load(dependencies, index => {

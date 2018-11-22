@@ -1,4 +1,4 @@
-import { el, delay } from '../../utils';
+import { el } from '../utils';
 
 const ESC_KEY = 27;
 const DEFAULT_MARKUP = ({ title, content }) => `<section>
@@ -8,7 +8,7 @@ const DEFAULT_MARKUP = ({ title, content }) => `<section>
 </section>`;
 const MULTIPLE_PAGES_MARKUP = ({ buttons, content }, index = 0) => `<section class="multiple-pages">
   <ul class="sub-nav">
-    ${ buttons.map((label, i) => `<li class="${ i === index ? 'active' : '' }"><a href="javascript:void(0);" data-export="page${ i }">${ label }</a></li>`).join('') }
+    ${ buttons.map((label, i) => `<li class="${ i === index ? 'active' : '' }"><a href="javascript:void(0);" data-export="page:${ i }">${ label }</a></li>`).join('') }
   </ul>
   <button class="close" data-export="close"><svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg></button>
   <div class="content">${ content[index] }</div>
@@ -34,7 +34,7 @@ export default function popup(config) {
       if (dataExport === 'close') {
         button.onClick(close);
       } else if (dataExport.match(/^page/)) {
-        button.onClick(() => render(MULTIPLE_PAGES_MARKUP(config, Number(dataExport.charAt(dataExport.length-1)))))
+        button.onClick(() => render(MULTIPLE_PAGES_MARKUP(config, Number(dataExport.split(':').pop()))))
       }
     });
     config.onRender && config.onRender({

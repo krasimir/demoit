@@ -1,18 +1,33 @@
 import createPopup from './popup';
-import { CHECK_ICON } from '../../utils/icons';
 
 const ENTER_KEY = 13;
 
-export default function settingsPopUp(storageContent, flushStorage, dependenciesStr, onDepsUpdated) {
+export default function settingsPopUp(storageContent, flushStorage, dependenciesStr, onDepsUpdated, onLayoutUpdate) {
   return new Promise(done => createPopup({
     buttons: [
-      'Storage',
+      'General',
+      'Local Storage',
       'Dependencies',
       'About'
     ],
     content: [
       `
-        <p>At the moment Demoit uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage API</a> to save your progress.</p>
+      <h2>Layout</h2>
+      <div class="layout">
+        <a href="javascript:void(0);" data-export="layoutDefault"><img src="./img/layout_default.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutLeft"><img src="./img/layout_left.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutTop"><img src="./img/layout_top.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutBottom"><img src="./img/layout_bottom.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutEC"><img src="./img/layout_ec.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutEO"><img src="./img/layout_eo.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutECBottom"><img src="./img/layout_ecbottom.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutEOBottom"><img src="./img/layout_eobottom.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutE"><img src="./img/layout_e.png" /></a>
+        <a href="javascript:void(0);" data-export="layoutO"><img src="./img/layout_o.png" /></a>
+      </div>
+      `,
+      `
+        <p>Demoit also uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage API</a> to save your progress.</p>
         <hr />
         <h2>Transfer your work</h2>
         <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in a <i>mycode.json</i> file. Then open Demoit with<br />"?state=mycode.json". It will automatically pick the data from the json.</p>
@@ -35,7 +50,40 @@ export default function settingsPopUp(storageContent, flushStorage, dependencies
     cleanUp() {
       done();
     },
-    onRender({ closePopup, storageTextarea, flushStorageButton, dependenciesTextarea, saveDependenciesButton }) {
+    onRender({
+      closePopup,
+      storageTextarea,
+      flushStorageButton,
+      dependenciesTextarea,
+      saveDependenciesButton,
+      layoutDefault,
+      layoutLeft,
+      layoutTop,
+      layoutBottom,
+      layoutEC,
+      layoutEO,
+      layoutE,
+      layoutO,
+      layoutEOBottom,
+      layoutECBottom
+    }) {
+      // general settings
+      if (layoutDefault) {
+        const switchLayout = name => () => {
+          onLayoutUpdate(name);
+          closePopup();
+        }
+        layoutDefault.onClick(switchLayout('default'));
+        layoutLeft.onClick(switchLayout('layoutLeft'));
+        layoutTop.onClick(switchLayout('layoutTop'));
+        layoutBottom.onClick(switchLayout('layoutBottom'));
+        layoutEC.onClick(switchLayout('layoutEC'));
+        layoutEO.onClick(switchLayout('layoutEO'));
+        layoutE.onClick(switchLayout('layoutE'));
+        layoutO.onClick(switchLayout('layoutO'));
+        layoutECBottom.onClick(switchLayout('layoutECBottom'));
+        layoutEOBottom.onClick(switchLayout('layoutEOBottom'));
+      }
       // managing storage
       if (storageTextarea && flushStorageButton) {
         storageTextarea.prop('value', storageContent);

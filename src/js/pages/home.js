@@ -1,5 +1,5 @@
 import { ICON_ERROR, FILE_ICON, STORAGE_ICON, isLocalStorageAvailable, getParam } from '../utils';
-import { LS_KEY, DEFAULT_STATE } from '../storage';
+import { LS_KEY, DEFAULT_STATE } from '../state';
 
 const EMPTY_PROJECT_COLUMN = {
   cls: 'as-button newProject',
@@ -77,7 +77,7 @@ const renderColumns = function (columns, pageDOMElement) {
   return handlers;
 }
 
-export default function home({ storage, changePage }) {
+export default function home({ state, changePage }) {
   return {
     isGrid: true,
     name: 'home',
@@ -88,12 +88,12 @@ export default function home({ storage, changePage }) {
       let localStorageColumn = null;
 
       if (stateFiles && stateFiles.length === 1) {
-        if (stateFiles[0] === 'LOCALSTORAGE') {
-          storage.setState(localStorageData);
+        if (stateFiles[0] === 'localstorage') {
+          state.setState(localStorageData);
           changePage('dependencies');
         } else {
           try {
-            storage.setState(await readFromJSONFile(stateFiles[0]));
+            state.setState(await readFromJSONFile(stateFiles[0]));
             changePage('dependencies');
           } catch(error) {
             codeSamplesColumn = CODE_SAMPLE_ERROR_LOADING(stateFiles[0]);
@@ -119,7 +119,7 @@ export default function home({ storage, changePage }) {
 
             renderColumns([ CODE_SAMPLE_LOADING_COLUMN(file), localStorageColumn ], pageDOMElement);
             try {
-              storage.setState(await readFromJSONFile(file));
+              state.setState(await readFromJSONFile(file));
               changePage('dependencies');
             } catch(error) {
               renderColumns([ CODE_SAMPLE_ERROR_LOADING(file), localStorageColumn ], pageDOMElement);
@@ -128,11 +128,11 @@ export default function home({ storage, changePage }) {
         })
 
       el('.newProject').onClick(() => {
-        storage.setState(DEFAULT_STATE);
+        state.setState(DEFAULT_STATE);
         changePage('dependencies');
       });
       localStorageData && el('.restoreFromLocalStorage').onClick(() => {
-        storage.setState(localStorageData);
+        state.setState(localStorageData);
         changePage('dependencies');
       });
     }

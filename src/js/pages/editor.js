@@ -6,35 +6,33 @@ import {
 import createConsolePanel from './partials/console';
 import navigation from './partials/navigation';
 import createEditor from './partials/codeMirror';
-import newFilePopUp from './partials/newFilePopUp';
-import editFilePopUp from './partials/editFilePopUp';
+import newFilePopUp from '../popups//newFilePopUp';
+import editFilePopUp from '../popups/editFilePopUp';
 import settings from './partials/settings';
 
 let codeMirrorEditor;
 
-export default function editor({ storage, changePage }) {
+export default function editor({ state, changePage }) {
   return {
-    editor: null,
     name: 'editor',
-    permanentInDOM: true,
     async didMount() {
-      editorLayout(storage.getEditorSettings().layout, storage.updateLayout);
-      settings(storage, changePage);
+      editorLayout(state.getEditorSettings().layout, state.updateLayout);
+      settings(state, changePage);
 
-      const { content: initialEditorValue } = storage.getCurrentFile();
+      const { content: initialEditorValue } = state.getCurrentFile();
       const cleanUp = teardown(createConsolePanel());
-      const execute = () => executeCode(storage.getCurrentIndex(), storage.getFiles());
+      const execute = () => executeCode(state.getCurrentIndex(), state.getFiles());
 
       codeMirrorEditor = await createEditor(
-        storage.getEditorSettings(),
+        state.getEditorSettings(),
         initialEditorValue,
         async function onSave(code) {
           await cleanUp();
-          storage.editCurrentFile({ content: code, editing: false  });
+          state.editCurrentFile({ content: code, editing: false  });
           execute();
         },
         function onChange(code) {
-          storage.editCurrentFile({ editing: true  });
+          state.editCurrentFile({ editing: true  });
         }
       );
 
@@ -43,33 +41,33 @@ export default function editor({ storage, changePage }) {
         codeMirrorEditor.setValue(file.content);
         codeMirrorEditor.focus();
         // we have to do this because we fire the onChange handler of the editor which sets editing=true;
-        storage.editCurrentFile({ editing: false  });
+        state.editCurrentFile({ editing: false  });
         execute();
       }
 
       navigation(
-        storage,
+        state,
         function showFile(index) {
-          loadFileInEditor(storage.changeActiveFile(index));
+          loadFileInEditor(state.changeActiveFile(index));
         },
         async function newFile() {
           const newFilename = await newFilePopUp();
 
           if (newFilename) {
-            loadFileInEditor(storage.addNewFile(newFilename));
+            loadFileInEditor(state.addNewFile(newFilename));
           }
         },
         async function editFile(index) {
           const result = await editFilePopUp(
-            storage.getFileAt(index).filename,
-            storage.getFiles().length
+            state.getFileAt(index).filename,
+            state.getFiles().length
           );
 
           if (result === 'delete') {
-            storage.deleteFile(index);
-            loadFileInEditor(storage.getCurrentFile());
+            state.deleteFile(index);
+            loadFileInEditor(state.getCurrentFile());
           } else if (result) {
-            storage.editFile(index, { filename: result });
+            state.editFile(index, { filename: result });
           }
         }
       );

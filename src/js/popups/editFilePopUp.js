@@ -1,5 +1,5 @@
 import createPopup from './popup';
-import { TRASH_ICON, CHECK_ICON } from '../../utils/icons';
+import { TRASH_ICON, CHECK_ICON } from '../utils/icons';
 
 const ENTER_KEY = 13;
 

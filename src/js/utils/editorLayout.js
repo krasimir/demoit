@@ -1,6 +1,6 @@
 import { el } from './element';
 
-const LAYOUTS = {
+export const LAYOUTS = {
   'default': {
     direction: 'horizontal',
     sizes: [30, 70],
@@ -11,6 +11,88 @@ const LAYOUTS = {
         elements: [ 'output', 'log' ]
       },
       'editor'
+    ]
+  },
+  'layoutLeft': {
+    direction: 'horizontal',
+    sizes: [70, 30],
+    elements: [
+      'editor',
+      {
+        direction: 'vertical',
+        sizes: [50, 50],
+        elements: [ 'output', 'log' ]
+      }
+    ]
+  },
+  'layoutTop': {
+    direction: 'vertical',
+    sizes: [30, 70],
+    elements: [
+      {
+        direction: 'horizontal',
+        sizes: [50, 50],
+        elements: [ 'output', 'log' ]
+      },
+      'editor'
+    ]
+  },
+  'layoutBottom': {
+    direction: 'vertical',
+    sizes: [70, 30],
+    elements: [
+      'editor',
+      {
+        direction: 'horizontal',
+        sizes: [50, 50],
+        elements: [ 'output', 'log' ]
+      }
+    ]
+  },
+  'layoutEC': {
+    direction: 'horizontal',
+    sizes: [70, 30],
+    elements: [
+      'editor',
+      'log'
+    ]
+  },
+  'layoutEO': {
+    direction: 'horizontal',
+    sizes: [70, 30],
+    elements: [
+      'editor',
+      'output'
+    ]
+  },
+  'layoutEOBottom': {
+    direction: 'vertical',
+    sizes: [70, 30],
+    elements: [
+      'editor',
+      'output'
+    ]
+  },
+  'layoutECBottom': {
+    direction: 'vertical',
+    sizes: [70, 30],
+    elements: [
+      'editor',
+      'log'
+    ]
+  },
+  'layoutE': {
+    direction: 'horizontal',
+    sizes: [100],
+    elements: [
+      'editor'
+    ]
+  },
+  'layoutO': {
+    direction: 'horizontal',
+    sizes: [100],
+    elements: [
+      'output'
     ]
   }
 };

@@ -1,9 +1,9 @@
 import createPage from './page';
-import createStorage from '../storage';
+import createState from '../state';
 
 export default function (pagesDefinitions) {
   var currentPage = null;
-  const storage = createStorage();
+  const state = createState();
   const changePage = async function (name, params) {
     const newPage = pages.find(({ name: n }) => n === name);
     
@@ -17,7 +17,7 @@ export default function (pagesDefinitions) {
     currentPage = newPage;
   }
   const pages = pagesDefinitions.map(
-    factory => createPage(factory({ changePage, storage }))
+    factory => createPage(factory({ changePage, state }))
   );
   
   return defaultPage => changePage(defaultPage);

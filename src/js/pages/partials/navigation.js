@@ -1,6 +1,6 @@
 import { el } from '../../utils';
 
-export default function navigation(storage, showFile, newFile, editFile) {
+export default function navigation(state, showFile, newFile, editFile) {
   const navigation = el.withFallback('.navigation');
   
   const render = () => {
@@ -8,9 +8,9 @@ export default function navigation(storage, showFile, newFile, editFile) {
 
     // current files
     items.push('<ul>');
-    storage.getFiles().forEach(({ filename, editing }, idx) => {
+    state.getFiles().forEach(({ filename, editing }, idx) => {
       items.push(
-        `<li><a data-export href="javascript:void(0);" ${ storage.isCurrentIndex(idx) ? 'class="active"' : '' }>${ filename }${ editing ? ' *' : ''}</a></li>`
+        `<li><a data-export href="javascript:void(0);" ${ state.isCurrentIndex(idx) ? 'class="active"' : '' }>${ filename }${ editing ? ' *' : ''}</a></li>`
       );
     });
     items.push('</ul>');
@@ -32,5 +32,5 @@ export default function navigation(storage, showFile, newFile, editFile) {
 
   render();
 
-  storage.listen(render);
+  state.listen(render);
 }
