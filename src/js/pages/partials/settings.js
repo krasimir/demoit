@@ -9,6 +9,10 @@ export default function settings(state, changePage) {
 
   settingsButton.onClick(() => settingsPopUp(
     JSON.stringify(state.dump(), null, 2),
+    function restoreFromStorage() {
+      state.restoreFromLocalStorage();
+      changePage('editor');
+    },
     function flushStorage() {
       state.clear();
       window.location = window.location.href.split("?")[0];

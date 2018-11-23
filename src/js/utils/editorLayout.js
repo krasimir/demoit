@@ -104,9 +104,9 @@ export function editorLayout(l, onLayoutUpdate) {
   const log = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
   const elementsMap = { output, log, editor };
-  const isLocalStorageAvailable = typeof window.localStorage !== 'undefined';
 
   const splitFuncs = [];
+  let splits;
   const build = ({ direction, elements, sizes }) => {
     const normalizedElements = elements.map(element => {
       if (typeof element === 'object') {
@@ -122,7 +122,16 @@ export function editorLayout(l, onLayoutUpdate) {
       split: Split(normalizedElements.map(({ e }) => e), {
         sizes,
         gutterSize: 4,
-        direction
+        direction,
+        onDragEnd: () => {
+          splits.forEach(({ split, sizes }) => {
+            const newSizes = split.getSizes();
+  
+            sizes[0] = newSizes[0];
+            sizes[1] = newSizes[1];
+          });
+          onLayoutUpdate(layout);
+        }
       }),
       sizes
     }));
@@ -136,21 +145,7 @@ export function editorLayout(l, onLayoutUpdate) {
 
   page.appendChildren(build(layout));
 
-  setTimeout(() => {
-    const splits = splitFuncs.map(f => f());
-
-    if (isLocalStorageAvailable) {
-      setInterval(() => {
-        splits.forEach(({ split, sizes }) => {
-          const newSizes = split.getSizes();
-
-          sizes[0] = newSizes[0];
-          sizes[1] = newSizes[1];
-        });
-        onLayoutUpdate(layout);
-      }, 2000);
-    }
-  }, 1);
+  setTimeout(() => (splits = splitFuncs.map(f => f())), 1);
 
   
 }

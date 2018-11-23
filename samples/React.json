@@ -2,14 +2,14 @@
   "editor": {
     "theme": "material",
     "layout": {
-      "direction": "horizontal",
+      "direction": "vertical",
       "sizes": [
-        23.537678398550952,
-        76.46232160144905
+        30,
+        70
       ],
       "elements": [
         {
-          "direction": "vertical",
+          "direction": "horizontal",
           "sizes": [
             50,
             50

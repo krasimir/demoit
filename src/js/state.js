@@ -7,8 +7,8 @@ const EMPTY_FILE = {
   editing: false
 };
 
-export const LS_KEY = 'DEMOIT_v2';
-export const DEFAULT_STATE = {
+const LS_KEY = 'DEMOIT_v2';
+const DEFAULT_STATE = {
   editor: { theme: 'material' },
   dependencies: [],
   files: [ EMPTY_FILE ]
@@ -25,6 +25,19 @@ const resolveActiveFileIndex = function (files) {
     }
   }
   return 0;
+}
+
+const readFromLocalStorage = function () {
+  if (isLocalStorageAvailable()) {
+    const state = localStorage.getItem(LS_KEY);
+
+    try {
+      if (state) return JSON.parse(state);
+    } catch(error) {
+      console.error(`There is some data in the local storage under the ${ LS_KEY } key. However, it is not a valid JSON.`);
+    }
+  }
+  return null;
 }
 
 export default function createStorage() {
@@ -133,6 +146,9 @@ export default function createStorage() {
     updateLayout(newLayout) {
       state.editor.layout = newLayout;
       syncState();
+    },
+    restoreFromLocalStorage() {
+      this.setState(readFromLocalStorage());
     }
   }
 

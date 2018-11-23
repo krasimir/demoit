@@ -6,26 +6,55 @@
 * No server needed. It works offline.
 * No building process needed. Built-in Babel support. It translates your code at runtime.
 * Supports external libraries and styles. Like React for example.
-* Persistent via localStorage (for now)
+* Persistent via localStorage
 * Easy export of the current code
+* Supports `import` statement (between the files of app)
+* Supports `import`ing of CSS and HTML files
 
 ## Demo :rocket:
 
-[https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/React.json,../samples/Vue.json,../samples/HTML+CSS.json)
+* React - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/React.json)
+* Vue - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/Vue.json)
+* HTML+CSS - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/HTML+CSS.json)
 
 ---
 
 ## Usage
 
-* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist?state=../samples/React.json,../samples/Vue.json,../samples/HTML+CSS.json)
+* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
 ## Configuration
 
+When you open the app and start writing code you progress gets saved to the local storage. You can grab it by clicking on the gear icon in the lower right corner of the screen (check section "Local storage"). The JSON there contains all the configuration that Demoit needs. You can save this configuration to an external file and let Demoit knows the path to it via the `state` GET parameter (for example `http://localhost/demoit?state=./mycode.json`).
+
+Here is what the configuration may contain:
+
 ```json
 {
   "editor": {
-    "theme": "material"
+    "theme": "material",
+    "layout": {
+      "direction": "vertical",
+      "sizes": [
+        30,
+        70
+      ],
+      "elements": [
+        {
+          "direction": "horizontal",
+          "sizes": [
+            50,
+            50
+          ],
+          "elements": [
+            "output",
+            "log"
+          ]
+        },
+        "editor"
+      ]
+    }
   },
   "dependencies": [
     "./resources/react-16.7.0-alpha.0.js",
@@ -43,20 +72,19 @@
 
 * `editor`
   * `theme` - Demoit uses CodeMirror as an editor so here you can place some of its build-in themes. Check them out [here](https://codemirror.net/demo/theme.html).
+  * `layout` - this field defines how the app looks like. Which of the sections are displayed and what's their size.
 * `dependencies` - an array of files that your demo needs. This could be JavaScript or CSS files. They may be local or not. Demoit will fetch those resources before running your code files.
 * `files` - It contains an array of items representing your scripts.
 
-The configuration must be saved into a JSON file. The path of which needs to be passed to Demoit. If there is no such file (or files) the tool still works. There's just no predefined content on it.
-
-The path to the JSON files is set via `state` GET parameter. For example: `http://localhost/demoit?state=./mycode.json`. You may pass as many JSON files as you want. Separate them with commas.
-
 ## GET Params
 
-* `?state=` - A comma separated list of configuration JSON files. If you provide only one file then that file is automatically loaded. If there is more then one you'll see an entry page that gives you the option to choose which of the files to be processed.
+* `?state=` - relative path to a JSON file
 
 ## Continuing your work offline
 
-You may need to transfer your progress on your machine. In order to do that go to the storage manager (there is a button in the top right corner of the app). Then copy the content of the text area into a JSON file on your machine. After that download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip), unzip it and move the newly created JSON file inside the folder. The last step is to open Demoit and give the name of your JSON file. For example: `http://localhost/demoit?state=./mycode.json`
+* You have to download [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
+* You need to transfer your progress to a JSON file and pass it to the app via `state` GET param
+* If you use external dependencies make sure that they are also saved locally and the path to the files is properly set (check the gear icon in the lower right corner of the screen)
 
 ## Keyboard shortcuts
 
