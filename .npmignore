@@ -1,6 +1,10 @@
 demoit.png
 src
 webpack.config.js
+webpack.config.prod.js
 *.log
 yarn.lock
 scripts
+demoit.zip
+NOTES
+_assets
