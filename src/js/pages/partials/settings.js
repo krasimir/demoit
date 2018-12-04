@@ -5,9 +5,7 @@ import { LAYOUTS } from '../../utils/editorLayout';
 const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
 
 export default function settings(state, changePage) {
-  const settingsButton = el('.settings');
-
-  settingsButton.onClick(() => settingsPopUp(
+  return () => settingsPopUp(
     JSON.stringify(state.dump(), null, 2),
     function restoreFromStorage() {
       state.restoreFromLocalStorage();
@@ -29,5 +27,5 @@ export default function settings(state, changePage) {
       state.updateLayout(LAYOUTS[newLayout]);
       changePage('editor');
     }
-  ));
+  );
 }

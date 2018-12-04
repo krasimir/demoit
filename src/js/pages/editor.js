@@ -4,7 +4,7 @@ import {
   execute as executeCode
 } from '../utils';
 import createConsolePanel from './partials/console';
-import navigation from './partials/navigation';
+import statusBar from './partials/statusBar';
 import createEditor from './partials/codeMirror';
 import newFilePopUp from '../popups//newFilePopUp';
 import editFilePopUp from '../popups/editFilePopUp';
@@ -17,8 +17,8 @@ export default function editor({ state, changePage }) {
     name: 'editor',
     async didMount() {
       editorLayout(state.getEditorSettings().layout, state.updateLayout);
-      settings(state, changePage);
-
+      
+      const showSettings = settings(state, changePage);
       const { content: initialEditorValue } = state.getCurrentFile();
       const cleanUp = teardown(createConsolePanel());
       const execute = () => executeCode(state.getCurrentIndex(), state.getFiles());
@@ -45,7 +45,7 @@ export default function editor({ state, changePage }) {
         execute();
       }
 
-      navigation(
+      statusBar(
         state,
         function showFile(index) {
           loadFileInEditor(state.changeActiveFile(index));
@@ -69,7 +69,8 @@ export default function editor({ state, changePage }) {
           } else if (result) {
             state.editFile(index, { filename: result });
           }
-        }
+        },
+        showSettings
       );
 
       execute();

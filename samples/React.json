@@ -4,10 +4,11 @@
     "layout": {
       "direction": "vertical",
       "sizes": [
-        30,
-        70
+        70,
+        30
       ],
       "elements": [
+        "editor",
         {
           "direction": "horizontal",
           "sizes": [
@@ -18,8 +19,7 @@
             "output",
             "log"
           ]
-        },
-        "editor"
+        }
       ]
     }
   },

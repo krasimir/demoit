@@ -12,36 +12,56 @@ body {
   width: 100%;
   height: 100%;
   font-family: Arial, Verdana;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 18px;
   background: #000;
 }
 .centered {
   text-align: center;
   display: block;
 }
+.right {
+  float: right;
+}
 svg {
   fill: currentColor;
+}
+/*************************** PAGE */
+.page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  display: none;
+  z-index: 8000;
+  opacity: 0;
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  -webkit-transition: opacity 200ms ease-out, transform 200ms ease-out;
+  transform: translateY(-20px);
+  -webkit-transform: translateY(-20px);
+}
+/*************************** GRID */
+.gutter.gutter-horizontal {
+  cursor: ew-resize;
+  float: left;
+  height: 100%;
+  background: #fff;
+}
+.gutter.gutter-vertical {
+  cursor: ns-resize;
+  width: 100%;
+  background: #fff;
 }
 /*************************** CODE EDITOR */
 .editor {
   background-color: #263238;
 }
 .editor .layout {
-  height: 100%;
-}
-.editor .settings {
-  display: block;
-  position: fixed;
-  bottom: 0.5em;
-  right: 0.5em;
-  color: rgba(0, 0, 0, 0.3);
-  transition: transform 300ms ease-out, bottom 300ms ease-out, right 300ms ease-out;
-  transform: rotate(0deg);
-}
-.editor .settings:hover {
-  color: #000;
-  transform: rotate(45deg);
+  height: calc(100% - 8px);
+  transition: height 200ms ease-out;
 }
 .editor-section {
   vertical-align: top;
@@ -122,89 +142,42 @@ svg {
 }
 /*************************** JS EDITOR */
 .js-code-editor {
+  height: 100%;
   width: 100%;
-  height: calc(100% - 40px);
   overflow: auto;
-  font-size: 20px;
-  line-height: 28px;
-}
-/*************************** FILES */
-.navigation {
-  height: 40px;
-  background: #141b1f;
-	border-bottom: solid 2px #000;
-}
-.navigation ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.navigation ul li {
-  margin: 0;
-  padding: 0;
+  font-size: 1em;
+  line-height: 1.3em;
   float: left;
+  z-index: 90;
 }
-.navigation ul li a, .navigation ul li > span {
-	display: inline-block;
-	color: #FFF;
+/*************************** STATUS BAR */
+.status-bar {
+  width: 100%;
+  height: 8px;
+  background: #000;
+  cursor: pointer;
+  transition: height 200ms ease-out;
+  overflow: hidden;
+}
+.status-bar > div {
+  display: none;
+}
+.status-bar a {
+  display: inline-block;
+	color: #bbb;
 	text-decoration: none;
 	font-size: 0.7em;
-	padding: 0.65em 1.4em;
-	opacity: 0.3;
-	border-left: solid 2px #000;
+	padding: 8px;
+  cursor: pointer;
 }
-.navigation ul li a {
-  height: 40px;
+.status-bar a:hover {
+  background: #141414;
 }
-.navigation ul li a.active {
-  opacity: 1;
-  color: #bbb;
-	background: #263238;
-	border-bottom: solid 2px #263238;
+.status-bar a.active {
+  border-bottom: solid 1px #999;
 }
-.navigation ul li a.active:hover {
-	border-bottom: solid 2px #263238;
-}
-.navigation ul li a:hover {
-	border-bottom: solid 2px #fff;
-}
-.navigation .buttons {
-  float: right;
-}
-.navigation .buttons ul li a, .navigation .with-icons li a {
-  padding: 0.3em 1em;
-}
-.navigation .buttons svg, .navigation .with-icons svg {
-  transform: translateY(9px);
-}
-/*************************** GRID */
-.gutter.gutter-horizontal {
-  cursor: ew-resize;
-  float: left;
-  height: 100%;
-  background: #fff;
-}
-.gutter.gutter-vertical {
-  cursor: ns-resize;
-  width: 100%;
-  background: #fff;
-}
-/*************************** PAGE */
-.page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  color: #fff;
-  display: none;
-  z-index: 8000;
-  opacity: 0;
-  transition: opacity 200ms ease-out, transform 200ms ease-out;
-  -webkit-transition: opacity 200ms ease-out, transform 200ms ease-out;
-  transform: translateY(-20px);
-  -webkit-transform: translateY(-20px);
+.status-bar a svg {
+  transform: translateY(3px);
 }
 /*************************** DEPENDENCIES */
 .manage-dependencies textarea.dependencies-list {
