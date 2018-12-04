@@ -26,7 +26,7 @@
 
 ## Configuration
 
-When you open the app and start writing code you progress gets saved to the local storage. You can grab it by clicking on the gear icon in the lower right corner of the screen (check section "Local storage"). The JSON there contains all the configuration that Demoit needs. You can save this configuration to an external file and let Demoit knows the path to it via the `state` GET parameter (for example `http://localhost/demoit?state=./mycode.json`).
+When you open the app and start writing code you progress gets saved to the local storage. You can grab it by opening the bar at the top and clicking on the gear icon (check section "Local storage"). The JSON there contains all the configuration that Demoit needs. You can save this configuration to an external file and let Demoit knows the path to it via the `state` GET parameter (for example `http://localhost/demoit?state=./mycode.json`).
 
 Here is what the configuration may contain:
 
