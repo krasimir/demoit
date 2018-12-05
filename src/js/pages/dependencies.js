@@ -58,15 +58,9 @@ export default function dependencies({ state, changePage }) {
       const progress = el('.value');
       const currentFile = el('.file');
       const dependencies = [
-        './vendor/codemirror/codemirror.js',
-        './vendor/codemirror/javascript.js',
-        './vendor/codemirror/xml.js',
-        './vendor/codemirror/jsx.js',
-        './vendor/codemirror/mark-selection.js',
-        './vendor/split.js',
-        './vendor/babel-6.26.0.min.js',
-        './vendor/babel-polyfill@6.26.0.js',
-        `./vendor/codemirror/theme/${ state.getEditorSettings().theme }.css`,
+        './resources/babel-6.26.0.min.js',
+        './resources/babel-polyfill@6.26.0.js',
+        // `./vendor/codemirror/theme/${ state.getEditorSettings().theme }.css`,
         ...state.getDependencies()
       ];
 
