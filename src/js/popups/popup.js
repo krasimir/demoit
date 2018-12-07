@@ -1,4 +1,4 @@
-import { el } from '../utils';
+import { el } from '../utils/element';
 import { CLOSE_ICON } from '../utils/icons';
 
 const ESC_KEY = 27;

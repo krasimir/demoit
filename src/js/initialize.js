@@ -1,9 +1,4 @@
-import { getParam } from './utils';
-
-const readFromJSONFile = async function (file) {
-  const res = await fetch(file);
-  return await res.json();
-}
+import { getParam, readFromJSONFile } from './utils';
 
 export default async function initialize(state) {
   const predefinedState = getParam('state');

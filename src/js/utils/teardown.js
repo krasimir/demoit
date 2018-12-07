@@ -1,6 +1,6 @@
 import { el } from './element';
 
-export function teardown(clearConsole) {
+export default function teardown(clearConsole) {
   return async function teardown() {
     clearConsole();
     

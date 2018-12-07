@@ -1,11 +1,3 @@
-export * from './element';
-export * from './execute';
-export * from './modals';
-export * from './editorLayout';
-export * from './teardown';
-export * from './transpile';
-export * from './icons';
-
 export const debounce = function (func, wait, immediate) {
 	var timeout; 
 	return function() {
@@ -51,4 +43,9 @@ export const getParam = (parameterName) => {
 			if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
 		});
 	return result;
+}
+
+export const readFromJSONFile = async function (file) {
+  const res = await fetch(file);
+  return await res.json();
 }

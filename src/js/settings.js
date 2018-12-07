@@ -1,15 +1,14 @@
-import { el } from '../../utils';
-import settingsPopUp from '../../popups/settingsPopUp';
-import { LAYOUTS } from '../../utils/editorLayout';
+
+import settingsPopUp from './popups/settingsPopUp';
+import { LAYOUTS } from './layout';
 
 const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
 
-export default function settings(state, changePage) {
+export default function settings(state) {
   return () => settingsPopUp(
     JSON.stringify(state.dump(), null, 2),
     function restoreFromStorage() {
       state.restoreFromLocalStorage();
-      changePage('editor');
     },
     function flushStorage() {
       state.clear();
@@ -20,12 +19,10 @@ export default function settings(state, changePage) {
     function onDepsUpdated(newDeps) {
       if (newDeps) {
         state.setDependencies(newDeps);
-        changePage('dependencies');
       }
     },
     function onLayoutUpdate(newLayout) {
       state.updateLayout(LAYOUTS[newLayout]);
-      changePage('editor');
     }
   );
 }

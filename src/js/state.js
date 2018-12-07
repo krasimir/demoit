@@ -1,4 +1,4 @@
-import { isLocalStorageAvailable } from './utils';
+import { isLocalStorageAvailable, getParam, readFromJSONFile } from './utils';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
 
 const EMPTY_FILE = {
@@ -40,14 +40,27 @@ const readFromLocalStorage = function () {
   return null;
 }
 
-export default function createStorage() {
+export default async function createState() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
-  var state = DEFAULT_STATE;
+
+  const predefinedState = getParam('state');
+  var state;
+
+  if (predefinedState) {
+    try {
+      state = await readFromJSONFile(predefinedState);
+    } catch(error) {
+      console.error(`Error reading ${ predefinedState }`);
+    }
+  } else {
+    state = DEFAULT_STATE;
+  }
+
   var activeFileIndex = resolveActiveFileIndex(state.files);
 
-  const notify = () => onChangeListeners.forEach(c => c());
   const syncState = () => {
+    onChangeListeners.forEach(c => c());
     if (localStorageAvailable) {
       localStorage.setItem(LS_KEY, JSON.stringify(state));
     }
@@ -65,7 +78,7 @@ export default function createStorage() {
     setCurrentIndex(idx) {
       activeFileIndex = idx;
       location.hash = state.files[idx].filename;
-      notify();
+      syncState();
     },
     isCurrentIndex(idx) {
       return activeFileIndex === idx;
@@ -85,7 +98,6 @@ export default function createStorage() {
     setDependencies(dependencies) {
       state.dependencies = dependencies;
       syncState();
-      notify();
     },
     getEditorSettings() {
       return state.editor;
@@ -106,7 +118,6 @@ export default function createStorage() {
         ...updates
       };
       syncState();
-      notify();
       this.setCurrentIndex(activeFileIndex);
     },
     editCurrentFile(updates) {
@@ -138,7 +149,7 @@ export default function createStorage() {
       if (isLocalStorageAvailable) {
         localStorage.clear();
       }
-      notify();
+      syncState();
     },
     listen(callback) {
       onChangeListeners.push(callback);

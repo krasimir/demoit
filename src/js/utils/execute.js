@@ -24,7 +24,7 @@ const formatModule = ({ filename, content }) => `
   }
 `;
 
-export function execute(index, allFiles) {
+export default function execute(index, allFiles) {
   try {
     const code = `
       const modules = [${ allFiles.map(prepareExecution).map(formatModule).join(',') }];

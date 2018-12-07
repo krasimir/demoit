@@ -1,4 +1,4 @@
-import { el } from './element';
+import { el } from './utils/element';
 
 export const LAYOUTS = {
   'default': {
@@ -97,9 +97,9 @@ export const LAYOUTS = {
   }
 };
 
-export function editorLayout(l, onLayoutUpdate) {
+export default function layout(l, onLayoutUpdate) {
   const layout = l || LAYOUTS.default;
-  const page = el('.editor.page .layout');
+  const page = el('.app .layout');
   const output = el.fromTemplate('#template-output');
   const log = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
@@ -145,7 +145,5 @@ export function editorLayout(l, onLayoutUpdate) {
 
   page.appendChildren(build(layout));
 
-  setTimeout(() => (splits = splitFuncs.map(f => f())), 1);
-
-  
+  setTimeout(() => (splits = splitFuncs.map(f => f())), 1);  
 }

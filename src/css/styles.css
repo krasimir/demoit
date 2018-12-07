@@ -1,3 +1,17 @@
+/*************************** Animations */
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-moz-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 html {
   box-sizing: border-box;
   width: 100%;
@@ -26,8 +40,8 @@ body {
 svg {
   fill: currentColor;
 }
-/*************************** PAGE */
-.page {
+/*************************** APP main */
+.app {
   position: fixed;
   top: 0;
   left: 0;
@@ -35,13 +49,16 @@ svg {
   height: 100%;
   background: #000;
   color: #fff;
-  display: none;
   z-index: 8000;
   opacity: 0;
   transition: opacity 200ms ease-out, transform 200ms ease-out;
   -webkit-transition: opacity 200ms ease-out, transform 200ms ease-out;
-  transform: translateY(-20px);
-  -webkit-transform: translateY(-20px);
+  animation: fadein 400ms forwards;
+  -webkit-animation: fadein 400ms forwards;
+}
+.app .layout {
+  height: calc(100% - 8px);
+  transition: height 200ms ease-out;
 }
 /*************************** GRID */
 .gutter.gutter-horizontal {
@@ -56,13 +73,6 @@ svg {
   background: #fff;
 }
 /*************************** CODE EDITOR */
-.editor {
-  background-color: #263238;
-}
-.editor .layout {
-  height: calc(100% - 8px);
-  transition: height 200ms ease-out;
-}
 .editor-section {
   vertical-align: top;
   height: 100%;

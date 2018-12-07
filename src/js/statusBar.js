@@ -1,5 +1,5 @@
-import { el } from '../../utils';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON } from '../../utils/icons';
+import { el } from './utils/element';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON } from './utils/icons';
 
 let visibility = false;
 
