@@ -9,5 +9,5 @@ window.onload = async function () {
   const loadPage = createPagesManager(state, [ dependenciesPage, editorPage ]);
 
   await initialize(state);
-  loadPage('dependencies')
+  loadPage('dependencies');
 };

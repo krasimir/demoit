@@ -63,3 +63,5 @@ typings/
 NOTES
 
 *.log
+
+.tmp

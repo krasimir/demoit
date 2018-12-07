@@ -8,11 +8,16 @@
     "url": "git+https://github.com/krasimir/demoit.git"
   },
   "scripts": {
-    "minify-demoit": "uglifyjs -c -m -o ./dist/demoit.js -- ./dist/demoit.js",
-    "produce-css": "cat ./src/css/styles.css ./src/css/codemirror.css ./src/css/codemirror_dark.css | uglifycss > ./dist/styles.css",
-    "produce-vendor-js": "cat ./src/vendor/split.js ./src/vendor/codemirror.js ./src/vendor/javascript.js ./src/vendor/xml.js ./src/vendor/jsx.js ./src/vendor/mark-selection.js | uglifyjs -c -m -o ./dist/vendor.js",
-    "dev": "yarn produce-vendor-js && concurrently \"webpack\" \"cpx ./src/index.html ./dist --watch\" \"cpx ./src/styles.css ./dist --watch\"",
-    "release": "yarn produce-vendor-js && webpack --config ./webpack.config.prod.js && cleancss ./src/styles.css -o ./dist/styles.css && cp ./src/index.html ./dist/index.html && yarn minify-demoit && node ./scripts/zipit.js"
+    "clean": "rm -rf ./dist/*",
+    "copy-static": "cp ./src/index.html ./dist/index.html && cp -r ./src/resources ./dist && cp -r ./src/img ./dist && cp -r ./src/font ./dist",
+    "produce-minified-js": "cat ./src/js-vendor/vendor.js ./.tmp/demoit.js | uglifyjs -c -m -o ./dist/demoit.js",
+    "produce-js": "cat ./src/js-vendor/vendor.js ./.tmp/demoit.js > ./dist/demoit.js",
+    "produce-css": "cat ./src/css/codemirror.css ./src/css/codemirror_dark.css ./src/css/styles.css | uglifycss > ./dist/styles.css",
+    "produce-vendor-js": "cat ./src/js-vendor/split.js ./src/js-vendor/codemirror.js ./src/js-vendor/javascript.js ./src/js-vendor/xml.js ./src/js-vendor/jsx.js ./src/js-vendor/mark-selection.js | uglifyjs -c -m -o ./src/js-vendor/vendor.js",
+    "dev": "yarn build && concurrently \"webpack\" \"onchange ./src/css/*.css -- yarn produce-css\" \"onchange ./.tmp/*.js -- yarn produce-js\"",
+    "build": "yarn clean && yarn copy-static && yarn produce-css && yarn produce-vendor-js && webpack --config ./webpack.config.prod.js && yarn produce-minified-js",
+    "zip": "node ./scripts/zipit.js",
+    "release": "yarn build && yarn zip"
   },
   "keywords": [
     "demo",
@@ -35,6 +40,7 @@
     "clean-css-cli": "4.2.1",
     "concurrently": "4.0.1",
     "cpx": "1.5.0",
+    "onchange": "5.1.3",
     "uglify-js": "3.4.9",
     "uglifycss": "0.0.29",
     "webpack": "4.25.1",
