@@ -6,24 +6,31 @@ import newFilePopUp from './popups/newFilePopUp';
 import editFilePopUp from './popups/editFilePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
+import preview from './preview';
+import { mode, PREVIEW, EDITOR } from './mode';
 
 window.onload = async function () {
   const state = await createState();
-  
-  layout(state.getEditorSettings().layout, state.updateLayout);
+  let loadFile;
 
-  const loadFileInEditor = editor(state);
+  layout(state);
+  if (mode === PREVIEW) {
+    loadFile = preview(state);
+  } else if (mode === EDITOR) {
+    loadFile = editor(state);
+  }
+  loadFile(state.getCurrentFile());
 
   statusBar(
     state,
     function showFile(index) {
-      loadFileInEditor(state.changeActiveFile(index));
+      loadFile(state.changeActiveFile(index));
     },
     async function newFile() {
       const newFilename = await newFilePopUp();
 
       if (newFilename) {
-        loadFileInEditor(state.addNewFile(newFilename));
+        loadFile(state.addNewFile(newFilename));
       }
     },
     async function editFile(index) {
@@ -34,7 +41,7 @@ window.onload = async function () {
 
       if (result === 'delete') {
         state.deleteFile(index);
-        loadFileInEditor(state.getCurrentFile());
+        loadFile(state.getCurrentFile());
       } else if (result) {
         state.editFile(index, { filename: result });
       }

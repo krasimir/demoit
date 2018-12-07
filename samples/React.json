@@ -1,6 +1,7 @@
 {
   "editor": {
     "theme": "material",
+    "statusBar": true,
     "layout": {
       "direction": "vertical",
       "sizes": [

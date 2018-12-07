@@ -8,8 +8,6 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
       e = document.createElement('div');
     }
   }
-  
-  var initialNode = e.cloneNode(true);
 
   return {
     e,
@@ -68,11 +66,6 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
     find(selector) {
       return el(selector, e);
     },
-    restoreToInitialDOM() {
-      const clone = initialNode.cloneNode(true);
-      e.parentNode.replaceChild(clone, e);
-      e = clone;
-    },
     appendTo(parent) {
       parent.e.appendChild(e);
     },
@@ -89,6 +82,12 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
     },
     detach() {
       e.parentNode.removeChild(e);
+    },
+    empty() {
+      while (e.firstChild) {
+        e.removeChild(e.firstChild);
+      }
+      return this;
     }
   }
 }

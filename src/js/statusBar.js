@@ -1,11 +1,11 @@
 import { el } from './utils/element';
 import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON } from './utils/icons';
-
-let visibility = false;
+import { mode, EDITOR } from './mode';
 
 export default function statusBar(state, showFile, newFile, editFile, showSettings) {
   const bar = el.withFallback('.status-bar');
-  const layout = el.withFallback('.editor .layout');
+  const layout = el.withFallback('.app .layout');
+  let visibility = !!state.getEditorSettings().statusBar;
 
   const render = () => {
     const items  = [];
@@ -17,9 +17,9 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         `<a data-export="file" href="javascript:void(0);" ${ state.isCurrentIndex(idx) ? 'class="active"' : '' }>${ filename }${ editing ? ' *' : ''}</a>`
       );
     });
-    items.push(`<a data-export="newFileButton" href="javascript:void(0)">${ PLUS_ICON(14) }</a>`);
+    mode === EDITOR && items.push(`<a data-export="newFileButton" href="javascript:void(0)">${ PLUS_ICON(14) }</a>`);
     items.push(`<a data-export="closeButton" class="right" href="javascript:void(0)">${ CLOSE_ICON(14) }</a>`);
-    items.push(`<a data-export="settingsButton" class="right" href="javascript:void(0)">${ SETTINGS_ICON(14) }</a>`);
+    mode === EDITOR && items.push(`<a data-export="settingsButton" class="right" href="javascript:void(0)">${ SETTINGS_ICON(14) }</a>`);
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {
@@ -31,15 +31,17 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       return index;
     }, 0);
 
-    const { newFileButton, buttons, closeButton, settingsButton } = bar.namedExports();
+    const { newFileButton, closeButton, settingsButton } = bar.namedExports();
     const manageVisibility = () => {
+      const { buttons } = bar.namedExports();
       buttons.css('display', visibility ? 'block' : 'none');
       bar.css('height', visibility ? '36px' : '8px');
       layout.css('height', visibility ? 'calc(100% - 36px)' : 'calc(100% - 8px)');
+      state.updateStatusBarVisibility(visibility);
     }
 
-    newFileButton.onClick(newFile);
-    settingsButton.onClick(showSettings);
+    newFileButton && newFileButton.onClick(newFile);
+    settingsButton && settingsButton.onClick(showSettings);
     closeButton.onClick(e => {
       e.stopPropagation();
       visibility = false;

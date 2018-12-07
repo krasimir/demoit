@@ -33,8 +33,8 @@ export const once = callback => {
 		callback(...args);
 	}
 }
-export const getParam = (parameterName) => {
-	var result = null, tmp = [];
+export const getParam = (parameterName, defaultValue) => {
+	var result = defaultValue, tmp = [];
 	location.search
 		.substr(1)
 		.split("&")

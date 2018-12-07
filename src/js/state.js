@@ -6,10 +6,12 @@ const EMPTY_FILE = {
   filename: 'untitled.js',
   editing: false
 };
-
 const LS_KEY = 'DEMOIT_v2';
 const DEFAULT_STATE = {
-  editor: { theme: 'material' },
+  editor: {
+    theme: 'material',
+    statusBar: true
+  },
   dependencies: [],
   files: [ EMPTY_FILE ]
 };
@@ -157,6 +159,9 @@ export default async function createState() {
     updateLayout(newLayout) {
       state.editor.layout = newLayout;
       syncState();
+    },
+    updateStatusBarVisibility(value) {
+      state.editor.statusBar = value;
     },
     restoreFromLocalStorage() {
       this.setState(readFromLocalStorage());

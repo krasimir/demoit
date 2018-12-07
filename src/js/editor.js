@@ -1,6 +1,6 @@
 import teardown from './utils/teardown';
-import executeCode from './utils/execute';
 import { el } from './utils/element';
+import executeCode from './execute';
 import createConsolePanel from './console';
 
 function codeMirror(editorSettings, value, onSave, onChange) {
@@ -42,9 +42,6 @@ export default function editor(state) {
       state.editCurrentFile({ editing: true });
     }
   );
-
-  // codeMirrorEditor && codeMirrorEditor.focus();
-  // execute();
 
   return async function loadFileInEditor(file) {
     await cleanUp();
