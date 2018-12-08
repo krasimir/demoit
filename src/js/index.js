@@ -8,7 +8,7 @@ import statusBar from './statusBar';
 import preview from './preview';
 import { mode, PREVIEW, EDITOR } from './mode';
 
-window.onload = async function () {
+(async function () {
   const state = await createState();
   let loadFile;
 
@@ -47,4 +47,4 @@ window.onload = async function () {
     },
     settings(state)
   );
-};
+})();

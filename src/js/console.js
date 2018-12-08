@@ -15,7 +15,7 @@ export default function logger() {
 
     node.innerHTML = '<p>' + text + '</p>';
     if (empty) {
-      element.content('');
+      element.empty();
       empty = false;
     }
     element.appendChild(node);
@@ -50,8 +50,8 @@ export default function logger() {
     };
   })();
 
-  return function clearConsole(hintValue = 'console.log(...)') {
+  return function clearConsole(hintValue = '<div class="hint"><div>console.log(...)</div></div>') {
     empty = true;
-    element.content(`<div class="hint">${ hintValue }</div>`);
+    element.empty().content(hintValue);
   }
 }
