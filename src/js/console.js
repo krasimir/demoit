@@ -50,8 +50,8 @@ export default function logger() {
     };
   })();
 
-  return function clearConsole() {
+  return function clearConsole(hintValue = 'console.log(...)') {
     empty = true;
-    element.content('<div class="hint">console.log</div>');
+    element.content(`<div class="hint">${ hintValue }</div>`);
   }
 }

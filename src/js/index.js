@@ -1,4 +1,3 @@
-import initialize from './initialize';
 import layout from './layout';
 import editor from './editor';
 import createState from './state';
@@ -17,7 +16,7 @@ window.onload = async function () {
   if (mode === PREVIEW) {
     loadFile = preview(state);
   } else if (mode === EDITOR) {
-    loadFile = editor(state);
+    loadFile = await editor(state);
   }
   loadFile(state.getCurrentFile());
 

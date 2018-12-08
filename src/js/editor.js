@@ -1,10 +1,11 @@
-import teardown from './utils/teardown';
 import { el } from './utils/element';
 import executeCode from './execute';
-import createConsolePanel from './console';
+import createConsole from './console';
+import output from './output';
+import dependencies from './dependencies';
 
-function codeMirror(editorSettings, value, onSave, onChange) {
-  const editor = CodeMirror(el.withFallback('.js-code-editor').e, {
+function codeMirror(container, editorSettings, value, onSave, onChange) {
+  const editor = CodeMirror(container.e, {
     value: value || '',
     mode:  'jsx',
     tabSize: 2,
@@ -26,25 +27,49 @@ function codeMirror(editorSettings, value, onSave, onChange) {
   return editor;
 };
 
-export default function editor(state) {
-  const { content: initialEditorValue } = state.getCurrentFile();
-  const cleanUp = teardown(createConsolePanel());
-  const execute = () => executeCode(state.getCurrentIndex(), state.getFiles());
+export default async function editor(state) {
+  const clearConsole = createConsole();
+  const clearOutput = output();
+  const loadDependencies = async () => {
+    await dependencies(state, (percents, file) => {
+      const content = `${ percents }%<br /><small>${ file }</small>`;
+
+      clearConsole(content);
+      clearOutput(content);
+    });
+  }
+  const execute = async () => {
+    await loadDependencies();
+    clearConsole();
+    clearOutput();
+    executeCode(state.getCurrentIndex(), state.getFiles());
+  }
+  const container = el.withFallback('.js-code-editor');
+
+  await loadDependencies();
+
   const codeMirrorEditor = codeMirror(
+    container,
     state.getEditorSettings(),
-    initialEditorValue,
+    state.getCurrentFile().content,
     async function onSave(code) {
-      await cleanUp();
-      state.editCurrentFile({ content: code, editing: false  });
+      await clearOutput();
+      clearConsole();
+      state.editCurrentFile({
+        content: code,
+        editing: false,
+        preview: container.content()
+      });
       execute();
     },
-    function onChange(code) {
+    function onChange() {
       state.editCurrentFile({ editing: true });
     }
   );
 
   return async function loadFileInEditor(file) {
-    await cleanUp();
+    await clearOutput();
+    clearConsole();
     codeMirrorEditor.setValue(file.content);
     codeMirrorEditor.focus();
     // we have to do this because we fire the onChange handler of the editor which sets editing=true;

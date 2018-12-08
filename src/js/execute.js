@@ -1,6 +1,6 @@
-import transpile from './transpile';
-import './executeCSS';
-import './executeHTML';
+import transpile from './utils/transpile';
+import './utils/executeCSS';
+import './utils/executeHTML';
 
 const getExt = file => file.split(/\./).pop().toLowerCase();
 const prepareExecution = ({ filename, content }) => {

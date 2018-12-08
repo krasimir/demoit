@@ -1,5 +1,3 @@
-import { el } from '../utils';
-
 const LOADED_FILES_CACHE = {};
 
 const addJSFile = function (path, done) {
@@ -28,14 +26,17 @@ const addCSSFile = function (path, done) {
   });
   document.body.appendChild(node);
 }
-const load = async function (dependencies, status = () => {}) {
+const load = async function (dependencies, onProgress) {
   return new Promise(done => {
     (function load(index) {
-      status(index);
       if (index === dependencies.length) {
         done();
         return;
       }
+      onProgress(
+        Math.ceil(100 * (index / dependencies.length)),
+        dependencies[index].split(/\//).pop()
+      );
 
       const resource = dependencies[index];
       const extension = resource.split('.').pop().toLowerCase();
@@ -51,28 +52,11 @@ const load = async function (dependencies, status = () => {}) {
   });
 }
 
-export default function dependencies({ state, changePage }) {
-  return {
-    name: 'dependencies',
-    async didMount({ el }) {
-      const progress = el('.value');
-      const currentFile = el('.file');
-      const dependencies = [
-        './resources/babel-6.26.0.min.js',
-        './resources/babel-polyfill@6.26.0.js',
-        // `./vendor/codemirror/theme/${ state.getEditorSettings().theme }.css`,
-        ...state.getDependencies()
-      ];
+export default async function dependencies(state, onProgress) {
+  const dependencies = [
+    './resources/editor.js',
+    ...state.getDependencies()
+  ];
 
-      await load(dependencies, index => {
-        progress.css('width', (100 * (index / dependencies.length)) + '%');
-        if (index < dependencies.length) {
-          currentFile.content(dependencies[index].split(/\//).pop());
-        } else {
-          currentFile.css('opacity', 0);
-          changePage('editor');
-        }
-      });
-    }
-  }
+  await load(dependencies, onProgress);
 }

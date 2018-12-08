@@ -12,6 +12,9 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
   return {
     e,
     content(str) {
+      if (!str) {
+        return e.innerHTML;
+      }
       e.innerHTML = str;
       return this.exports();
     },
