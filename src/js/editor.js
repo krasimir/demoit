@@ -32,7 +32,7 @@ export default async function editor(state) {
   const clearOutput = output();
   const loadDependencies = async () => {
     await dependencies(state, (percents, file) => {
-      const content = `<div class="hint"><div class="spinner"></div></div>`;
+      const content = `<div class="centered"><div class="spinner"></div></div>`;
 
       clearConsole(content);
       clearOutput(content);
@@ -49,7 +49,7 @@ export default async function editor(state) {
   await loadDependencies();
 
   const codeMirrorEditor = codeMirror(
-    container,
+    container.empty(),
     state.getEditorSettings(),
     state.getCurrentFile().content,
     async function onSave(code) {

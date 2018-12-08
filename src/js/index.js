@@ -6,16 +6,16 @@ import editFilePopUp from './popups/editFilePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import preview from './preview';
-import { mode, PREVIEW, EDITOR } from './mode';
+import { isPreviewMode, isEditorMode } from './mode';
 
 (async function () {
   const state = await createState();
   let loadFile;
 
   layout(state);
-  if (mode === PREVIEW) {
+  if (isPreviewMode()) {
     loadFile = preview(state);
-  } else if (mode === EDITOR) {
+  } else if (isEditorMode()) {
     loadFile = await editor(state);
   }
   loadFile(state.getCurrentFile());

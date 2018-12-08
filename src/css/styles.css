@@ -11,9 +11,9 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: 'PT Mono', monospace;
-  font-size: 18px;
-  line-height: 18px;
+  font-family: "Fira Mono", monospace;
+  font-size: 14px;
+  line-height: 14px;
   background: #fff;
   color: #000;
 }
@@ -22,6 +22,12 @@ body {
 }
 svg {
   fill: currentColor;
+}
+.centered {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /*************************** APP main */
 .app {
@@ -41,12 +47,12 @@ svg {
   cursor: ew-resize;
   float: left;
   height: 100%;
-  background: #999;
+  background: #eaeaea;
 }
 .gutter.gutter-vertical {
   cursor: ns-resize;
   width: 100%;
-  background: #999;
+  background: #eaeaea;
 }
 /*************************** CODE EDITOR */
 .editor-section {
@@ -66,52 +72,29 @@ svg {
 .CodeMirror-selected  {
   background-color: #fff !important;
 }
-.CodeMirror-selectedtext {
-  color: #000 !important;
-}
 /*************************** OUTPUT PANEL */
 .output {
-	font-size: 1em;
-	line-height: 1.2em;
 	color: #000;
 	padding: 1em;
   position: relative;
   overflow: auto;
 }
-.output .hint {
-  font-size: 1em;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 /*************************** CONSOLE */
 .console {
-	font-size: 0.8em;
-	line-height: 1em;
   position: relative;
   overflow: auto;
-}
-.console .hint {
-  font-size: 1em;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .console p {
   margin: 0;
   padding: 0.5em;
   border-bottom: solid 1px #bbb;
   white-space: pre-wrap;
-  font-size: 0.9em;
 }
 /*************************** JS EDITOR */
 .js-code-editor {
   height: 100%;
   width: 100%;
   overflow: auto;
-  font-size: 1em;
   line-height: 1.3em;
   float: left;
   z-index: 90;
@@ -130,9 +113,8 @@ svg {
 }
 .status-bar a {
   display: inline-block;
-	color: #bbb;
+	color: rgb(145, 145, 145);
 	text-decoration: none;
-	font-size: 0.7em;
 	padding: 8px;
   cursor: pointer;
 }
@@ -140,7 +122,7 @@ svg {
   background: #141414;
 }
 .status-bar a.active {
-  border-bottom: solid 1px #999;
+  color: #FFF;
 }
 .status-bar a svg {
   transform: translateY(3px);
@@ -200,7 +182,6 @@ svg {
 .popup p {
   margin: 0 0 1em 0;
   padding: 0;
-  font-size: 1em;
   line-height: 1.2em;
 }
 .popup h1 {
@@ -212,7 +193,6 @@ svg {
   margin: 0 0 1em 0;
 }
 .popup button {
-  font-size: 0.7em;
   padding: 0.6em 1em;
   background: none;
   cursor: pointer;
@@ -242,7 +222,6 @@ svg {
 .popup input, .popup textarea {
   width: 100%;
   border: solid 1px #525252;
-  font-size: 1em;
   padding: 0.6em;
   display: block;
   border-radius: 4px;
@@ -273,7 +252,6 @@ svg {
 .popup .sub-nav li a {
   display: block;
   text-decoration: none;
-	font-size: 0.8em;
 	padding: 1em;
   text-transform: uppercase;
   border-right: solid 1px #0e0e0e;

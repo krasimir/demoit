@@ -1,7 +1,9 @@
+import { el } from './element';
+
 window.executeHTML = function (filename, content) {
   const node = document.createElement('div');
 
   node.innerHTML = content;
-  document.querySelector('.output').appendChild(node.firstChild);
+  el('.output').empty().appendChild(node.firstChild);
 }
 

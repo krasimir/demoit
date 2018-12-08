@@ -9,6 +9,20 @@ export const cleanUpExecutedCSS = function (filename) {
   }
 }
 
+export const injectCSS = function (css, id) {
+  const node = document.querySelector('#' + id);
+
+  if (node) {
+    node.innerHTML = css;
+  } else {
+    const node = document.createElement('style');
+
+    id && node.setAttribute('id', id);
+    node.innerHTML = css;
+    document.body.appendChild(node);
+  }
+}
+
 window.executeCSS = function (filename, content) {
   if (!STYLES_CACHE[filename]) {
     const node = document.createElement('style');

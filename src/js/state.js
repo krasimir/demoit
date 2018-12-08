@@ -9,8 +9,8 @@ const EMPTY_FILE = {
 const LS_KEY = 'DEMOIT_v2';
 const DEFAULT_STATE = {
   editor: {
-    theme: 'material',
-    statusBar: true
+    theme: 'light',
+    statusBar: false
   },
   dependencies: [],
   files: [ EMPTY_FILE ]
