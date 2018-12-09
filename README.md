@@ -19,6 +19,8 @@
 * HTML+CSS - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/HTML+CSS.json)
 * Canvas - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/Canvas.json)
 
+[(All demos embeded on a single page)](https://krasimir.github.io/samples)
+
 ---
 
 ## Usage

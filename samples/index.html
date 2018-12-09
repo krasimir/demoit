@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demoit samples</title>
+  <style>
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      font-size: 18px;
+      line-height: 18px;
+      font-family: monospace;
+    }
+    .container {
+      width: 960px;
+      padding: 0 1em;
+      margin: 2em auto;
+    }
+    h2 {
+      margin-top: 2em;
+      margin-bottom: 1em;
+    }
+    hr {
+      border-top: solid 1em #000;
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+      <h2>Empty</h2>
+      <iframe src="../dist" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <hr />
+
+    <div class="container">
+      <h2>React</h2>
+      <iframe src="../dist?state=../samples/React.json" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <hr />
+
+    <div class="container">
+      <h2>Vue</h2>
+      <iframe src="../dist?state=../samples/Vue.json" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <hr />
+
+    <div class="container">
+      <h2>HTML+CSS</h2>
+      <iframe src="../dist?state=../samples/HTML+CSS.json" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <hr />
+
+    <div class="container">
+      <h2>Canvas</h2>
+      <iframe src="../dist?state=../samples/Canvas.json" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+    </div>
+
+  </div>
+</body>
+</html>
