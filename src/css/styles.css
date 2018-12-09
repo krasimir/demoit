@@ -29,6 +29,9 @@ svg {
   align-items: center;
   justify-content: center;
 }
+.mt1 {
+  margin-top: 1em !important;
+}
 /*************************** APP main */
 .app {
   position: fixed;
@@ -278,17 +281,6 @@ svg {
 }
 .popup .content {
   padding: 1em;
-}
-.popup .layout a {
-  display: inline-block;
-  padding: 4px;
-  border: solid 2px #525252;
-  line-height: 0;
-  margin-right: 0.4em;
-  margin-bottom: 1em;
-}
-.popup .layout a:hover {
-  border-color: #000;
 }
 /*************************** SPINNER */
 @keyframes bubble {

@@ -4,6 +4,7 @@ import { isPreviewMode, isEditorMode } from './mode';
 
 export const LAYOUTS = {
   'default': {
+    name: 'default',
     direction: 'horizontal',
     sizes: [30, 70],
     elements: [
@@ -16,6 +17,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutLeft': {
+    name: 'layoutLeft',
     direction: 'horizontal',
     sizes: [70, 30],
     elements: [
@@ -28,6 +30,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutTop': {
+    name: 'layoutTop',
     direction: 'vertical',
     sizes: [30, 70],
     elements: [
@@ -40,6 +43,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutBottom': {
+    name: 'layoutBottom',
     direction: 'vertical',
     sizes: [70, 30],
     elements: [
@@ -52,6 +56,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutEC': {
+    name: 'layoutEC',
     direction: 'horizontal',
     sizes: [70, 30],
     elements: [
@@ -60,6 +65,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutEO': {
+    name: 'layoutEO',
     direction: 'horizontal',
     sizes: [70, 30],
     elements: [
@@ -68,6 +74,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutEOBottom': {
+    name: 'layoutEOBottom',
     direction: 'vertical',
     sizes: [70, 30],
     elements: [
@@ -76,6 +83,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutECBottom': {
+    name: 'layoutECBottom',
     direction: 'vertical',
     sizes: [70, 30],
     elements: [
@@ -84,6 +92,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutE': {
+    name: 'layoutE',
     direction: 'horizontal',
     sizes: [100],
     elements: [
@@ -91,6 +100,7 @@ export const LAYOUTS = {
     ]
   },
   'layoutO': {
+    name: 'layoutO',
     direction: 'horizontal',
     sizes: [100],
     elements: [

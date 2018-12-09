@@ -18,7 +18,7 @@ const MULTIPLE_PAGES_MARKUP = ({ buttons, content }, index = 0) => `<section cla
 export default function popup(config) {
   const container = el.fromString('<div class="popup"></div>');
   const body = el.withRelaxedCleanup('body');
-  const editor = el('.editor');
+  const layout = el.withRelaxedCleanup('.layout');
   const escHandler = e => (e.keyCode === ESC_KEY && close());
   const removeKeyUpListener = body.onKeyUp(escHandler);
   const close = () => {
@@ -26,7 +26,7 @@ export default function popup(config) {
     container.css('opacity', 0);
     config.cleanUp && config.cleanUp();
     setTimeout(() => container.destroy(), 200);
-    editor.css('filter', 'none');
+    layout.css('filter', 'none');
   };
   const render = (markup) => {
     container.content(markup).forEach(button => {
@@ -44,7 +44,7 @@ export default function popup(config) {
     });
   }
 
-  editor.css('filter', 'blur(2px)');
+  layout.css('filter', 'blur(2px)');
   container.appendTo(body);
   render('buttons' in config ? MULTIPLE_PAGES_MARKUP(config) : DEFAULT_MARKUP(config));
   setTimeout(() => container.css('opacity', 1), 1);

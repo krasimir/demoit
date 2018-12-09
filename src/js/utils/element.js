@@ -81,6 +81,14 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       removeListenersCallbacks.push(removeListener);
       return removeListener;
     },
+    onChange(callback) {
+      e.addEventListener('change', () => callback(e.value));
+      
+      const removeListener = () => e.removeEventListener('change', callback);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
+    },
     find(selector) {
       return el(selector, e);
     },

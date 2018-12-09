@@ -3,6 +3,7 @@
     "theme": "light",
     "statusBar": true,
     "layout": {
+      "name": "layoutBottom",
       "direction": "vertical",
       "sizes": [
         70,

@@ -160,6 +160,10 @@ export default async function createState() {
       state.editor.layout = newLayout;
       syncState();
     },
+    updateTheme(newTheme) {
+      state.editor.theme = newTheme;
+      syncState();
+    },
     updateStatusBarVisibility(value) {
       state.editor.statusBar = value;
     },

@@ -3,7 +3,7 @@ import { TRASH_ICON, STORAGE_ICON } from '../utils/icons';
 
 const ENTER_KEY = 13;
 
-export default function settingsPopUp(storageContent, dependenciesStr, onDepsUpdated, onLayoutUpdate) {
+export default function settingsPopUp(storageContent, { layout, theme }, dependenciesStr, onDepsUpdated, onLayoutUpdate, onThemeUpdate) {
   return new Promise(done => createPopup({
     buttons: [
       'General',
@@ -13,19 +13,24 @@ export default function settingsPopUp(storageContent, dependenciesStr, onDepsUpd
     ],
     content: [
       `
-      <h2>Layout</h2>
-      <div class="layout">
-        <a href="javascript:void(0);" data-export="layoutDefault"><img src="./img/layout_default.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutLeft"><img src="./img/layout_left.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutTop"><img src="./img/layout_top.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutBottom"><img src="./img/layout_bottom.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutEC"><img src="./img/layout_ec.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutEO"><img src="./img/layout_eo.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutECBottom"><img src="./img/layout_ecbottom.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutEOBottom"><img src="./img/layout_eobottom.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutE"><img src="./img/layout_e.png" /></a>
-        <a href="javascript:void(0);" data-export="layoutO"><img src="./img/layout_o.png" /></a>
-      </div>
+      <p>Layout:</p>
+      <select data-export="layoutPicker">
+        <option value="default">default (HTML/console | editor)</option>
+        <option value="layoutLeft">editor | HTML/console</option>
+        <option value="layoutTop">HTML|console / editor</option>
+        <option value="layoutBottom">editor / HTML|console</option>
+        <option value="layoutEC">editor | console</option>
+        <option value="layoutEO">editor | HTML</option>
+        <option value="layoutECBottom">editor / console</option>
+        <option value="layoutEOBottom">editor / HTML</option>
+        <option value="layoutO">only HTML</option>
+        <option value="layoutE">only editor</option>
+      </select>
+      <p class="mt1">Theme:</p>
+      <select data-export="themePicker">
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+      </select>
       `,
       `
         <h2>Export</h2>
@@ -52,33 +57,21 @@ export default function settingsPopUp(storageContent, dependenciesStr, onDepsUpd
       storageTextarea,
       dependenciesTextarea,
       saveDependenciesButton,
-      layoutDefault,
-      layoutLeft,
-      layoutTop,
-      layoutBottom,
-      layoutEC,
-      layoutEO,
-      layoutE,
-      layoutO,
-      layoutEOBottom,
-      layoutECBottom
+      layoutPicker,
+      themePicker
     }) {
       // general settings
-      if (layoutDefault) {
-        const switchLayout = name => () => {
-          onLayoutUpdate(name);
+      if (layoutPicker && themePicker) {
+        layoutPicker.onChange(newLayout => {
+          onLayoutUpdate(newLayout);
           closePopup();
-        }
-        layoutDefault.onClick(switchLayout('default'));
-        layoutLeft.onClick(switchLayout('layoutLeft'));
-        layoutTop.onClick(switchLayout('layoutTop'));
-        layoutBottom.onClick(switchLayout('layoutBottom'));
-        layoutEC.onClick(switchLayout('layoutEC'));
-        layoutEO.onClick(switchLayout('layoutEO'));
-        layoutE.onClick(switchLayout('layoutE'));
-        layoutO.onClick(switchLayout('layoutO'));
-        layoutECBottom.onClick(switchLayout('layoutECBottom'));
-        layoutEOBottom.onClick(switchLayout('layoutEOBottom'));
+        });
+        layoutPicker.e.value = layout.name || 'default';
+        themePicker.onChange(newTheme => {
+          onThemeUpdate(newTheme);
+          closePopup();
+        });
+        themePicker.e.value = theme || 'light';
       }
       // managing storage
       if (storageTextarea) {
