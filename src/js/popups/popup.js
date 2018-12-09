@@ -1,4 +1,4 @@
-import { el } from '../utils/element';
+import el from '../utils/element';
 import { CLOSE_ICON } from '../utils/icons';
 
 const ESC_KEY = 27;
@@ -25,7 +25,7 @@ export default function popup(config) {
     removeKeyUpListener();
     container.css('opacity', 0);
     config.cleanUp && config.cleanUp();
-    setTimeout(() => container.detach(), 200);
+    setTimeout(() => container.destroy(), 200);
     editor.css('filter', 'none');
   };
   const render = (markup) => {

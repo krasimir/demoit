@@ -4,25 +4,19 @@ import { LAYOUTS } from './layout';
 
 const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
 
-export default function settings(state) {
+export default function settings(state, render, executeCurrentFile) {
   return () => settingsPopUp(
     JSON.stringify(state.dump(), null, 2),
-    function restoreFromStorage() {
-      state.restoreFromLocalStorage();
-    },
-    function flushStorage() {
-      state.clear();
-      window.location = window.location.href.split("?")[0];
-      window.location.reload(false);
-    },
     filterDeps(state.getDependencies()).join('\n'),
     function onDepsUpdated(newDeps) {
       if (newDeps) {
         state.setDependencies(newDeps);
+        executeCurrentFile();
       }
     },
     function onLayoutUpdate(newLayout) {
       state.updateLayout(LAYOUTS[newLayout]);
+      render();
     }
   );
 }

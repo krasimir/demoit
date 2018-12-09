@@ -1,4 +1,5 @@
-import { el } from './utils/element';
+import el from './utils/element';
+import setTheme from './utils/setTheme';
 import { isPreviewMode, isEditorMode } from './mode';
 
 export const LAYOUTS = {
@@ -100,6 +101,8 @@ export const LAYOUTS = {
 
 export default state => {
   const container = el('.app .layout');
+
+  setTheme(state.getEditorSettings().theme);
 
   if (isPreviewMode()) {
     container.empty().appendChild(el.fromTemplate('#template-code-preview').e);

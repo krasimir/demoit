@@ -38,6 +38,10 @@ svg {
   height: 100%;
   z-index: 8000;
 }
+.app.dark {
+  background: #20303a;
+  color: #fefefe;
+}
 .app .layout {
   height: calc(100% - 8px);
   transition: height 200ms ease-out;
@@ -53,6 +57,9 @@ svg {
   cursor: ns-resize;
   width: 100%;
   background: #eaeaea;
+}
+.dark .gutter.gutter-horizontal, .dark .gutter.gutter-vertical {
+  background: #2e414c;
 }
 /*************************** CODE EDITOR */
 .editor-section {
@@ -74,7 +81,6 @@ svg {
 }
 /*************************** OUTPUT PANEL */
 .output {
-	color: #000;
 	padding: 1em;
   position: relative;
   overflow: auto;
@@ -87,7 +93,6 @@ svg {
 .console p {
   margin: 0;
   padding: 0.5em;
-  border-bottom: solid 1px #bbb;
   white-space: pre-wrap;
 }
 /*************************** JS EDITOR */
@@ -103,26 +108,35 @@ svg {
 .status-bar {
   width: 100%;
   height: 8px;
-  background: #000;
+  background: #ccc;
   cursor: pointer;
   transition: height 200ms ease-out;
   overflow: hidden;
+}
+.dark .status-bar {
+  background: #000;
 }
 .status-bar > div {
   display: none;
 }
 .status-bar a {
   display: inline-block;
-	color: rgb(145, 145, 145);
+	color: #000;
 	text-decoration: none;
 	padding: 8px;
   cursor: pointer;
 }
+.dark .status-bar a {
+  color: #a5a5a5;
+}
 .status-bar a:hover {
-  background: #141414;
+  color: #4c0000;
+}
+.dark .status-bar a:hover {
+  color: #7b6d6d;
 }
 .status-bar a.active {
-  color: #FFF;
+  font-weight: bold;
 }
 .status-bar a svg {
   transform: translateY(3px);

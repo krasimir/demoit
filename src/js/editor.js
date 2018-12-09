@@ -1,4 +1,4 @@
-import { el } from './utils/element';
+import el from './utils/element';
 import executeCode from './execute';
 import createConsole from './console';
 import output from './output';

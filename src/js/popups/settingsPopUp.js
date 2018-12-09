@@ -3,11 +3,11 @@ import { TRASH_ICON, STORAGE_ICON } from '../utils/icons';
 
 const ENTER_KEY = 13;
 
-export default function settingsPopUp(storageContent, restoreFromStorage, flushStorage, dependenciesStr, onDepsUpdated, onLayoutUpdate) {
+export default function settingsPopUp(storageContent, dependenciesStr, onDepsUpdated, onLayoutUpdate) {
   return new Promise(done => createPopup({
     buttons: [
       'General',
-      'Local Storage',
+      'Export',
       'Dependencies',
       'About'
     ],
@@ -28,16 +28,9 @@ export default function settingsPopUp(storageContent, restoreFromStorage, flushS
       </div>
       `,
       `
-        <h2>Transfer your work</h2>
+        <h2>Export</h2>
         <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in a <i>mycode.json</i> file. Then open Demoit with<br />"?state=mycode.json". It will automatically pick the data from the json.</p>
         <textarea class="state-json" data-export="storageTextarea"></textarea>
-        <hr />
-        <button class="clear-storage secondary" data-export="flushStorageButton">
-          ${ TRASH_ICON }<span>Clean up localStorage</span>
-        </button>
-        <button class="clear-storage secondary right" data-export="restoreStorageButton">
-          ${ STORAGE_ICON }<span>Restore from localStorage</span>
-        </button>
       `,
       `
         <textarea class="dependencies-list" data-export="dependenciesTextarea"></textarea>
@@ -57,8 +50,6 @@ export default function settingsPopUp(storageContent, restoreFromStorage, flushS
     onRender({
       closePopup,
       storageTextarea,
-      flushStorageButton,
-      restoreStorageButton,
       dependenciesTextarea,
       saveDependenciesButton,
       layoutDefault,
@@ -90,13 +81,8 @@ export default function settingsPopUp(storageContent, restoreFromStorage, flushS
         layoutEOBottom.onClick(switchLayout('layoutEOBottom'));
       }
       // managing storage
-      if (storageTextarea && flushStorageButton && restoreStorageButton) {
+      if (storageTextarea) {
         storageTextarea.prop('value', storageContent);
-        flushStorageButton.onClick(flushStorage);
-        restoreStorageButton.onClick(() => {
-          restoreFromStorage();
-          closePopup();
-        });
       }
       // managing dependencies
       if (dependenciesTextarea && saveDependenciesButton) {

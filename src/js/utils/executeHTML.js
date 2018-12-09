@@ -1,4 +1,4 @@
-import { el } from './element';
+import el from './element';
 
 window.executeHTML = function (filename, content) {
   const node = document.createElement('div');

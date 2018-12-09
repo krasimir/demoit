@@ -1,4 +1,4 @@
-import { el } from './utils/element';
+import el from './utils/element';
 
 export default function output() {
   const output = el.withFallback('.output');

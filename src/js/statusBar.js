@@ -1,4 +1,4 @@
-import { el } from './utils/element';
+import el from './utils/element';
 import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON } from './utils/icons';
 import { isEditorMode } from './mode';
 

@@ -1,4 +1,7 @@
-export function el(selector, parent = document, fallbackToEmpty = false) {
+var createdElements = [];
+
+export default function el(selector, parent = document, fallbackToEmpty = false) {
+  const removeListenersCallbacks = [];
   var e = typeof selector === 'string' ? parent.querySelector(selector) : selector;
   
   if (!e) {
@@ -9,7 +12,7 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
     }
   }
 
-  return {
+  const api = {
     e,
     content(str) {
       if (!str) {
@@ -52,11 +55,19 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
     },
     onClick(callback) {
       e.addEventListener('click', callback);
-      return () => e.removeEventListener('click', callback);
+      
+      const removeListener = () => e.removeEventListener('click', callback);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
     },
     onKeyUp(callback) {
       e.addEventListener('keyup', callback);
-      return () => e.removeEventListener('keyup', callback);
+      
+      const removeListener = () => e.removeEventListener('keyup', callback);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
     },
     onRightClick(callback) {
       const handler = event => {
@@ -64,7 +75,11 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
         callback();
       };
       e.addEventListener('contextmenu', handler);
-      return () => e.removeEventListener('oncontextmenu', handler);
+      
+      const removeListener = () => e.removeEventListener('oncontextmenu', handler);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
     },
     find(selector) {
       return el(selector, e);
@@ -84,15 +99,26 @@ export function el(selector, parent = document, fallbackToEmpty = false) {
       }, {});
     },
     detach() {
-      e.parentNode.removeChild(e);
+      if (e.parentNode && e.parentNode.contains(e)) {
+        e.parentNode.removeChild(e);
+      }
     },
     empty() {
       while (e.firstChild) {
         e.removeChild(e.firstChild);
       }
       return this;
+    },
+    destroy() {
+      removeListenersCallbacks.forEach(c => c());
+      this.empty();
+      this.detach();
     }
   }
+
+  createdElements.push(api);
+
+  return api;
 }
 
 el.fromString = str => {
@@ -110,4 +136,7 @@ el.fromString = str => {
 el.wrap = elements => el(document.createElement('div')).appendChildren(elements);
 el.fromTemplate = selector => el.fromString(document.querySelector(selector).innerHTML);
 el.withFallback = selector => el(selector, document, true);
-el.empty = () => el(document.createElement('div'));
+el.destroy = () => {
+  createdElements.forEach(elInstance => elInstance.destroy());
+  createdElements = [];
+}

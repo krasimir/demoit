@@ -1,7 +1,7 @@
 {
   "editor": {
     "theme": "light",
-    "statusBar": false,
+    "statusBar": true,
     "layout": {
       "direction": "vertical",
       "sizes": [
