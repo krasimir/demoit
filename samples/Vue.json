@@ -1,7 +1,29 @@
 {
   "editor": {
     "theme": "light",
-    "statusBar": true
+    "statusBar": true,
+    "layout": {
+      "name": "default",
+      "direction": "horizontal",
+      "sizes": [
+        30,
+        70
+      ],
+      "elements": [
+        {
+          "direction": "vertical",
+          "sizes": [
+            50,
+            50
+          ],
+          "elements": [
+            "output",
+            "log"
+          ]
+        },
+        "editor"
+      ]
+    }
   },
   "dependencies": [
     "./resources/vue@2.5.17.js",
