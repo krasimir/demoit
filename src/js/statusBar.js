@@ -6,8 +6,8 @@ const STATUS_BAR_HIDDEN_HEIGHT = '4px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
 
 export default function statusBar(state, showFile, newFile, editFile, showSettings) {
-  const bar = el.withFallback('.status-bar');
-  const layout = el.withFallback('.app .layout');
+  const bar = el.withRelaxedCleanup('.status-bar');
+  const layout = el.withRelaxedCleanup('.app .layout');
   let visibility = !!state.getEditorSettings().statusBar;
 
   const render = () => {

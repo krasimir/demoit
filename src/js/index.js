@@ -22,7 +22,11 @@ createState().then(state => {
     }
     loadFile(state.getCurrentFile());
   
-    const showSettings = settings(state, render, () => loadFile(state.getCurrentFile()));
+    const showSettings = settings(
+      state,
+      () => (el.destroy(), render()), 
+      () => loadFile(state.getCurrentFile())
+    );
   
     statusBar(
       state,

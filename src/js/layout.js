@@ -100,7 +100,7 @@ export const LAYOUTS = {
 };
 
 export default state => {
-  const container = el('.app .layout');
+  const container = el.withRelaxedCleanup('.app .layout');
 
   setTheme(state.getEditorSettings().theme);
 

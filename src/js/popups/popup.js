@@ -17,7 +17,7 @@ const MULTIPLE_PAGES_MARKUP = ({ buttons, content }, index = 0) => `<section cla
 
 export default function popup(config) {
   const container = el.fromString('<div class="popup"></div>');
-  const body = el('body');
+  const body = el.withRelaxedCleanup('body');
   const editor = el('.editor');
   const escHandler = e => (e.keyCode === ESC_KEY && close());
   const removeKeyUpListener = body.onKeyUp(escHandler);

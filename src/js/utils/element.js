@@ -1,6 +1,6 @@
 var createdElements = [];
 
-export default function el(selector, parent = document, fallbackToEmpty = false) {
+export default function el(selector, parent = document, fallbackToEmpty = false, relaxedCleanup = false) {
   const removeListenersCallbacks = [];
   var e = typeof selector === 'string' ? parent.querySelector(selector) : selector;
   
@@ -111,8 +111,10 @@ export default function el(selector, parent = document, fallbackToEmpty = false)
     },
     destroy() {
       removeListenersCallbacks.forEach(c => c());
-      this.empty();
-      this.detach();
+      if (!relaxedCleanup) {
+        this.empty();
+        this.detach();
+      }
     }
   }
 
@@ -136,6 +138,7 @@ el.fromString = str => {
 el.wrap = elements => el(document.createElement('div')).appendChildren(elements);
 el.fromTemplate = selector => el.fromString(document.querySelector(selector).innerHTML);
 el.withFallback = selector => el(selector, document, true);
+el.withRelaxedCleanup = selector => el(selector, document, false, true);
 el.destroy = () => {
   createdElements.forEach(elInstance => elInstance.destroy());
   createdElements = [];

@@ -1,3 +1,5 @@
+import el from './element';
+
 export default function setTheme(theme) {
-  document.querySelector('.app').setAttribute('class', 'app ' + theme);
+  el.withRelaxedCleanup('.app').attr('class', 'app ' + theme);
 }
