@@ -42,7 +42,12 @@ export default async function editor(state) {
     await loadDependencies();
     clearConsole();
     clearOutput();
-    executeCode(state.getCurrentIndex(), state.getFiles());
+    state.updateCode(
+      executeCode(
+        state.getCurrentIndex(),
+        state.getFiles()
+      )
+    );
   }
   const container = el.withFallback('.js-code-editor');
 

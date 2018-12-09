@@ -1,5 +1,6 @@
 import { isLocalStorageAvailable, getParam, readFromJSONFile } from './utils';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
+import { LAYOUTS } from './layout';
 
 const EMPTY_FILE = {
   content: '',
@@ -10,10 +11,12 @@ const LS_KEY = 'DEMOIT_v2';
 const DEFAULT_STATE = {
   editor: {
     theme: 'light',
-    statusBar: false
+    statusBar: false,
+    layout: LAYOUTS.default
   },
   dependencies: [],
-  files: [ EMPTY_FILE ]
+  files: [ EMPTY_FILE ],
+  code: ''
 };
 
 const resolveActiveFileIndex = function (files) {
@@ -163,6 +166,13 @@ export default async function createState() {
     updateTheme(newTheme) {
       state.editor.theme = newTheme;
       syncState();
+    },
+    updateCode(code) {
+      state.code = code;
+      syncState();
+    },
+    getCode() {
+      return state.code;
     },
     updateStatusBarVisibility(value) {
       state.editor.statusBar = value;

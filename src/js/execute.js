@@ -37,10 +37,14 @@ export default function execute(index, allFiles) {
         module.func(require, module.exports, true);
         return module.exports;
       };
-      modules[${ index }].func(require, modules[${ index }].exports, false);
+      modules[index].func(require, modules[index].exports, false);
     `;
+    
+    const transpiledCode = transpile(code);
 
-    (new Function(transpile(code)))();
+    (new Function('index', transpiledCode))(index);
+
+    return transpiledCode;
   } catch (error) {
     console.error(error);
   }

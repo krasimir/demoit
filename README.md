@@ -32,7 +32,8 @@ When you open the app and start writing code you progress gets saved to an inter
 ## GET Params
 
 * `?state=<path to json file>` - relative path to a JSON file
-* `?mode=preview` - it loads the editor just in a preview mode. The code is visible but not compiled and not editable. This significantly reduces the file size and it is useful for syntax highlighting.
+* `?mode=preview` - it loads the editor just in a preview mode. The code is visible but not compiled, not editable and not executed. This significantly reduces the file size and it is useful for showing your code in a blog post for example.
+* `?mode=readonly` - it loads the editor in a readonly mode. It means that the code is transpiled and executed but you can't make changes. This also reduces the page's size because it is not loading Babel and CodeMirror (which is roughly 1.5MB)
 
 ## Continuing your work offline
 

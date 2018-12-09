@@ -1,3 +1,5 @@
+import { isEditorMode } from './mode';
+
 const LOADED_FILES_CACHE = {};
 
 const addJSFile = function (path, done) {
@@ -53,10 +55,10 @@ const load = async function (dependencies, onProgress) {
 }
 
 export default async function dependencies(state, onProgress) {
-  const dependencies = [
-    './resources/editor.js',
-    ...state.getDependencies()
-  ];
+  var dependencies = [];
+
+  isEditorMode() && dependencies.push('./resources/editor.js');
+  dependencies = dependencies.concat(state.getDependencies());
 
   await load(dependencies, onProgress);
 }

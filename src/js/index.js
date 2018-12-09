@@ -6,7 +6,8 @@ import editFilePopUp from './popups/editFilePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import preview from './preview';
-import { isPreviewMode, isEditorMode } from './mode';
+import readOnly from './readOnly';
+import { isPreviewMode, isEditorMode, isReadOnlyMode } from './mode';
 import el from './utils/element';
 
 createState().then(state => {
@@ -19,6 +20,8 @@ createState().then(state => {
       loadFile = preview(state);
     } else if (isEditorMode()) {
       loadFile = await editor(state);
+    } else if (isReadOnlyMode()) {
+      loadFile = readOnly(state);
     }
     loadFile(state.getCurrentFile());
   

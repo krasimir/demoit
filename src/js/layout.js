@@ -1,6 +1,6 @@
 import el from './utils/element';
 import setTheme from './utils/setTheme';
-import { isPreviewMode, isEditorMode } from './mode';
+import { isPreviewMode, isEditorMode, isReadOnlyMode } from './mode';
 
 export const LAYOUTS = {
   'default': {
@@ -116,7 +116,7 @@ export default state => {
 
   if (isPreviewMode()) {
     container.empty().appendChild(el.fromTemplate('#template-code-preview').e);
-  } else if (isEditorMode()) {
+  } else if (isEditorMode() || isReadOnlyMode()) {
     const layout = state.getEditorSettings().layout || LAYOUTS.default;
     const output = el.fromTemplate('#template-output');
     const log = el.fromTemplate('#template-console');
