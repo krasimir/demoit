@@ -1,4 +1,5 @@
-![demoit](./demoit.png)
+![demoit](./_assets/demoit_light.png)
+![demoit](./_assets/demoit_dark.png)
 
 # **Demoit** is a interactive JavaScript playground
 
