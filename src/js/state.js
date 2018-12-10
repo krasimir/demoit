@@ -49,17 +49,19 @@ export default async function createState() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
 
-  const predefinedState = window.state || getParam('state');
-  var state;
+  const stateFromURL = getParam('state');
+  var state = window.state;
 
-  if (predefinedState) {
-    try {
-      state = await readFromJSONFile(predefinedState);
-    } catch(error) {
-      console.error(`Error reading ${ predefinedState }`);
+  if (!state) {
+    if (stateFromURL) {
+      try {
+        state = await readFromJSONFile(stateFromURL);
+      } catch(error) {
+        console.error(`Error reading ${ stateFromURL }`);
+      }
+    } else {
+      state = DEFAULT_STATE;
     }
-  } else {
-    state = DEFAULT_STATE;
   }
 
   var activeFileIndex = resolveActiveFileIndex(state.files);
