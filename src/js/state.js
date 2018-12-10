@@ -49,7 +49,7 @@ export default async function createState() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
 
-  const predefinedState = getParam('state');
+  const predefinedState = window.state || getParam('state');
   var state;
 
   if (predefinedState) {
