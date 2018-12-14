@@ -6,5 +6,8 @@ export default function preview(state) {
 
   injectCSS(`.CodeMirror-cursor { height: 0 !important; }`, 'hide-editor-cursor');
 
-  return ({ preview }) => container.empty().content(preview);
+  return () => {
+    const { preview } = state.getCurrentFile();
+    container.empty().content(preview);
+  }
 }
