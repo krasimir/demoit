@@ -19,6 +19,7 @@ export default function logger() {
       empty = false;
     }
     element.appendChild(node);
+    element.scrollToBottom();
   }
 
   (function(){

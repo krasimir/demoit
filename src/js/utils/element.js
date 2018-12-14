@@ -123,6 +123,15 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
         this.empty();
         this.detach();
       }
+    },
+    scrollToBottom() {
+      e.scrollTop = e.scrollHeight;
+    },
+    selectOnClick() {
+      const removeListener = this.onClick(() => {
+        e.select();
+        removeListener();
+      });
     }
   }
 

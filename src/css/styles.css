@@ -128,6 +128,7 @@ svg {
 	text-decoration: none;
 	padding: 8px;
   cursor: pointer;
+  opacity: 0.7;
 }
 .dark .status-bar a {
   color: #a5a5a5;
@@ -140,6 +141,7 @@ svg {
 }
 .status-bar a.active {
   font-weight: bold;
+  opacity: 1;
 }
 .status-bar a svg {
   transform: translateY(3px);
@@ -210,7 +212,7 @@ svg {
 }
 .popup h2 {
   padding: 0;
-  margin: 0 0 1em 0;
+  margin: 1em 0 1em 0;
 }
 .popup button {
   padding: 0.6em 1em;
@@ -253,7 +255,7 @@ svg {
   font-size: 1.2em;
 }
 .popup textarea {
-  height: 162px;
+  height: 95px;
 }
 .popup a {
   color: inherit;

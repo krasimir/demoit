@@ -1,9 +1,13 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, SHARE } from './utils/icons';
 import { isEditorMode, isReadOnlyMode } from './mode';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
+
+const createStatusBarLink = (exportKey, label, className = 'right') => {
+  return `<a data-export="${ exportKey }" class="${ className }" href="javascript:void(0)">${ label }</a>`;
+}
 
 export default function statusBar(state, showFile, newFile, editFile, showSettings) {
   const bar = el.withRelaxedCleanup('.status-bar');
@@ -16,15 +20,15 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
     items.push('<div data-export="buttons">');
     files.forEach(({ filename, editing, entryPoint }, idx) => {
-      items.push(
-        `<a data-export="file" href="javascript:void(0);" class='file ${ state.isCurrentIndex(idx) ? ' active' : '' }'>
-          ${ entryPoint ? DOT_CIRCLE(15) : ''}${ filename }${ editing ? ' *' : ''}
-        </a>`
-      );
+      items.push(createStatusBarLink(
+        'file',
+        `${ entryPoint ? DOT_CIRCLE(15) : ''}${ filename }${ editing ? ' *' : ''}`,
+        `file ${ state.isCurrentIndex(idx) ? ' active' : '' }`
+      ))
     });
-    isEditorMode() && items.push(`<a data-export="newFileButton" href="javascript:void(0)">${ PLUS_ICON(14) }</a>`);
-    items.push(`<a data-export="closeButton" class="right" href="javascript:void(0)">${ CLOSE_ICON(14) }</a>`);
-    (isEditorMode() || isReadOnlyMode()) && items.push(`<a data-export="settingsButton" class="right" href="javascript:void(0)">${ SETTINGS_ICON(14) }</a>`);
+    isEditorMode() && items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
+    items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
+    (isEditorMode() || isReadOnlyMode()) && items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {

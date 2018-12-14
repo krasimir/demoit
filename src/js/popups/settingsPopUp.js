@@ -1,14 +1,15 @@
 import createPopup from './popup';
-import { TRASH_ICON, STORAGE_ICON } from '../utils/icons';
+import { EDITOR, READ_ONLY, PREVIEW } from '../mode';
 
 const ENTER_KEY = 13;
+const generateIframe = url => `<iframe src="${ url }" style="display: block; width:100%; height: 400px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>`;
 
 export default function settingsPopUp(storageContent, { layout, theme }, dependenciesStr, onDepsUpdated, onLayoutUpdate, onThemeUpdate) {
   return new Promise(done => createPopup({
     buttons: [
       'General',
-      'Export',
       'Dependencies',
+      'Export/Share',
       'About'
     ],
     content: [
@@ -33,18 +34,27 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
       </select>
       `,
       `
-        <h2>Export</h2>
-        <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in a <i>mycode.json</i> file. Then open Demoit with<br />"?state=mycode.json". It will automatically pick the data from the json.</p>
-        <textarea class="state-json" data-export="storageTextarea"></textarea>
-      `,
-      `
         <textarea class="dependencies-list" data-export="dependenciesTextarea"></textarea>
         <p><small>(Separate your dependencies by a new line)</small></p>
         <button class="save" data-export="saveDependenciesButton">Save</button>
       `,
       `
+        <h2>Embed</h2>
         <p>
-          Author: <a href="https://twitter.com/krasimirtsonev" target="_blank">Krasimir Tsonev</a><br />
+          <select data-export="modePicker">
+            <option value="${ EDITOR }">Editable (403KB page size + dependencies)</option>
+            <option value="${ READ_ONLY }">Read only (18KB page size + dependencies)</option>
+            <option value="${ PREVIEW }">Code preview (18KB page size)</option>
+          </select>
+        </p>
+        <textarea data-export="iframeTextarea">${ generateIframe(window.location.href) }</textarea>
+        <h2>Working offline</h2>
+        <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in a <i>mycode.json</i> file. Then open Demoit with "?state=mycode.json". It will automatically pick the data from the json.</p>
+        <textarea data-export="stateTextarea"></textarea>
+      `,
+      `
+        <p>
+          On the web: <a href="https://demoit.app" target="_blank">demoit.app</a><br />
           GitHub repo: <a href="https://github.com/krasimir/demoit" target="_blank">github.com/krasimir/demoit</a>
         </p>
       `
@@ -54,11 +64,13 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
     },
     onRender({
       closePopup,
-      storageTextarea,
+      stateTextarea,
       dependenciesTextarea,
       saveDependenciesButton,
       layoutPicker,
-      themePicker
+      themePicker,
+      iframeTextarea,
+      modePicker
     }) {
       // general settings
       if (layoutPicker && themePicker) {
@@ -73,9 +85,28 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
         });
         themePicker.e.value = theme || 'light';
       }
-      // managing storage
-      if (storageTextarea) {
-        storageTextarea.prop('value', storageContent);
+      // share
+      if (stateTextarea) {
+        stateTextarea.prop('value', storageContent);
+        stateTextarea.selectOnClick();
+      }
+      if (iframeTextarea) {
+        iframeTextarea.selectOnClick();
+      }
+      if (modePicker) {
+        modePicker.onChange(newMode => {
+          if (newMode === EDITOR) {
+            iframeTextarea.prop('value', generateIframe(window.location.href));
+          } else {
+            const [ url, hash ] = window.location.href.split('#');
+            const [ onlyURL, params ] = url.split('?');
+            const newParams = params ? `mode=${ newMode }&${ params }` : `mode=${ newMode }`;
+
+            iframeTextarea.prop('value', generateIframe([
+              onlyURL, '?', newParams, '#', hash
+            ].join('')));
+          }
+        });
       }
       // managing dependencies
       if (dependenciesTextarea && saveDependenciesButton) {
