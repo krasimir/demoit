@@ -86,6 +86,7 @@ export default async function createState() {
       activeFileIndex = idx;
       location.hash = state.files[idx].filename;
       syncState();
+      return state.files[idx];
     },
     isCurrentIndex(idx) {
       return activeFileIndex === idx;
@@ -130,14 +131,10 @@ export default async function createState() {
     editCurrentFile(updates) {
       this.editFile(activeFileIndex, updates);
     },
-    changeActiveFile(index) {
-      this.setCurrentIndex(index);
-      return this.getCurrentFile();
-    },
     addNewFile(filename = 'untitled.js') {
       state.files.push({ ...EMPTY_FILE, filename });
+      this.setCurrentIndex(state.files.length - 1);
       syncState();
-      return this.changeActiveFile(state.files.length - 1);
     },
     deleteFile(index) {
       cleanUpExecutedCSS(this.getFileAt(index).filename);
@@ -181,6 +178,16 @@ export default async function createState() {
     },
     restoreFromLocalStorage() {
       this.setState(readFromLocalStorage());
+    },
+    setEntryPoint(index) {
+      state.files = state.files.map((file, i) => {
+        if (i === index) {
+          file.entryPoint = true;
+        } else {
+          delete file.entryPoint;
+        }
+        return file;
+      });
     }
   }
 

@@ -144,6 +144,9 @@ svg {
 .status-bar a svg {
   transform: translateY(3px);
 }
+.status-bar a.file svg {
+  margin-right: 3px;
+}
 /*************************** POPUP */
 .popup {
   position: fixed;
@@ -193,8 +196,8 @@ svg {
   background: none;
 }
 .popup .multiple-pages .close {
-  top: 4px;
-  right: 0px;
+  top: 0;
+  right: 0;
 }
 .popup p {
   margin: 0 0 1em 0;
@@ -244,6 +247,10 @@ svg {
   border-radius: 4px;
   outline: none;
   margin-bottom: 1em;
+  font-size: 1.2em;
+}
+.popup select {
+  font-size: 1.2em;
 }
 .popup textarea {
   height: 162px;

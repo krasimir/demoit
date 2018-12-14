@@ -4,7 +4,7 @@ import createConsole from './console';
 import output from './output';
 import dependencies from './dependencies';
 
-function codeMirror(container, editorSettings, value, onSave, onChange) {
+function codeMirror(container, editorSettings, value, onSave, onChange, showFile) {
   const editor = CodeMirror(container.e, {
     value: value || '',
     mode:  'jsx',
@@ -20,7 +20,28 @@ function codeMirror(container, editorSettings, value, onSave, onChange) {
   const change = () => onChange(editor.getValue());
 
   editor.on('change', change);
-  editor.setOption("extraKeys", { 'Ctrl-S': save, 'Cmd-S': save });
+  editor.setOption("extraKeys", {
+    'Ctrl-S': save,
+    'Cmd-S': save,
+    'Cmd-1': () => showFile(0),
+    'Cmd-2': () => showFile(1),
+    'Cmd-3': () => showFile(2),
+    'Cmd-4': () => showFile(3),
+    'Cmd-5': () => showFile(4),
+    'Cmd-6': () => showFile(5),
+    'Cmd-7': () => showFile(6),
+    'Cmd-8': () => showFile(7),
+    'Cmd-9': () => showFile(8),
+    'Ctrl-1': () => showFile(0),
+    'Ctrl-2': () => showFile(1),
+    'Ctrl-3': () => showFile(2),
+    'Ctrl-4': () => showFile(3),
+    'Ctrl-5': () => showFile(4),
+    'Ctrl-6': () => showFile(5),
+    'Ctrl-7': () => showFile(6),
+    'Ctrl-8': () => showFile(7),
+    'Ctrl-9': () => showFile(8)
+  });
   CodeMirror.normalizeKeyMap();
   editor.focus();
 
@@ -69,16 +90,21 @@ export default async function editor(state) {
     },
     function onChange() {
       state.editCurrentFile({ editing: true });
+    },
+    function showFile(index) {
+      loadFileInEditor(state.setCurrentIndex(index));
     }
   );
 
-  return async function loadFileInEditor(file) {
+  async function loadFileInEditor() {
     await clearOutput();
     clearConsole();
-    codeMirrorEditor.setValue(file.content);
+    codeMirrorEditor.setValue(state.getCurrentFile().content);
     codeMirrorEditor.focus();
     // we have to do this because we fire the onChange handler of the editor which sets editing=true;
     state.editCurrentFile({ editing: false  });
     execute();
-  }  
+  }
+
+  return loadFileInEditor;
 }

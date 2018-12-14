@@ -19,16 +19,19 @@ export default function preview(state) {
 
   injectCSS(`.CodeMirror-cursor { height: 0 !important; }`, 'hide-editor-cursor');
 
-  return async (file) => {
+  return async () => {
+    const file = state.getCurrentFile();
     container.empty().content(file.preview);
     
-    const fileIndex = state.getFiles().findIndex(({ filename }) => filename === file.filename);
+    const index = state.getCurrentIndex();
+    const entryPoint = state.getFiles().findIndex(({ entryPoint }) => entryPoint === true);
+    const fileToExecuteIndex = entryPoint >= 0 ? entryPoint : index;
 
-    if (fileIndex >= 0 && state.getCode()) {
+    if (fileToExecuteIndex >= 0 && state.getCode()) {
       await loadDependencies();
       clearConsole();
       clearOutput();
-      (new Function('index', state.getCode()))(fileIndex);
+      (new Function('index', state.getCode()))(fileToExecuteIndex);
     }
   }
 }

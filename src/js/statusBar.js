@@ -1,5 +1,5 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE } from './utils/icons';
 import { isEditorMode, isReadOnlyMode } from './mode';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
@@ -15,9 +15,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     const files = state.getFiles();
 
     items.push('<div data-export="buttons">');
-    files.forEach(({ filename, editing }, idx) => {
+    files.forEach(({ filename, editing, entryPoint }, idx) => {
       items.push(
-        `<a data-export="file" href="javascript:void(0);" ${ state.isCurrentIndex(idx) ? 'class="active"' : '' }>${ filename }${ editing ? ' *' : ''}</a>`
+        `<a data-export="file" href="javascript:void(0);" class='file ${ state.isCurrentIndex(idx) ? ' active' : '' }'>
+          ${ entryPoint ? DOT_CIRCLE(15) : ''}${ filename }${ editing ? ' *' : ''}
+        </a>`
       );
     });
     isEditorMode() && items.push(`<a data-export="newFileButton" href="javascript:void(0)">${ PLUS_ICON(14) }</a>`);

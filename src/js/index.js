@@ -12,49 +12,56 @@ import el from './utils/element';
 
 createState().then(state => {
   async function render() {
-    let loadFile;
+    let executeCurrentFile;
     
     layout(state);
   
     if (isPreviewMode()) {
-      loadFile = preview(state);
+      executeCurrentFile = preview(state);
     } else if (isEditorMode()) {
-      loadFile = await editor(state);
+      executeCurrentFile = await editor(state);
     } else if (isReadOnlyMode()) {
-      loadFile = readOnly(state);
+      executeCurrentFile = readOnly(state);
     }
-    loadFile(state.getCurrentFile());
+    executeCurrentFile();
   
     const showSettings = settings(
       state,
       () => (el.destroy(), render()), 
-      () => loadFile(state.getCurrentFile())
+      () => executeCurrentFile()
     );
   
     statusBar(
       state,
       function showFile(index) {
-        loadFile(state.changeActiveFile(index));
+        state.setCurrentIndex(index);
+        executeCurrentFile();
       },
       async function newFile() {
         const newFilename = await newFilePopUp();
   
         if (newFilename) {
-          loadFile(state.addNewFile(newFilename));
+          state.addNewFile(newFilename);
+          executeCurrentFile();
         }
       },
       async function editFile(index) {
-        const result = await editFilePopUp(
+        editFilePopUp(
           state.getFileAt(index).filename,
-          state.getFiles().length
+          state.getFiles().length,
+          function onDelete() {
+            state.deleteFile(index);
+            executeCurrentFile();
+          },
+          function onRename(newName) {
+            state.editFile(index, { filename: newName });
+            executeCurrentFile();
+          },
+          function onSetAsEntryPoint() {
+            state.setEntryPoint(index)
+            executeCurrentFile();
+          }
         );
-  
-        if (result === 'delete') {
-          state.deleteFile(index);
-          loadFile(state.getCurrentFile());
-        } else if (result) {
-          state.editFile(index, { filename: result });
-        }
       },
       showSettings
     );

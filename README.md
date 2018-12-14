@@ -44,9 +44,10 @@ When you open the app and start writing code you progress gets saved to an inter
 * You need to transfer your progress to a JSON file and pass it to the app via `state` GET param
 * If you use external dependencies make sure that they are also saved locally and the path to the files is properly set (check the gear icon in the status bar at the top of the app)
 
-## Keyboard shortcuts
+## Keyboard shortcuts when the focus is on the editor
 
-* `Ctrl + S` and `Cmd + S` which is basically triggering a new run of your current file.
+* `Ctrl + S` / `Cmd + S` - essential for seeing the result of your code. This keys combination triggers transpilation and execution.
+* `Ctrl + <0-9>` / `Cmd + <0-9>` - switch between files
 
 ## Editing filenames and deleting files
 

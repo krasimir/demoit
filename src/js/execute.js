@@ -41,8 +41,10 @@ export default function execute(index, allFiles) {
     `;
     
     const transpiledCode = transpile(code);
+    const entryPoint = allFiles.findIndex(({ entryPoint }) => entryPoint === true);
+    const fileToExecuteIndex = entryPoint >= 0 ? entryPoint : index;
 
-    (new Function('index', transpiledCode))(index);
+    (new Function('index', transpiledCode))(fileToExecuteIndex);
 
     return transpiledCode;
   } catch (error) {
