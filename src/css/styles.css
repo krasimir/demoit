@@ -300,8 +300,35 @@ svg {
 .spinner {
   width: 20px;
   height: 20px;
-  background: #000;
+  background: #999;
   border-radius: 10px;
   animation: bubble 1.0s infinite;
   -webkit-animation: bubble 1.0s infinite;
+}
+/*************************** PROFILE */
+.profile > img {
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+}
+.authentication-failed {
+  padding: 2em;
+}
+.authentication-failed::before {
+  display: block;
+  content: " ";
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  margin-bottom: 2em;
+  background-color: black;
+}
+.authentication-failed a {
+  color: black;
+}
+.authentication-failed p {
+  line-height: 1.2em;
+}
+.authentication-failed a:hover {
+  color: #9f0000;
 }

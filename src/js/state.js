@@ -7,7 +7,8 @@ const EMPTY_FILE = {
   filename: 'untitled.js',
   editing: false
 };
-const LS_KEY = 'DEMOIT_v2';
+const LS_KEY = 'DEMOIT_v3';
+const LS_PROFILE_KEY = 'DEMOIT_PROFILE_v3';
 const DEFAULT_STATE = {
   editor: {
     theme: 'light',
@@ -32,14 +33,14 @@ const resolveActiveFileIndex = function (files) {
   return 0;
 }
 
-const readFromLocalStorage = function () {
+const readFromLocalStorage = function (key = LS_KEY) {
   if (isLocalStorageAvailable()) {
-    const state = localStorage.getItem(LS_KEY);
+    const data = localStorage.getItem(key);
 
     try {
-      if (state) return JSON.parse(state);
+      if (data) return JSON.parse(data);
     } catch(error) {
-      console.error(`There is some data in the local storage under the ${ LS_KEY } key. However, it is not a valid JSON.`);
+      console.error(`There is some data in the local storage under the ${ key } key. However, it is not a valid JSON.`);
     }
   }
   return null;
@@ -48,6 +49,7 @@ const readFromLocalStorage = function () {
 export default async function createState() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
+  let profile = readFromLocalStorage(LS_PROFILE_KEY);
 
   const stateFromURL = getParam('state');
   var state = window.state;
@@ -70,6 +72,7 @@ export default async function createState() {
     onChangeListeners.forEach(c => c());
     if (localStorageAvailable) {
       localStorage.setItem(LS_KEY, JSON.stringify(state));
+      localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(profile));
     }
   }
   
@@ -188,6 +191,17 @@ export default async function createState() {
         }
         return file;
       });
+    },
+    // profile methods
+    loggedIn() {
+      return profile !== null;
+    },
+    login(userProfile) {
+      profile = userProfile;
+      syncState();
+    },
+    getProfile() {
+      return profile;
     }
   }
 

@@ -25,7 +25,7 @@
 
 ## Usage
 
-* Online at [krasimir.github.io/demoit/dist/](https://krasimir.github.io/demoit/dist)
+* Online at [demoit.app](https://demoit.app)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
 ## Configuration

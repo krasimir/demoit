@@ -49,3 +49,23 @@ export const readFromJSONFile = async function (file) {
   const res = await fetch(file);
   return await res.json();
 }
+
+export const removeParam = function (key, sourceURL) {
+	const urlWithoutParams = sourceURL.split("?")[0];
+	const hash = sourceURL.split('#')[1];
+	const queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split('?')[1] : '';
+	let params = [];
+	let param;
+
+	if (queryString !== '') {
+		params = queryString.split("&");
+		for (let i = params.length - 1; i >= 0; i -= 1) {
+			param = params[i].split('=')[0];
+			if (param === key) {
+				params.splice(i, 1);
+			}
+		}
+		return urlWithoutParams + '?' + params.join('&') + (hash ? '#' + hash : '');
+	}
+	return urlWithoutParams;
+}

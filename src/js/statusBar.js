@@ -1,15 +1,19 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, SHARE } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, USER, NO_USER } from './utils/icons';
 import { isEditorMode, isReadOnlyMode } from './mode';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
 
+const showProfilePicAndName = profile => {
+  return `<img src="${ profile.avatar }"/>`
+};
+
 const createStatusBarLink = (exportKey, label, className = 'right') => {
   return `<a data-export="${ exportKey }" class="${ className }" href="javascript:void(0)">${ label }</a>`;
 }
 
-export default function statusBar(state, showFile, newFile, editFile, showSettings) {
+export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile) {
   const bar = el.withRelaxedCleanup('.status-bar');
   const layout = el.withRelaxedCleanup('.app .layout');
   let visibility = !!state.getEditorSettings().statusBar;
@@ -29,6 +33,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     isEditorMode() && items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     (isEditorMode() || isReadOnlyMode()) && items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
+    items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'right profile'));
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {
@@ -40,7 +45,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       return index;
     }, 0);
 
-    const { newFileButton, closeButton, settingsButton } = bar.namedExports();
+    const { newFileButton, closeButton, settingsButton, profileButton } = bar.namedExports();
     const manageVisibility = () => {
       const { buttons } = bar.namedExports();
       buttons.css('display', visibility ? 'block' : 'none');
@@ -51,6 +56,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
     newFileButton && newFileButton.onClick(newFile);
     settingsButton && settingsButton.onClick(showSettings);
+    profileButton && profileButton.onClick(showProfile);
     closeButton.onClick(e => {
       e.stopPropagation();
       visibility = false;
