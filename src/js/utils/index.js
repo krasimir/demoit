@@ -71,7 +71,7 @@ export const removeParam = function (key, sourceURL) {
 }
 
 export const isProd = () => {
-	return window.location.href.match(/^http:\/\/demoit.app/);
+	return window.location.href.match(/^https:\/\/demoit.app/);
 }
 
 export const ensureDemoIdInPageURL = demoId => {
