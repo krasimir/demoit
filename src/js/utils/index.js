@@ -78,5 +78,5 @@ export const ensureDemoIdInPageURL = demoId => {
 	const currentURL = window.location.href;
 	const hash = currentURL.split('#')[1];
 
-	history.pushState(null, null, `e/${ demoId }${ hash ? '#' + hash : '' }`);
+	history.pushState(null, null, `/e/${ demoId }${ hash ? '#' + hash : '' }`);
 }
