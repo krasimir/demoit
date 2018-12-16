@@ -1,59 +1,19 @@
 import { removeParam } from './utils';
-
-const GITHUB = {
-  authorizeURL: 'https://github.com/login/oauth/authorize',
-  getTokenURL: 'https://demoit.app/api/token',
-  getProfileURL: 'https://api.github.com/user',
-  clientID: '94dc62a335b2f3e38d25',
-  async authorize(code, setProfile) {
-    const response = await fetch(this.getTokenURL, {
-      method: 'POST',
-      body: JSON.stringify({
-        mode: 'cors',
-        client_id: this.clientID,
-        code
-      })
-    });
-    const { token } = await response.json();
-    
-    if (!token) {
-      throw new Error('Demoit is not able to get access token.');
-    }
-    const profile = await fetch(this.getProfileURL, {
-      headers: {
-        'Authorization': `token ${ token }`
-      }
-    });
-    if (!profile) {
-      throw new Error('Invalid or missing profile.');
-    }
-    const profileData = await profile.json();
-
-    setProfile({
-      token,
-      id: profileData.id,
-      name: profileData.name,
-      avatar: profileData.avatar_url
-    });
-
-    window.location.href = removeParam('code', window.location.href);
-  },
-  grandAccess() {
-    const params = [
-      `client_id=${ this.clientID }`,
-      `redirect_uri=${ window.location.href }`
-    ];
-
-    window.location.href = this.authorizeURL + '?' + params.join('&');
-  }
-}
+import el from './utils/element';
+import GitHub from './providers/github';
 
 export default function profile(state) {
-  const provider = GITHUB;
+  const provider = GitHub;
 
   return {
     authorize(code) {
-      return provider.authorize(code, profile => state.login(profile));
+      return provider
+        .authorize(code)
+        .then(profileData => {
+          state.login(profileData);
+          window.top.location.href = removeParam('code', window.top.location.href);
+        })
+        .catch(this.fallbackUI);
     },
     showProfile() {
       if (state.loggedIn()) {
@@ -61,6 +21,21 @@ export default function profile(state) {
       } else {
         provider.grandAccess();
       }
+    },
+    fallbackUI(error) {
+      const fallback = el('.layout');
+      
+      fallback.content(`
+        <div class="authentication-failed">
+          <h1>Authentication failed</h1>
+          <p>Reason: ${ error && error.message ? error.message : 'Unknown' }</p>
+          <p>
+            <a href="javascript:void(0);" data-export="goBack">Go back</a><br />
+            <a href="https://github.com/krasimir/demoit/issues">Report an issue</a><br />
+          </p>
+        </div>
+      `);
+      fallback.namedExports().goBack.onClick(() => window.top.location.href = removeParam('code', window.top.location.href));
     }
   }
 }

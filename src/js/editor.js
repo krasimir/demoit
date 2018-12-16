@@ -83,13 +83,13 @@ export default async function editor(state) {
       clearConsole();
       state.editCurrentFile({
         content: code,
-        editing: false,
         preview: container.content()
       });
+      state.pendingChanges(false);
       execute();
     },
     function onChange() {
-      state.editCurrentFile({ editing: true });
+      state.pendingChanges(true);
     },
     function showFile(index) {
       loadFileInEditor(state.setCurrentIndex(index));
@@ -102,7 +102,7 @@ export default async function editor(state) {
     codeMirrorEditor.setValue(state.getCurrentFile().content);
     codeMirrorEditor.focus();
     // we have to do this because we fire the onChange handler of the editor which sets editing=true;
-    state.editCurrentFile({ editing: false  });
+    state.pendingChanges(false);
     execute();
   }
 

@@ -23,11 +23,13 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     const files = state.getFiles();
 
     items.push('<div data-export="buttons">');
-    files.forEach(({ filename, editing, entryPoint }, idx) => {
+    files.forEach(({ filename, entryPoint }, idx) => {
+      const isCurrentFile = state.isCurrentIndex(idx);
+
       items.push(createStatusBarLink(
         'file',
-        `${ entryPoint ? DOT_CIRCLE(15) : ''}${ filename }${ editing ? ' *' : ''}`,
-        `file ${ state.isCurrentIndex(idx) ? ' active' : '' }`
+        `${ entryPoint ? DOT_CIRCLE(15) : ''}${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}`,
+        `file ${ isCurrentFile ? ' active' : '' }`
       ))
     });
     isEditorMode() && items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));

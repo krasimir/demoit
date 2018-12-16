@@ -1,13 +1,13 @@
 import { isLocalStorageAvailable, getParam, readFromJSONFile } from './utils';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
 import { LAYOUTS } from './layout';
+import API from './providers/api';
 
 const EMPTY_FILE = {
   content: '',
   filename: 'untitled.js',
   editing: false
 };
-const LS_KEY = 'DEMOIT_v3';
 const LS_PROFILE_KEY = 'DEMOIT_PROFILE_v3';
 const DEFAULT_STATE = {
   editor: {
@@ -33,7 +33,7 @@ const resolveActiveFileIndex = function (files) {
   return 0;
 }
 
-const readFromLocalStorage = function (key = LS_KEY) {
+const readFromLocalStorage = function (key) {
   if (isLocalStorageAvailable()) {
     const data = localStorage.getItem(key);
 
@@ -50,11 +50,13 @@ export default async function createState() {
   const localStorageAvailable = isLocalStorageAvailable();
   const onChangeListeners = [];
   let profile = readFromLocalStorage(LS_PROFILE_KEY);
+  let pendingChanges = false;
 
-  const stateFromURL = getParam('state');
   var state = window.state;
-
+  
   if (!state) {
+    const stateFromURL = getParam('state');
+    
     if (stateFromURL) {
       try {
         state = await readFromJSONFile(stateFromURL);
@@ -68,11 +70,14 @@ export default async function createState() {
 
   var activeFileIndex = resolveActiveFileIndex(state.files);
 
+  const notify = () => onChangeListeners.forEach(c => c());
   const syncState = () => {
-    onChangeListeners.forEach(c => c());
+    notify();
     if (localStorageAvailable) {
-      localStorage.setItem(LS_KEY, JSON.stringify(state));
       localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(profile));
+    }
+    if (api.loggedIn()) {
+      API.saveDemo(state, profile.token);
     }
   }
   
@@ -179,9 +184,6 @@ export default async function createState() {
     updateStatusBarVisibility(value) {
       state.editor.statusBar = value;
     },
-    restoreFromLocalStorage() {
-      this.setState(readFromLocalStorage());
-    },
     setEntryPoint(index) {
       state.files = state.files.map((file, i) => {
         if (i === index) {
@@ -191,6 +193,13 @@ export default async function createState() {
         }
         return file;
       });
+    },
+    pendingChanges(status) {
+      if (typeof status !== 'undefined') {
+        pendingChanges = status;
+        notify();
+      }
+      return pendingChanges;
     },
     // profile methods
     loggedIn() {
