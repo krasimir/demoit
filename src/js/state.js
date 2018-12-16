@@ -1,4 +1,4 @@
-import { isLocalStorageAvailable, getParam, readFromJSONFile } from './utils';
+import { isLocalStorageAvailable, getParam, readFromJSONFile, isProd, ensureDemoIdInPageURL } from './utils';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
 import { LAYOUTS } from './layout';
 import API from './providers/api';
@@ -71,13 +71,18 @@ export default async function createState() {
   var activeFileIndex = resolveActiveFileIndex(state.files);
 
   const notify = () => onChangeListeners.forEach(c => c());
-  const syncState = () => {
+  const syncState = async () => {
     notify();
     if (localStorageAvailable) {
       localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(profile));
     }
-    if (api.loggedIn()) {
-      API.saveDemo(state, profile.token);
+    if (isProd() && api.loggedIn()) {
+      const demoId = await API.saveDemo(state, profile.token);
+
+      if (demoId) {
+        state.id = demoId;
+        ensureDemoIdInPageURL(demoId);
+      }
     }
   }
   

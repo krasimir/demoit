@@ -53,7 +53,7 @@ export const readFromJSONFile = async function (file) {
 export const removeParam = function (key, sourceURL) {
 	const urlWithoutParams = sourceURL.split("?")[0];
 	const hash = sourceURL.split('#')[1];
-	const queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split('?')[1] : '';
+	const queryString = (sourceURL.indexOf('?') !== -1) ? sourceURL.split('?')[1] : '';
 	let params = [];
 	let param;
 
@@ -68,4 +68,15 @@ export const removeParam = function (key, sourceURL) {
 		return urlWithoutParams + '?' + params.join('&') + (hash ? '#' + hash : '');
 	}
 	return urlWithoutParams;
+}
+
+export const isProd = () => {
+	return window.location.href.match(/^http:\/\/demoit.app/);
+}
+
+export const ensureDemoIdInPageURL = demoId => {
+	const currentURL = window.location.href;
+	const hash = currentURL.split('#')[1];
+
+	history.pushState(null, null, `${ demoId }${ hash ? '#' + hash : '' }`);
 }

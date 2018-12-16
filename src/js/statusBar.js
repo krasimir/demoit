@@ -1,6 +1,7 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, USER, NO_USER } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER } from './utils/icons';
 import { isEditorMode, isReadOnlyMode } from './mode';
+import { isProd } from './utils';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
@@ -35,7 +36,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     isEditorMode() && items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     (isEditorMode() || isReadOnlyMode()) && items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
-    items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'right profile'));
+    isProd() && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'right profile'));
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {

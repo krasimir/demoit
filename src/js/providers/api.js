@@ -1,18 +1,9 @@
 import { SAVE_DEMO_URL } from '../constants';
-import { debounce } from '../utils';
-
-const DEBOUNCE_INTERVAL = 2000;
-const STATUS = {
-  IN_FLIGHT: 'IN_FLIGHT',
-  OK: 'OK',
-  ERROR_WITH_REQUEST: 'WITH_REQUEST',
-  INVALID_TOKEN: 'INVALID_TOKEN'
-}
 
 let requestInFlight = false;
 
-const saveDemo = debounce(async function (state, token) {
-  if (requestInFlight) { return STATUS.IN_FLIGHT; }
+const saveDemo = async function (state, token) {
+  if (requestInFlight) { return; }
 
   try {
     requestInFlight = true;
@@ -27,16 +18,15 @@ const saveDemo = debounce(async function (state, token) {
     requestInFlight = false;
 
     if (result.ok) {
-      return STATUS.OK;
+      return result.demoId;
     } else if (result.error) {
-      return result.error;
+      console.error(result.error);
     }
   } catch(error) {
-    return STATUS.ERROR_WITH_REQUEST;
+    console.error(error);
   }
-}, DEBOUNCE_INTERVAL, true);
+};
 
 export default {
-  saveDemo,
-  STATUS
+  saveDemo
 };
