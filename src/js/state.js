@@ -70,35 +70,26 @@ export default async function createState() {
 
   var activeFileIndex = resolveActiveFileIndex(state.files);
 
-  const notify = () => onChangeListeners.forEach(c => c());
-  const syncState = async () => {
-    notify();
-    if (localStorageAvailable) {
-      localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(profile));
-    }
+  const onChange = () => onChangeListeners.forEach(c => c());
+  const persist = () => {
     if (isProd() && api.loggedIn()) {
-      const demoId = await API.saveDemo(state, profile.token);
-
-      if (demoId) {
-        state.demoId = demoId;
-        ensureDemoIdInPageURL(demoId);
-      }
+      API.saveDemo(state, profile.token).then(demoId => {
+        if (demoId && demoId !== state.demoId) {
+          state.demoId = demoId;
+          ensureDemoIdInPageURL(demoId);
+        }
+      });
     }
   }
   
   const api = {
-    setState(newState) {
-      state = newState;
-      activeFileIndex = resolveActiveFileIndex(state.files);
-      syncState();
-    },
     getCurrentIndex() {
       return activeFileIndex;
     },
     setCurrentIndex(idx) {
       activeFileIndex = idx;
       location.hash = state.files[idx].filename;
-      syncState();
+      onChange();
       return state.files[idx];
     },
     isCurrentIndex(idx) {
@@ -118,7 +109,8 @@ export default async function createState() {
     },
     setDependencies(dependencies) {
       state.dependencies = dependencies;
-      syncState();
+      onChange();
+      persist();
     },
     getEditorSettings() {
       return state.editor;
@@ -126,19 +118,13 @@ export default async function createState() {
     getFileAt(index) {
       return this.getFiles()[index];
     },
-    makeSureOneFileAtLeast() {
-      if (this.getFiles().length === 0) {
-        state.files.push(EMPTY_FILE);
-        this.setCurrentIndex(0);
-        syncState();
-      }
-    },
     editFile(index, updates) {
       state.files[index] = {
         ...state.files[index],
         ...updates
       };
-      syncState();
+      onChange();
+      persist();
       this.setCurrentIndex(activeFileIndex);
     },
     editCurrentFile(updates) {
@@ -147,41 +133,35 @@ export default async function createState() {
     addNewFile(filename = 'untitled.js') {
       state.files.push({ ...EMPTY_FILE, filename });
       this.setCurrentIndex(state.files.length - 1);
-      syncState();
+      onChange();
+      persist();
     },
     deleteFile(index) {
       cleanUpExecutedCSS(this.getFileAt(index).filename);
       if (index === activeFileIndex) {
         state.files.splice(index, 1);
-        syncState();
+        onChange();
+        persist();
         this.setCurrentIndex(0);
       } else {
         const currentFile = this.getCurrentFile();
         state.files.splice(index, 1);
-        syncState();
+        onChange();
+        persist();
         this.setCurrentIndex(this.getFiles().findIndex(file => file === currentFile) || 0);
       }
-    },
-    clear() {
-      if (isLocalStorageAvailable) {
-        localStorage.clear();
-      }
-      syncState();
     },
     listen(callback) {
       onChangeListeners.push(callback);
     },
     updateLayout(newLayout) {
       state.editor.layout = newLayout;
-      syncState();
+      onChange();
     },
     updateTheme(newTheme) {
       state.editor.theme = newTheme;
-      syncState();
-    },
-    updateCode(code) {
-      state.code = code;
-      syncState();
+      onChange();
+      persist();
     },
     getCode() {
       return state.code;
@@ -202,7 +182,7 @@ export default async function createState() {
     pendingChanges(status) {
       if (typeof status !== 'undefined') {
         pendingChanges = status;
-        notify();
+        onChange();
       }
       return pendingChanges;
     },
@@ -212,14 +192,14 @@ export default async function createState() {
     },
     login(userProfile) {
       profile = userProfile;
-      syncState();
+      if (localStorageAvailable) {
+        localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(profile));
+      }
     },
     getProfile() {
       return profile;
     }
   }
-
-  api.makeSureOneFileAtLeast();
 
   return api;
 }
