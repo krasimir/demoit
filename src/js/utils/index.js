@@ -1,3 +1,5 @@
+import { DEV } from '../constants';
+
 export const debounce = function (func, wait, immediate) {
 	var timeout; 
 	return function() {
@@ -71,7 +73,7 @@ export const removeParam = function (key, sourceURL) {
 }
 
 export const isProd = () => {
-	return window.location.href.match(/^https:\/\/demoit.app/);
+	return DEV || window.location.href.match(/^https:\/\/demoit.app/);
 }
 
 export const ensureDemoIdInPageURL = demoId => {

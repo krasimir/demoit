@@ -81,10 +81,7 @@ export default async function editor(state) {
     async function onSave(code) {
       await clearOutput();
       clearConsole();
-      state.editCurrentFile({
-        content: code,
-        preview: container.content()
-      });
+      state.editCurrentFile({ content: code });
       state.pendingChanges(false);
       execute();
     },

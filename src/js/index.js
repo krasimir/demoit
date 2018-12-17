@@ -7,9 +7,6 @@ import newFilePopUp from './popups/newFilePopUp';
 import editFilePopUp from './popups/editFilePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
-import preview from './preview';
-import readOnly from './readOnly';
-import { isPreviewMode, isEditorMode, isReadOnlyMode } from './mode';
 import profile from './profile';
 
 if (getParam('code')) {
@@ -18,18 +15,11 @@ if (getParam('code')) {
 } else {
   // proceed with the app ui
   createState().then(state => {
-    async function render() {
-      let executeCurrentFile;
-      
+    async function render() {      
       layout(state);
+      
+      const executeCurrentFile = await editor(state);
     
-      if (isPreviewMode()) {
-        executeCurrentFile = preview(state);
-      } else if (isEditorMode()) {
-        executeCurrentFile = await editor(state);
-      } else if (isReadOnlyMode()) {
-        executeCurrentFile = readOnly(state);
-      }
       executeCurrentFile();
     
       const showSettings = settings(

@@ -80,7 +80,7 @@ export default async function createState() {
       const demoId = await API.saveDemo(state, profile.token);
 
       if (demoId) {
-        state.id = demoId;
+        state.demoId = demoId;
         ensureDemoIdInPageURL(demoId);
       }
     }

@@ -1,6 +1,5 @@
 import el from './utils/element';
 import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER } from './utils/icons';
-import { isEditorMode, isReadOnlyMode } from './mode';
 import { isProd } from './utils';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
@@ -33,16 +32,16 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         `file ${ isCurrentFile ? ' active' : '' }`
       ))
     });
-    isEditorMode() && items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
+    items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
-    (isEditorMode() || isReadOnlyMode()) && items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
+    items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     isProd() && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'right profile'));
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {
       if (button.attr('data-export') === 'file') {
         button.onClick(() => showFile(index));
-        isEditorMode() && button.onRightClick(() => editFile(index));
+        button.onRightClick(() => editFile(index));
         return index + 1;
       }
       return index;

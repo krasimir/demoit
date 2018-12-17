@@ -17,10 +17,12 @@ const saveDemo = async function (state, token) {
 
     requestInFlight = false;
 
-    if (result.ok) {
-      return result.demoId;
-    } else if (result.error) {
+    if (result.error) {
       console.error(result.error);
+    } else if (result.demoId) {
+      return result.demoId;
+    } else {
+      console.log(result);
     }
   } catch(error) {
     console.error(error);
