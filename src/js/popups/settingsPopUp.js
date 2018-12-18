@@ -85,19 +85,12 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
         iframeTextarea.selectOnClick();
       }
       // managing dependencies
-      if (dependenciesTextarea && saveDependenciesButton) {
-        const save = () => {
+      if (dependenciesTextarea && saveDependenciesButton) {        
+        dependenciesTextarea.prop('value', dependenciesStr);
+        saveDependenciesButton.onClick(() => {
           onDepsUpdated(dependenciesTextarea.prop('value').split(/\r?\n/));
           closePopup();
-        }
-        
-        dependenciesTextarea.prop('value', dependenciesStr);
-        dependenciesTextarea.onKeyUp(e => {
-          if (e.keyCode === ENTER_KEY) {
-            save();
-          }
         });
-        saveDependenciesButton.onClick(save);
       }
     }
   }));

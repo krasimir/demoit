@@ -14,17 +14,7 @@ export const debounce = function (func, wait, immediate) {
 		if (callNow) func.apply(context, args);
 	};
 };
-export const isLocalStorageAvailable = function () {
-  const test = 'test';
 
-  try {
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
-  } catch(e) {
-    return false;
-  }
-}
 export const delay = async (amount = 1) => new Promise(done => setTimeout(done, amount));
 export const once = callback => {
 	let called = false;
@@ -67,7 +57,13 @@ export const removeParam = function (key, sourceURL) {
 				params.splice(i, 1);
 			}
 		}
-		return urlWithoutParams + '?' + params.join('&') + (hash ? '#' + hash : '');
+		params = params.join('&');
+
+		return [
+			urlWithoutParams,
+			params !== '' ? '?' + params : '',
+			hash ? '#' + hash : ''
+		].join('');
 	}
 	return urlWithoutParams;
 }

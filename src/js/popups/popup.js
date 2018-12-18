@@ -13,7 +13,7 @@ const MULTIPLE_PAGES_MARKUP = ({ buttons, content }, index = DEFAULT_PAGE_INDEX)
   <ul class="sub-nav">
     ${ buttons.map((label, i) => `<li class="${ i === index ? 'active' : '' }"><a href="javascript:void(0);" data-export="page:${ i }">${ label }</a></li>`).join('') }
   </ul>
-  <button class="close" data-export="close">${ CLOSE_ICON() }</button>
+  <button class="close" data-export="close">${ CLOSE_ICON(24) }</button>
   <div class="content">${ content[index] }</div>
 </section>`;
 

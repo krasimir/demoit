@@ -1,4 +1,4 @@
-import { getParam, removeParam } from './utils';
+import { getParam } from './utils';
 import el from './utils/element';
 import layout from './layout';
 import editor from './editor';

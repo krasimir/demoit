@@ -1,5 +1,5 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER, FORK } from './utils/icons';
 import { isProd } from './utils';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
@@ -36,6 +36,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     isProd() && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'right profile'));
+    state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {
@@ -47,7 +48,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       return index;
     }, 0);
 
-    const { newFileButton, closeButton, settingsButton, profileButton } = bar.namedExports();
+    const { newFileButton, closeButton, settingsButton, profileButton, forkButton } = bar.namedExports();
     const manageVisibility = () => {
       const { buttons } = bar.namedExports();
       buttons.css('display', visibility ? 'block' : 'none');
@@ -59,6 +60,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     newFileButton && newFileButton.onClick(newFile);
     settingsButton && settingsButton.onClick(showSettings);
     profileButton && profileButton.onClick(showProfile);
+    forkButton && forkButton.onClick(() => state.fork());
     closeButton.onClick(e => {
       e.stopPropagation();
       visibility = false;
