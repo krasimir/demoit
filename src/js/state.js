@@ -183,7 +183,7 @@ export default async function createState() {
     },
     // forking
     isForkable() {
-      return !!state.owner;
+      return this.loggedIn() && !!state.owner;
     },
     fork() {
       persist(true, onChange);

@@ -26,7 +26,7 @@
     }
   },
   "dependencies": [
-    "./resources/vue@2.5.17.js",
+    "https://unpkg.com/vue@2.5.21/dist/vue.min.js",
     "./resources/marked@0.3.6.js",
     "./resources/lodash@4.16.0.js"
   ],

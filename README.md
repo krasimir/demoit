@@ -3,6 +3,8 @@
 
 # **Demoit** is a interactive JavaScript playground
 
+[https://demoit.app](https://demoit.app)
+
 * No installation.
 * No server needed. It works offline.
 * No building process needed. Built-in Babel support. It translates your code at runtime.
@@ -14,12 +16,9 @@
 
 ## Demo :rocket:
 
-* React - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/React.json)
-* Vue - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/Vue.json)
-* HTML+CSS - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/HTML+CSS.json)
-* Canvas - [https://krasimir.github.io/demoit/dist](https://krasimir.github.io/demoit/dist?state=../samples/Canvas.json)
-
-[(All demos embeded on a single page)](https://krasimir.github.io/samples)
+* React - [https://demoit.app/e/react](https://demoit.app/e/react)
+* Vue - [https://demoit.app/e/vue](https://demoit.app/e/vue)
+* HTML+CSS - [https://demoit.app/e/htmlcss](https://demoit.app/e/htmlcss)
 
 ---
 
