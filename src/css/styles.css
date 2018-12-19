@@ -90,6 +90,8 @@ svg {
 }
 /*************************** CONSOLE */
 .console {
+  font-size: 0.8em;
+  line-height: 0.8em;
   position: relative;
   overflow: auto;
 }

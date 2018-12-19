@@ -63,7 +63,9 @@ export default async function createState() {
 
   const onChange = () => onChangeListeners.forEach(c => c());
   const persist = (fork = false, done = () => {}) => {
-    if (isProd() && api.loggedIn() && (state.owner === profile.id || fork || !state.owner)) {
+    if (isProd() && api.loggedIn()) {
+      if (fork) { delete state.owner; }
+      if (state.owner && state.owner !== profile.id) { return; }
       API.saveDemo(state, profile.token).then(demoId => {
         if (demoId && demoId !== state.demoId) {
           state.demoId = demoId;
@@ -181,7 +183,7 @@ export default async function createState() {
     },
     // forking
     isForkable() {
-      return this.loggedIn() && state.owner !== profile.id;
+      return !!state.owner;
     },
     fork() {
       persist(true, onChange);
