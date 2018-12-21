@@ -1,25 +1,14 @@
 import { removeParam } from './utils';
 import el from './utils/element';
-import GitHub from './providers/github';
+import auth from './providers/auth';
 
 export default function profile(state) {
-  const provider = GitHub;
-
   return {
-    authorize(code) {
-      return provider
-        .authorize(code)
-        .then(profileData => {
-          state.login(profileData);
-          window.top.location.href = removeParam('code', window.top.location.href);
-        })
-        .catch(this.fallbackUI);
-    },
     showProfile() {
       if (state.loggedIn()) {
         
       } else {
-        provider.grandAccess();
+        auth.grandAccess(state.getDemoId());
       }
     },
     fallbackUI(error) {

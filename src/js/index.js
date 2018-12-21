@@ -9,64 +9,58 @@ import settings from './settings';
 import statusBar from './statusBar';
 import profile from './profile';
 
-if (getParam('code')) {
-  // in a process of logging in
-  createState().then(state => profile(state).authorize(getParam('code')));
-} else {
-  // proceed with the app ui
-  createState().then(state => {
-    async function render() {      
-      layout(state);
-      
-      const executeCurrentFile = await editor(state);
+createState().then(state => {
+  async function render() {      
+    layout(state);
     
-      executeCurrentFile();
-    
-      const showSettings = settings(
-        state,
-        () => (el.destroy(), render()), 
-        () => executeCurrentFile()
-      );
+    const executeCurrentFile = await editor(state);
+  
+    executeCurrentFile();
+  
+    const showSettings = settings(
+      state,
+      () => (el.destroy(), render()), 
+      () => executeCurrentFile()
+    );
 
-      const showProfile = profile(state).showProfile;
-    
-      statusBar(
-        state,
-        function showFile(index) {
-          state.setCurrentIndex(index);
+    const showProfile = profile(state).showProfile;
+  
+    statusBar(
+      state,
+      function showFile(index) {
+        state.setCurrentIndex(index);
+        executeCurrentFile();
+      },
+      async function newFile() {
+        const newFilename = await newFilePopUp();
+  
+        if (newFilename) {
+          state.addNewFile(newFilename);
           executeCurrentFile();
-        },
-        async function newFile() {
-          const newFilename = await newFilePopUp();
-    
-          if (newFilename) {
-            state.addNewFile(newFilename);
+        }
+      },
+      async function editFile(index) {
+        editFilePopUp(
+          state.getFileAt(index).filename,
+          state.getFiles().length,
+          function onDelete() {
+            state.deleteFile(index);
+            executeCurrentFile();
+          },
+          function onRename(newName) {
+            state.editFile(index, { filename: newName });
+            executeCurrentFile();
+          },
+          function onSetAsEntryPoint() {
+            state.setEntryPoint(index)
             executeCurrentFile();
           }
-        },
-        async function editFile(index) {
-          editFilePopUp(
-            state.getFileAt(index).filename,
-            state.getFiles().length,
-            function onDelete() {
-              state.deleteFile(index);
-              executeCurrentFile();
-            },
-            function onRename(newName) {
-              state.editFile(index, { filename: newName });
-              executeCurrentFile();
-            },
-            function onSetAsEntryPoint() {
-              state.setEntryPoint(index)
-              executeCurrentFile();
-            }
-          );
-        },
-        showSettings,
-        showProfile
-      );
-    };
+        );
+      },
+      showSettings,
+      showProfile
+    );
+  };
 
-    render();
-  });
-}
+  render();
+});

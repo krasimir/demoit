@@ -14,7 +14,7 @@ const EMPTY_FILE = {
   filename: 'untitled.js',
   editing: false
 };
-const LS_PROFILE_KEY = 'DEMOIT_PROFILE_v3';
+const LS_PROFILE_KEY = 'DEMOIT_PROFILE';
 const DEFAULT_STATE = {
   editor: {
     theme: 'light',
@@ -78,6 +78,12 @@ export default async function createState() {
   }
   
   const api = {
+    getDemoId() {
+      if (!state.demoId) {
+        throw new Error('There is no demoId!');
+      }
+      return state.demoId;
+    },
     getCurrentIndex() {
       return activeFileIndex;
     },
@@ -191,10 +197,6 @@ export default async function createState() {
     // profile methods
     loggedIn() {
       return profile !== null;
-    },
-    login(userProfile) {
-      profile = userProfile;
-      LS(LS_PROFILE_KEY, profile);
     },
     getProfile() {
       return profile;
