@@ -1,5 +1,5 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER, FORK } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER, FORK, FILE_ICON } from './utils/icons';
 import { isProd } from './utils';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '4px';
@@ -8,10 +8,10 @@ const STATUS_BAR_VISIBLE_HEIGHT = '36px';
 const showProfilePicAndName = profile => {
   return `<img src="${ profile.avatar }"/>`
 };
-
-const createStatusBarLink = (exportKey, label, className = 'right') => {
+const createStatusBarLink = (exportKey, label, className = '') => {
   return `<a data-export="${ exportKey }" class="${ className }" href="javascript:void(0)">${ label }</a>`;
 }
+const createStr = (str, n) => Array(n).join(str);
 
 export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile) {
   const bar = el.withRelaxedCleanup('.status-bar');
@@ -23,20 +23,21 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     const files = state.getFiles();
 
     items.push('<div data-export="buttons">');
+    isProd() && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
+    state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
     files.forEach(({ filename, entryPoint }, idx) => {
       const isCurrentFile = state.isCurrentIndex(idx);
 
       items.push(createStatusBarLink(
         'file',
-        `${ entryPoint ? DOT_CIRCLE(15) : ''}${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}`,
+        `<span>${ entryPoint ? DOT_CIRCLE(15) : FILE_ICON(15) }${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
         `file ${ isCurrentFile ? ' active' : '' }`
       ))
     });
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
-    items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
+    items.push('<div></div>');
     items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
-    isProd() && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'right profile'));
-    state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
+    items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     items.push('</div>');
 
     bar.content(items.join('')).reduce((index, button) => {
@@ -51,7 +52,17 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     const { newFileButton, closeButton, settingsButton, profileButton, forkButton } = bar.namedExports();
     const manageVisibility = () => {
       const { buttons } = bar.namedExports();
-      buttons.css('display', visibility ? 'block' : 'none');
+
+      buttons.css('display', visibility ? 'grid' : 'none');
+      buttons.css('gridTemplateColumns', [
+        isProd() ? '34px' : false,
+        state.isForkable() ? '30px' : false,
+        createStr('minmax(auto, 135px) ', files.length + 1),
+        '30px',
+        '1fr',
+        '30px',
+        '30px',
+      ].filter(value => value).join(' '));
       bar.css('height', visibility ? STATUS_BAR_VISIBLE_HEIGHT : STATUS_BAR_HIDDEN_HEIGHT);
       layout.css('height', visibility ? `calc(100% - ${ STATUS_BAR_VISIBLE_HEIGHT })` : `calc(100% - ${ STATUS_BAR_HIDDEN_HEIGHT })`);
       state.updateStatusBarVisibility(visibility);

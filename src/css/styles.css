@@ -131,6 +131,12 @@ svg {
 	padding: 8px;
   cursor: pointer;
   opacity: 0.7;
+  overflow: hidden;
+  border-left: solid 1px #999;
+}
+.status-bar a span {
+  display: block;
+  width: 500px;
 }
 .dark .status-bar a {
   color: #a5a5a5;
@@ -147,6 +153,9 @@ svg {
 }
 .status-bar a svg {
   transform: translateY(3px);
+}
+.status-bar .file {
+  
 }
 .status-bar a.file svg {
   margin-right: 3px;
