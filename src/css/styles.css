@@ -132,11 +132,20 @@ svg {
   cursor: pointer;
   opacity: 0.7;
   overflow: hidden;
-  border-left: solid 1px #999;
   position: relative;
 }
-.dark .status-bar a {
-  border-left: solid 1px #272727;
+.status-bar a::before {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 18px;
+  background: #999;
+  position: absolute;
+  top: 9px;
+  left: 0;
+}
+.dark .status-bar a::before {
+  background: #4e4e4e;
 }
 .status-bar a span {
   display: block;
@@ -163,7 +172,7 @@ svg {
   transform: translateY(-2px);
   -webkit-transform: translateY(-2px);
 }
-.status-bar .entry::before {
+.status-bar .entry span::before {
   display: block;
   content: "•";
   float: left;
@@ -176,6 +185,8 @@ svg {
   line-height: 8px;
   transform: translateY(1px);
   -webkit-transform: translateY(1px);
+  position: relative;
+  top: 0;
 }
 .status-bar .file::after {
   display: block;

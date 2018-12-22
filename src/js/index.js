@@ -1,5 +1,5 @@
-import { getParam } from './utils';
 import el from './utils/element';
+import { isProd } from './utils';
 import layout from './layout';
 import editor from './editor';
 import createState from './state';
@@ -68,3 +68,14 @@ createState().then(state => {
 
   render();
 });
+
+window.addEventListener('load', () => {
+  if (!('serviceWorker' in navigator) || !isProd()) {
+    return;
+  }
+
+  navigator.serviceWorker.register('/sw.js').then(
+    () => {},
+    err => console.error('SW registration failed!')
+  )
+})
