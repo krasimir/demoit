@@ -128,11 +128,15 @@ svg {
   display: inline-block;
 	color: #000;
 	text-decoration: none;
-	padding: 8px;
+	padding: 10px 8px 8px 8px;
   cursor: pointer;
   opacity: 0.7;
   overflow: hidden;
   border-left: solid 1px #999;
+  position: relative;
+}
+.dark .status-bar a {
+  border-left: solid 1px #272727;
 }
 .status-bar a span {
   display: block;
@@ -152,13 +156,60 @@ svg {
   opacity: 1;
 }
 .status-bar a svg {
-  transform: translateY(3px);
+  transform: translateY(1px);
+  -webkit-transform: translateY(1px);
 }
-.status-bar .file {
-  
+.status-bar a img {
+  transform: translateY(-2px);
+  -webkit-transform: translateY(-2px);
+}
+.status-bar .entry::before {
+  display: block;
+  content: "•";
+  float: left;
+  margin-right: 4px;
+  margin-top: 1px;
+  border: solid 2px black;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  line-height: 8px;
+  transform: translateY(1px);
+  -webkit-transform: translateY(1px);
+}
+.status-bar .file::after {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 20%;
+  content: "";
+  background: linear-gradient(
+      to left,
+     rgba(204, 204, 204, 1) 20%, 
+     rgba(204, 204, 204, 0) 80%
+  );
+  pointer-events: none;
+}
+.dark .status-bar .file::after {
+  background: linear-gradient(
+      to left,
+     rgba(0, 0, 0, 1) 20%, 
+     rgba(0, 0, 0, 0) 80%
+  );
 }
 .status-bar a.file svg {
   margin-right: 3px;
+}
+.dark .status-bar .file.entry::before {
+  border-color: #7b7b7b;
+}
+.status-bar .name {
+  text-align: center;
+  font-size: 0.9em;
+  font-style: italic;
+  opacity: 0.4;
 }
 /*************************** POPUP */
 .popup {
@@ -223,7 +274,7 @@ svg {
 }
 .popup h2 {
   padding: 0;
-  margin: 1em 0 1em 0;
+  margin: 0 0 1em 0;
 }
 .popup button {
   padding: 0.6em 1em;

@@ -2,7 +2,7 @@ import el from './utils/element';
 import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER, FORK, FILE_ICON } from './utils/icons';
 import { isProd } from './utils';
 
-const STATUS_BAR_HIDDEN_HEIGHT = '4px';
+const STATUS_BAR_HIDDEN_HEIGHT = '6px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
 
 const showProfilePicAndName = profile => {
@@ -13,7 +13,7 @@ const createStatusBarLink = (exportKey, label, className = '') => {
 }
 const createStr = (str, n) => Array(n).join(str);
 
-export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile) {
+export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile, editName) {
   const bar = el.withRelaxedCleanup('.status-bar');
   const layout = el.withRelaxedCleanup('.app .layout');
   let visibility = !!state.getEditorSettings().statusBar;
@@ -30,12 +30,12 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
       items.push(createStatusBarLink(
         'file',
-        `<span>${ entryPoint ? DOT_CIRCLE(15) : FILE_ICON(15) }${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
-        `file ${ isCurrentFile ? ' active' : '' }`
+        `<span>${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
+        `file${ isCurrentFile ? ' active' : '' }${ entryPoint ? ' entry' : ''}`
       ))
     });
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
-    items.push('<div></div>');
+    items.push(createStatusBarLink('nameButton', state.name() ? state.name() : 'unnamed', 'name'));
     items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     items.push('</div>');
@@ -49,7 +49,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       return index;
     }, 0);
 
-    const { newFileButton, closeButton, settingsButton, profileButton, forkButton } = bar.namedExports();
+    const { newFileButton, closeButton, settingsButton, profileButton, forkButton, nameButton } = bar.namedExports();
     const manageVisibility = () => {
       const { buttons } = bar.namedExports();
 
@@ -71,6 +71,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     newFileButton && newFileButton.onClick(newFile);
     settingsButton && settingsButton.onClick(showSettings);
     profileButton && profileButton.onClick(showProfile);
+    nameButton && nameButton.onClick(editName);
     forkButton && forkButton.onClick(() => state.fork());
     closeButton.onClick(e => {
       e.stopPropagation();

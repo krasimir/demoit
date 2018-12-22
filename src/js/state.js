@@ -16,6 +16,7 @@ const EMPTY_FILE = {
 };
 const LS_PROFILE_KEY = 'DEMOIT_PROFILE';
 const DEFAULT_STATE = {
+  name: '',
   editor: {
     theme: 'light',
     statusBar: false,
@@ -102,8 +103,14 @@ export default async function createState() {
     getFiles() {
       return state.files;
     },
-    dump() {
-      return state;
+    name(value) {
+      if (typeof value !== 'undefined') {
+        state.name = value;
+        onChange();
+        persist();
+        return;
+      }
+      return state.name || '';
     },
     getDependencies() {
       return state.dependencies;
@@ -164,9 +171,6 @@ export default async function createState() {
       onChange();
       persist();
     },
-    getCode() {
-      return state.code;
-    },
     updateStatusBarVisibility(value) {
       state.editor.statusBar = value;
     },
@@ -186,6 +190,9 @@ export default async function createState() {
         onChange();
       }
       return pendingChanges;
+    },
+    dump() {
+      return state;
     },
     // forking
     isForkable() {

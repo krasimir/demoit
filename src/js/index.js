@@ -5,6 +5,7 @@ import editor from './editor';
 import createState from './state';
 import newFilePopUp from './popups/newFilePopUp';
 import editFilePopUp from './popups/editFilePopUp';
+import editNamePopUp from './popups/editNamePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import profile from './profile';
@@ -58,7 +59,10 @@ createState().then(state => {
         );
       },
       showSettings,
-      showProfile
+      showProfile,
+      function editName() {
+        editNamePopUp(state.name(), newName => state.name(newName));
+      }
     );
   };
 
