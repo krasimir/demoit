@@ -16,7 +16,20 @@ const createStr = (str, n) => Array(n).join(str);
 export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile, editName) {
   const bar = el.withRelaxedCleanup('.status-bar');
   const layout = el.withRelaxedCleanup('.app .layout');
+  const tooltip = el('.status-bar-tooltip');
   let visibility = !!state.getEditorSettings().statusBar;
+
+  const enableTooltip = (button, text, position, positionValue) => {
+    button.onMouseOver(() => {
+      tooltip
+        .css('display', 'block')
+        .css(position, positionValue + 'px')
+        .content(text);
+    });
+    button.onMouseOut(() => {
+      tooltip.clearCSS().css('display', 'none');
+    })
+  }
 
   const render = () => {
     const items  = [];
@@ -84,6 +97,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         manageVisibility();
       }
     });
+
+    enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
+    enableTooltip(profileButton, 'Your profile', 'left', 0);
+    enableTooltip(settingsButton, 'Settings', 'right', 29);
+    enableTooltip(closeButton, 'Close status bar', 'right', 0);
 
     manageVisibility();
   }

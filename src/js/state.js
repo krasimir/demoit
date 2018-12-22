@@ -207,6 +207,9 @@ export default async function createState() {
     },
     getProfile() {
       return profile;
+    },
+    getDemos() {
+      return API.getDemos(profile.token);
     }
   }
 

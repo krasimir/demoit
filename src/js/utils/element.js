@@ -37,6 +37,10 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
         return e.style[prop];
       }
     },
+    clearCSS() {
+      e.style = {};
+      return this;
+    },
     prop(name, value) {
       if (typeof value !== 'undefined') {
         e[name] = value;
@@ -65,6 +69,22 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       e.addEventListener('keyup', callback);
       
       const removeListener = () => e.removeEventListener('keyup', callback);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
+    },
+    onMouseOver(callback) {
+      e.addEventListener('mouseover', callback);
+      
+      const removeListener = () => e.removeEventListener('mouseover', callback);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
+    },
+    onMouseOut(callback) {
+      e.addEventListener('mouseout', callback);
+      
+      const removeListener = () => e.removeEventListener('mouseout', callback);
 
       removeListenersCallbacks.push(removeListener);
       return removeListener;

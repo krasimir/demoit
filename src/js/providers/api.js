@@ -1,4 +1,4 @@
-import { SAVE_DEMO_URL } from '../constants';
+import { SAVE_DEMO_URL, GET_DEMOS_URL } from '../constants';
 
 let requestInFlight = false;
 
@@ -29,6 +29,27 @@ const saveDemo = async function (state, token) {
   }
 };
 
+const getDemos = async function (token) {
+  try {
+    const response = await fetch(GET_DEMOS_URL, {
+      headers: { token }
+    });
+
+    const result = await response.json();
+
+    if (result.error) {
+      console.error(result.error);
+    } else if (result) {
+      return result;
+    } else {
+      console.log(result);
+    }
+  } catch(error) {
+    console.error(error);
+  }
+};
+
 export default {
-  saveDemo
+  saveDemo,
+  getDemos
 };

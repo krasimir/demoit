@@ -211,6 +211,18 @@ svg {
   font-style: italic;
   opacity: 0.4;
 }
+.status-bar-tooltip {
+  position: absolute;
+  display: none;
+  top: 36px;
+  background: #cccccc;
+  font-size: 0.8em;
+  padding: 1em;
+  z-index: 9;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top: solid 1px #999;
+}
 /*************************** POPUP */
 .popup {
   position: fixed;
@@ -352,6 +364,22 @@ svg {
 }
 .popup .content {
   padding: 1em;
+}
+.popup .demos {
+  margin-bottom: 2em;
+  height: 250px;
+  overflow-y: auto;
+}
+.popup .demos a {
+  text-decoration: none;
+  display: block;
+  padding: 0.5em 0;
+}
+.popup .demos a:hover {
+  opacity: 0.5;
+}
+.popup .demos a > small {
+  opacity: 0.5;
 }
 /*************************** SPINNER */
 @keyframes bubble {

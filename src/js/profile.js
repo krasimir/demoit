@@ -1,12 +1,13 @@
 import { removeParam } from './utils';
 import el from './utils/element';
 import auth from './providers/auth';
+import profilePopUp from './popups/profilePopUp';
 
 export default function profile(state) {
   return {
     showProfile() {
       if (state.loggedIn()) {
-        
+        profilePopUp(state.getProfile(), () => state.getDemos());
       } else {
         auth.grandAccess(state.getDemoId());
       }
