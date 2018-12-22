@@ -16,7 +16,7 @@ const createStr = (str, n) => Array(n).join(str);
 export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile, editName) {
   const bar = el.withRelaxedCleanup('.status-bar');
   const layout = el.withRelaxedCleanup('.app .layout');
-  const tooltip = el('.status-bar-tooltip');
+  const tooltip = el.withRelaxedCleanup('.status-bar-tooltip');
   let visibility = !!state.getEditorSettings().statusBar;
 
   const enableTooltip = (button, text, position, positionValue) => {

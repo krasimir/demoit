@@ -223,6 +223,10 @@ svg {
   border-bottom-left-radius: 4px;
   border-top: solid 1px #999;
 }
+.dark .status-bar-tooltip {
+  background-color: #000;
+  border-color: #2b2b2b;
+}
 /*************************** POPUP */
 .popup {
   position: fixed;
