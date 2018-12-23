@@ -177,7 +177,7 @@ export default async function createState() {
     setEntryPoint(index) {
       state.files = state.files.map((file, i) => {
         if (i === index) {
-          file.entryPoint = true;
+          file.entryPoint = !file.entryPoint;
         } else {
           delete file.entryPoint;
         }

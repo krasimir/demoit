@@ -22,6 +22,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
   const enableTooltip = (button, text, position, positionValue) => {
     button.onMouseOver(() => {
       tooltip
+        .attr('class', 'status-bar-tooltip ' + position)
         .css('display', 'block')
         .css(position, positionValue + 'px')
         .content(text);
@@ -99,9 +100,9 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     });
 
     enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
-    enableTooltip(profileButton, 'Your profile', 'left', 0);
+    enableTooltip(profileButton, 'Your profile', 'left', 2);
     enableTooltip(settingsButton, 'Settings', 'right', 29);
-    enableTooltip(closeButton, 'Close status bar', 'right', 0);
+    enableTooltip(closeButton, 'Close status bar', 'right', 2);
 
     manageVisibility();
   }
