@@ -1,3 +1,5 @@
+const version = '4.12.2';
+
 self.addEventListener('install', event => {
   event.waitUntil(
     caches

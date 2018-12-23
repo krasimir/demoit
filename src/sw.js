@@ -1,3 +1,5 @@
+const version = '{version}';
+
 self.addEventListener('install', event => {
   event.waitUntil(
     caches

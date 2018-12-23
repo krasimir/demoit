@@ -1,6 +1,6 @@
 {
   "name": "demoit",
-  "version": "4.12.1",
+  "version": "4.12.2",
   "description": "A live coding tool",
   "main": "index.js",
   "repository": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist/*",
-    "copy-static": "cp ./src/index.html ./dist/index.html && cp ./src/sw.js ./dist/sw.js && cp -r ./src/resources ./dist && cp -r ./src/img ./dist && cp -r ./src/font ./dist",
+    "copy-sw": "node ./scripts/copy-sw.js",
+    "copy-static": "cp ./src/index.html ./dist/index.html && yarn copy-sw && cp -r ./src/resources ./dist && cp -r ./src/img ./dist && cp -r ./src/font ./dist",
     "produce-minified-js": "cat ./src/js-vendor/split.js ./.tmp/demoit.js | uglifyjs -c -m -o ./dist/demoit.js",
     "produce-js": "cat ./src/js-vendor/split.js ./.tmp/demoit.js > ./dist/demoit.js",
     "produce-css": "cat ./src/css/font.css ./src/css/codemirror.css ./src/css/styles.css ./src/css/light_theme.css ./src/css/dark_theme.css | uglifycss > ./dist/styles.css",
