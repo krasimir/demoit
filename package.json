@@ -1,6 +1,6 @@
 {
   "name": "demoit",
-  "version": "4.12.3",
+  "version": "4.13.0",
   "description": "A live coding tool",
   "main": "index.js",
   "repository": {
@@ -14,7 +14,7 @@
     "produce-minified-js": "cat ./src/js-vendor/split.js ./.tmp/demoit.js | uglifyjs -c -m -o ./dist/demoit.js",
     "produce-js": "cat ./src/js-vendor/split.js ./.tmp/demoit.js > ./dist/demoit.js",
     "produce-css": "cat ./src/css/font.css ./src/css/codemirror.css ./src/css/styles.css ./src/css/light_theme.css ./src/css/dark_theme.css | uglifycss > ./dist/styles.css",
-    "produce-editor-js": "cat ./src/js-vendor/codemirror.js ./src/js-vendor/javascript.js ./src/js-vendor/xml.js ./src/js-vendor/jsx.js ./src/js-vendor/mark-selection.js ./src/js-vendor/babel-6.26.0.js ./src/js-vendor/babel-polyfill@6.26.0.js ./src/js-vendor/babel-plugin-transform-es2015-modules-commonjs@6.26.2.js | uglifyjs -c -m -o ./dist/resources/editor.js",
+    "produce-editor-js": "cat ./src/js-vendor/codemirror.js ./src/js-vendor/javascript.js ./src/js-vendor/xml.js ./src/js-vendor/jsx.js ./src/js-vendor/mark-selection.js ./src/js-vendor/babel-6.26.0.min.js ./src/js-vendor/babel-polyfill@6.26.0.js ./src/js-vendor/babel-plugin-transform-es2015-modules-commonjs@6.26.2.js | uglifyjs -c -m -o ./dist/resources/editor.js",
     "dev": "yarn build && concurrently \"webpack\" \"onchange ./src/css/*.css -- yarn produce-css\" \"onchange ./.tmp/*.js -- yarn produce-js\" \"cpx ./src/index.html ./dist/ -w\" \"cpx ./src/sw.js ./dist/ -w\"",
     "build": "yarn clean && yarn copy-static && yarn produce-css && yarn produce-editor-js && webpack --config ./webpack.config.prod.js && yarn produce-minified-js",
     "zip": "node ./scripts/zipit.js",
