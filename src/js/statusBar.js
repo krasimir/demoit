@@ -99,8 +99,8 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       }
     });
 
-    enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
-    enableTooltip(profileButton, 'Your profile', 'left', 2);
+    forkButton && enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
+    profileButton && enableTooltip(profileButton, 'Your profile', 'left', 2);
     enableTooltip(settingsButton, 'Settings', 'right', 29);
     enableTooltip(closeButton, 'Close status bar', 'right', 2);
 
