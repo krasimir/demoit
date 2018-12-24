@@ -5,7 +5,7 @@ import {
   ensureDemoIdInPageURL
 } from './utils';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
-import { LAYOUTS } from './layout';
+import { DEFAULT_LAYOUT } from './layout';
 import API from './providers/api';
 import LS from './utils/localStorage';
 
@@ -20,7 +20,7 @@ const DEFAULT_STATE = {
   editor: {
     theme: 'light',
     statusBar: false,
-    layout: LAYOUTS.default
+    layout: DEFAULT_LAYOUT
   },
   dependencies: [],
   files: [ EMPTY_FILE ]

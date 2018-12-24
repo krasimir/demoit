@@ -1,6 +1,5 @@
 
 import settingsPopUp from './popups/settingsPopUp';
-import { LAYOUTS } from './layout';
 
 const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
 
@@ -16,7 +15,7 @@ export default function settings(state, render, executeCurrentFile) {
       }
     },
     function onLayoutUpdate(newLayout) {
-      state.updateLayout(LAYOUTS[newLayout]);
+      state.updateLayout(newLayout);
       render();
     },
     function onThemeUpdate(newTheme) {

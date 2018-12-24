@@ -72,7 +72,7 @@ export default async function editor(state) {
 
   await loadDependencies();
 
-  const codeMirrorEditor = codeMirror(
+  const codeMirrorEditor = window.__editor = codeMirror(
     container.empty(),
     state.getEditorSettings(),
     state.getCurrentFile().content,

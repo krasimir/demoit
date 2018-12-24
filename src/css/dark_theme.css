@@ -98,7 +98,15 @@
   text-decoration: none;
   color: #8eaf86; }
 
-.CodeMirror-selectedtext {
+.cm-s-dark .CodeMirror-selectedtext {
   color: #000 !important;
-  background: #d1d8e0 !important;
+  background: #fff !important;
+}
+.cm-s-dark .CodeMirror-selected {
+  background: #20303a !important;
+}
+.cm-s-dark .CodeMirror-markedText {
+  background: #386480;
+  box-shadow: 11px 6px 21px 0 rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 11px 6px 21px 0 rgba(0, 0, 0, 0.75);
 }

@@ -1,111 +1,28 @@
 import el from './utils/element';
 import setTheme from './utils/setTheme';
 
-export const LAYOUTS = {
-  'default': {
-    name: 'default',
-    direction: 'horizontal',
-    sizes: [30, 70],
-    elements: [
-      {
-        direction: 'vertical',
-        sizes: [50, 50],
-        elements: [ 'output', 'log' ]
-      },
-      'editor'
-    ]
-  },
-  'layoutLeft': {
-    name: 'layoutLeft',
-    direction: 'horizontal',
-    sizes: [70, 30],
-    elements: [
-      'editor',
-      {
-        direction: 'vertical',
-        sizes: [50, 50],
-        elements: [ 'output', 'log' ]
-      }
-    ]
-  },
-  'layoutTop': {
-    name: 'layoutTop',
-    direction: 'vertical',
-    sizes: [30, 70],
-    elements: [
-      {
-        direction: 'horizontal',
-        sizes: [50, 50],
-        elements: [ 'output', 'log' ]
-      },
-      'editor'
-    ]
-  },
-  'layoutBottom': {
-    name: 'layoutBottom',
-    direction: 'vertical',
-    sizes: [70, 30],
-    elements: [
-      'editor',
-      {
-        direction: 'horizontal',
-        sizes: [50, 50],
-        elements: [ 'output', 'log' ]
-      }
-    ]
-  },
-  'layoutEC': {
-    name: 'layoutEC',
-    direction: 'horizontal',
-    sizes: [70, 30],
-    elements: [
-      'editor',
-      'log'
-    ]
-  },
-  'layoutEO': {
-    name: 'layoutEO',
-    direction: 'horizontal',
-    sizes: [70, 30],
-    elements: [
-      'editor',
-      'output'
-    ]
-  },
-  'layoutEOBottom': {
-    name: 'layoutEOBottom',
-    direction: 'vertical',
-    sizes: [70, 30],
-    elements: [
-      'editor',
-      'output'
-    ]
-  },
-  'layoutECBottom': {
-    name: 'layoutECBottom',
-    direction: 'vertical',
-    sizes: [70, 30],
-    elements: [
-      'editor',
-      'log'
-    ]
-  },
-  'layoutE': {
-    name: 'layoutE',
-    direction: 'horizontal',
-    sizes: [100],
-    elements: [
-      'editor'
-    ]
-  },
-  'layoutO': {
-    name: 'layoutO',
-    direction: 'horizontal',
-    sizes: [100],
-    elements: [
-      'output'
-    ]
-  }
+const LAYOUT_BLOCKS = ['editor', 'HTML', 'console'];
+export const DEFAULT_LAYOUT = {
+  elements: [
+    {
+      name: 'editor',
+      elements: []
+    },
+    {
+      elements: [
+        {
+          name: 'HTML',
+          elements: []
+        },
+        {
+          name: 'console',
+          elements: []
+        }
+      ],
+      direction: 'horizontal'
+    }
+  ],
+  direction: 'vertical'
 };
 
 export default state => {
@@ -113,7 +30,7 @@ export default state => {
 
   setTheme(state.getEditorSettings().theme);
 
-  const layout = state.getEditorSettings().layout || LAYOUTS.default;
+  const layout = state.getEditorSettings().layout || DEFAULT_LAYOUT;
   const output = el.fromTemplate('#template-output');
   const log = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');

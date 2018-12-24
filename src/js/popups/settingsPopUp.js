@@ -1,6 +1,6 @@
+import Layout from 'layout-architect';
 import createPopup from './popup';
 
-const ENTER_KEY = 13;
 const generateIframe = url => `<iframe src="${ url }" style="display: block; width:100%; height: 400px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin allow-top-navigation-by-user-activation"></iframe>`;
 
 export default function settingsPopUp(storageContent, { layout, theme }, dependenciesStr, onDepsUpdated, onLayoutUpdate, onThemeUpdate) {
@@ -14,18 +14,7 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
     content: [
       `
       <p>Layout:</p>
-      <select data-export="layoutPicker">
-        <option value="default">default (HTML/console | editor)</option>
-        <option value="layoutLeft">editor | HTML/console</option>
-        <option value="layoutTop">HTML|console / editor</option>
-        <option value="layoutBottom">editor / HTML|console</option>
-        <option value="layoutEC">editor | console</option>
-        <option value="layoutEO">editor | HTML</option>
-        <option value="layoutECBottom">editor / console</option>
-        <option value="layoutEOBottom">editor / HTML</option>
-        <option value="layoutO">only HTML</option>
-        <option value="layoutE">only editor</option>
-      </select>
+      <div data-export="layoutArchitectContainer"></div>
       <p class="mt1">Theme:</p>
       <select data-export="themePicker">
         <option value="light">light</option>
@@ -59,17 +48,14 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
       stateTextarea,
       dependenciesTextarea,
       saveDependenciesButton,
-      layoutPicker,
       themePicker,
-      iframeTextarea
+      iframeTextarea,
+      layoutArchitectContainer
     }) {
       // general settings
-      if (layoutPicker && themePicker) {
-        layoutPicker.onChange(newLayout => {
-          onLayoutUpdate(newLayout);
-          closePopup();
-        });
-        layoutPicker.e.value = layout.name || 'default';
+      if (layoutArchitectContainer && themePicker) {
+        console.log(layout);
+        Layout(layoutArchitectContainer.e, ['editor', 'output', 'console']);
         themePicker.onChange(newTheme => {
           onThemeUpdate(newTheme);
           closePopup();
