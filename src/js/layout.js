@@ -39,6 +39,9 @@ function validateLayout(item) {
   }
   return item;
 }
+function generateSizes(elements) {
+  return elements.map(() => 100 / elements.length);
+}
 
 export default state => {
   const container = el.withRelaxedCleanup('.app .layout');
@@ -66,16 +69,18 @@ export default state => {
     });
 
     splitFuncs.push(() => ({
+      b: block,
       split: Split(normalizedElements.map(({ e }) => e), {
-        sizes: sizes || [50, 50],
+        sizes: sizes || generateSizes(normalizedElements),
         gutterSize: 2,
         direction,
         onDragEnd: () => {
-          splits.forEach(({ split }) => element.sizes = split.getSizes());
+          splits.forEach(({ b, split }) => {
+            b.sizes = split.getSizes();
+          });
           state.updateLayout(layout);
         }
-      }),
-      sizes
+      })
     }));
 
     if (direction === 'horizontal') {
@@ -85,6 +90,8 @@ export default state => {
     return normalizedElements;
   }
 
-  container.empty().appendChildren(build(layout));
+  container.empty().appendChildren(build({
+    elements: [layout]
+  }));
   setTimeout(() => (splits = splitFuncs.map(f => f())), 1);
 }
