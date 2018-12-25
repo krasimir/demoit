@@ -2194,10 +2194,10 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
 
-layout-architect@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/layout-architect/-/layout-architect-1.1.2.tgz#27c4452e9d6fafefab5fb1066d955dd4edbefe1d"
-  integrity sha512-MJ2wVko4VhxfT/TRxeY4RhquAxoxfHdJqsG7Fe3PAI+qH2gHmsuim7PublsKP5b/yr+qjrOS6wPitKdAPjYGvA==
+layout-architect@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/layout-architect/-/layout-architect-3.0.0.tgz#1f7590491c2c3b835c9be3c8c9589d08d7ffd97e"
+  integrity sha512-ewzsnpqX1pYZ9gj7ZkMeWXtTQUNnI8pcMcazlFXMsmthmr8C3x9uoh+23J3ZWPuSdAcEH5Nz3SHO29CiP3NUYg==
 
 lazystream@~0.1.0:
   version "0.1.0"

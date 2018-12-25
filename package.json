@@ -50,6 +50,6 @@
   },
   "dependencies": {
     "hashids": "1.2.2",
-    "layout-architect": "1.1.2"
+    "layout-architect": "3.0.0"
   }
 }

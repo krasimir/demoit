@@ -32,6 +32,9 @@ svg {
 .mt1 {
   margin-top: 1em !important;
 }
+.mb1 {
+  margin-bottom: 1em !important;
+}
 /*************************** APP main */
 .app {
   position: fixed;

@@ -1,7 +1,7 @@
 import el from './utils/element';
 import setTheme from './utils/setTheme';
 
-const LAYOUT_BLOCKS = ['editor', 'HTML', 'console'];
+export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console'];
 export const DEFAULT_LAYOUT = {
   elements: [
     {
@@ -25,42 +25,53 @@ export const DEFAULT_LAYOUT = {
   direction: 'vertical'
 };
 
+function validateLayout(item) {
+  if (typeof item === 'string') {
+    if (item === 'output') item = 'HTML';
+    if (item === 'log') item = 'console';
+    return {
+      name: item,
+      elements: []
+    }
+  }
+  if (item.elements.length > 0) {
+    item.elements.forEach((i, index) => item.elements[index] = validateLayout(i));
+  }
+  return item;
+}
+
 export default state => {
   const container = el.withRelaxedCleanup('.app .layout');
 
   setTheme(state.getEditorSettings().theme);
 
-  const layout = state.getEditorSettings().layout || DEFAULT_LAYOUT;
-  const output = el.fromTemplate('#template-output');
-  const log = el.fromTemplate('#template-console');
+  const layout = validateLayout(state.getEditorSettings().layout || DEFAULT_LAYOUT);
+  const HTML = el.fromTemplate('#template-html');
+  const consoleE = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
-  const elementsMap = { output, log, editor };
+  const elementsMap = { HTML, console: consoleE, editor };
 
   const splitFuncs = [];
   let splits;
-  const build = ({ direction, elements, sizes }) => {
-    const normalizedElements = elements.map(element => {
-      if (typeof element === 'object') {
-        const wrapper = el.wrap(build(element));
+  const build = block => {
+    const { direction, elements, sizes } = block;
+    const normalizedElements = elements.map(item => {
+      if (item.elements.length > 0) {
+        const wrapper = el.wrap(build(item));
 
         wrapper.attr('class', 'editor-section'); 
         return wrapper;
       }
-      return elementsMap[element];
+      return elementsMap[item.name];
     });
 
     splitFuncs.push(() => ({
       split: Split(normalizedElements.map(({ e }) => e), {
-        sizes,
+        sizes: sizes || [50, 50],
         gutterSize: 2,
         direction,
         onDragEnd: () => {
-          splits.forEach(({ split, sizes }) => {
-            const newSizes = split.getSizes();
-  
-            sizes[0] = newSizes[0];
-            sizes[1] = newSizes[1];
-          });
+          splits.forEach(({ split }) => element.sizes = split.getSizes());
           state.updateLayout(layout);
         }
       }),
@@ -68,7 +79,7 @@ export default state => {
     }));
 
     if (direction === 'horizontal') {
-      normalizedElements.map(element => element.css('float', 'left'));
+      normalizedElements.map(el => el.css('float', 'left'));
     }
 
     return normalizedElements;

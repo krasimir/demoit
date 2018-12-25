@@ -64,8 +64,6 @@ createState().then(state => {
         editNamePopUp(state.name(), newName => state.name(newName));
       }
     );
-
-    setTimeout(showSettings, 400);
   };
   render();
 });

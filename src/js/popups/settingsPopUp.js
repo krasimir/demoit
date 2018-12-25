@@ -1,9 +1,10 @@
 import Layout from 'layout-architect';
 import createPopup from './popup';
+import { LAYOUT_BLOCKS } from '../layout';
 
 const generateIframe = url => `<iframe src="${ url }" style="display: block; width:100%; height: 400px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin allow-top-navigation-by-user-activation"></iframe>`;
 
-export default function settingsPopUp(storageContent, { layout, theme }, dependenciesStr, onDepsUpdated, onLayoutUpdate, onThemeUpdate) {
+export default function settingsPopUp(storageContent, { layout, theme }, dependenciesStr, onDepsUpdated, onGeneralUpdate) {
   return new Promise(done => createPopup({
     buttons: [
       'General',
@@ -13,13 +14,16 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
     ],
     content: [
       `
-      <p>Layout:</p>
-      <div data-export="layoutArchitectContainer"></div>
-      <p class="mt1">Theme:</p>
-      <select data-export="themePicker">
-        <option value="light">light</option>
-        <option value="dark">dark</option>
-      </select>
+        <p>
+          Theme:
+          <select data-export="themePicker">
+            <option value="light">light</option>
+            <option value="dark">dark</option>
+          </select>
+        </p>
+        <p class="mt1">Layout:</p>
+        <div class="mb1" data-export="layoutArchitectContainer"></div>
+        <button class="save" data-export="saveGeneral">Save</button>
       `,
       `
         <textarea class="dependencies-list" data-export="dependenciesTextarea"></textarea>
@@ -45,6 +49,7 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
     },
     onRender({
       closePopup,
+      saveGeneral,
       stateTextarea,
       dependenciesTextarea,
       saveDependenciesButton,
@@ -54,13 +59,12 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
     }) {
       // general settings
       if (layoutArchitectContainer && themePicker) {
-        console.log(layout);
-        Layout(layoutArchitectContainer.e, ['editor', 'output', 'console']);
-        themePicker.onChange(newTheme => {
-          onThemeUpdate(newTheme);
+        const la = Layout(layoutArchitectContainer.e, LAYOUT_BLOCKS, layout);
+        themePicker.e.value = theme || 'light';
+        saveGeneral.onClick(() => {
+          onGeneralUpdate(themePicker.e.value, la.get());
           closePopup();
         });
-        themePicker.e.value = theme || 'light';
       }
       // share
       if (stateTextarea) {
