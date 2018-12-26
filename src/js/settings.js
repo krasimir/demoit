@@ -1,11 +1,11 @@
-
 import settingsPopUp from './popups/settingsPopUp';
+import download from './download';
 
 const filterDeps = deps => deps.filter(dep => (dep !== '' && dep !== '\n'));
 
 export default function settings(state, render, executeCurrentFile) {
-  const showSettingsPopUp = () => settingsPopUp(
-    JSON.stringify(state.dump(), null, 2),
+  const showSettingsPopUp = tab => settingsPopUp(
+    download(state),
     state.getEditorSettings(),
     filterDeps(state.getDependencies()).join('\n'),
     function onDepsUpdated(newDeps) {
@@ -18,7 +18,8 @@ export default function settings(state, render, executeCurrentFile) {
       state.updateTheme(newTheme);
       state.updateLayout(newLayout);
       render();
-    }
+    },
+    tab
   );
 
   return showSettingsPopUp;

@@ -1,5 +1,5 @@
 import el from './utils/element';
-import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, DOT_CIRCLE, NO_USER, FORK, FILE_ICON } from './utils/icons';
+import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, NO_USER, FORK, SHARE } from './utils/icons';
 import { isProd } from './utils';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '6px';
@@ -50,6 +50,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     });
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
     items.push(createStatusBarLink('nameButton', state.name() ? state.name() : 'unnamed', 'name'));
+    items.push(createStatusBarLink('shareButton', SHARE(14)));
     items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     items.push('</div>');
@@ -62,8 +63,16 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       }
       return index;
     }, 0);
-
-    const { newFileButton, closeButton, settingsButton, profileButton, forkButton, nameButton } = bar.namedExports();
+    
+    const {
+      newFileButton,
+      closeButton,
+      settingsButton,
+      profileButton,
+      forkButton,
+      nameButton,
+      shareButton
+    } = bar.namedExports();
     const manageVisibility = () => {
       const { buttons } = bar.namedExports();
 
@@ -76,6 +85,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         '1fr',
         '30px',
         '30px',
+        '30px',
       ].filter(value => value).join(' '));
       bar.css('height', visibility ? STATUS_BAR_VISIBLE_HEIGHT : STATUS_BAR_HIDDEN_HEIGHT);
       layout.css('height', visibility ? `calc(100% - ${ STATUS_BAR_VISIBLE_HEIGHT })` : `calc(100% - ${ STATUS_BAR_HIDDEN_HEIGHT })`);
@@ -83,7 +93,8 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     }
 
     newFileButton && newFileButton.onClick(newFile);
-    settingsButton && settingsButton.onClick(showSettings);
+    shareButton && shareButton.onClick(() => showSettings(2));
+    settingsButton && settingsButton.onClick(() => showSettings());
     profileButton && profileButton.onClick(showProfile);
     nameButton && nameButton.onClick(editName);
     forkButton && forkButton.onClick(() => state.fork());
@@ -101,6 +112,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
     forkButton && enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
     profileButton && enableTooltip(profileButton, 'Your profile', 'left', 2);
+    enableTooltip(shareButton, 'Embed and save locally', 'right', 60);
     enableTooltip(settingsButton, 'Settings', 'right', 29);
     enableTooltip(closeButton, 'Close status bar', 'right', 2);
 

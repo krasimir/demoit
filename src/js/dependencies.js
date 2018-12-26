@@ -2,6 +2,7 @@ const LOADED_FILES_CACHE = {};
 
 const addJSFile = function (path, done) {
   if (LOADED_FILES_CACHE[path]) return done();
+  LOADED_FILES_CACHE[path] = false;
 
   const node = document.createElement('script');
 
@@ -14,6 +15,7 @@ const addJSFile = function (path, done) {
 }
 const addCSSFile = function (path, done) {
   if (LOADED_FILES_CACHE[path]) return done();
+  LOADED_FILES_CACHE[path] = false;
 
   const node = document.createElement('link');
 
@@ -26,7 +28,7 @@ const addCSSFile = function (path, done) {
   });
   document.body.appendChild(node);
 }
-const load = async function (dependencies, onProgress) {
+export const load = async function (dependencies, onProgress = () => {}) {
   return new Promise(done => {
     (function load(index) {
       if (index === dependencies.length) {
@@ -51,7 +53,9 @@ const load = async function (dependencies, onProgress) {
     })(0);
   });
 }
-
+export const cache = function () {
+  return LOADED_FILES_CACHE;
+}
 export default async function dependencies(state, onProgress) {
   var dependencies = ['./resources/editor.js'];
 

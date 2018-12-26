@@ -335,6 +335,9 @@ svg {
   text-transform: uppercase;
   font-weight: bold;
 }
+.popup button:disabled {
+  opacity: 0.3;
+}
 .popup button:hover {
   background: #313131;
 }

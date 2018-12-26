@@ -1,11 +1,19 @@
 import Layout from 'layout-architect';
 import createPopup from './popup';
-import { LAYOUT_BLOCKS } from '../layout';
+import { LAYOUT_BLOCKS, DEFAULT_LAYOUT } from '../layout';
 
 const generateIframe = url => `<iframe src="${ url }" style="display: block; width:100%; height: 400px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin allow-top-navigation-by-user-activation"></iframe>`;
 
-export default function settingsPopUp(storageContent, { layout, theme }, dependenciesStr, onDepsUpdated, onGeneralUpdate) {
+export default function settingsPopUp(
+  enableDownload,
+  { layout, theme },
+  dependenciesStr,
+  onDepsUpdated,
+  onGeneralUpdate,
+  defaultTab
+) {
   return new Promise(done => createPopup({
+    defaultTab: defaultTab || 0,
     buttons: [
       'General',
       'Dependencies',
@@ -33,9 +41,8 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
       `
         <h2>Embed</h2>
         <textarea data-export="iframeTextarea">${ generateIframe(window.location.href) }</textarea>
-        <h2>Working offline</h2>
-        <p>Download <a href="https://github.com/krasimir/demoit/raw/master/demoit.zip">Demoit.zip</a>. Unzip. Get the JSON below and save it in a <i>mycode.json</i> file. Then open Demoit with "?state=mycode.json". It will automatically pick the data from the json.</p>
-        <textarea data-export="stateTextarea"></textarea>
+        <h2>Download</h2>
+        <button class="save" data-export="downloadButton">Download zip file</button>
       `,
       `
         <p>
@@ -50,29 +57,28 @@ export default function settingsPopUp(storageContent, { layout, theme }, depende
     onRender({
       closePopup,
       saveGeneral,
-      stateTextarea,
       dependenciesTextarea,
       saveDependenciesButton,
       themePicker,
       iframeTextarea,
-      layoutArchitectContainer
+      layoutArchitectContainer,
+      downloadButton
     }) {
       // general settings
       if (layoutArchitectContainer && themePicker) {
         const la = Layout(layoutArchitectContainer.e, LAYOUT_BLOCKS, layout);
         themePicker.e.value = theme || 'light';
         saveGeneral.onClick(() => {
-          onGeneralUpdate(themePicker.e.value, la.get());
+          onGeneralUpdate(themePicker.e.value, la.get() || DEFAULT_LAYOUT);
           closePopup();
         });
       }
       // share
-      if (stateTextarea) {
-        stateTextarea.prop('value', storageContent);
-        stateTextarea.selectOnClick();
-      }
       if (iframeTextarea) {
         iframeTextarea.selectOnClick();
+      }
+      if (downloadButton) {
+        enableDownload(downloadButton);
       }
       // managing dependencies
       if (dependenciesTextarea && saveDependenciesButton) {        
