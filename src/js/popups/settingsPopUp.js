@@ -1,6 +1,7 @@
 import Layout from 'layout-architect';
 import createPopup from './popup';
 import { LAYOUT_BLOCKS, DEFAULT_LAYOUT } from '../layout';
+import { isProd } from '../utils';
 
 const generateIframe = url => `<iframe src="${ url }" style="display: block; width:100%; height: 400px; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin allow-top-navigation-by-user-activation"></iframe>`;
 
@@ -41,8 +42,9 @@ export default function settingsPopUp(
       `
         <h2>Embed</h2>
         <textarea data-export="iframeTextarea">${ generateIframe(window.location.href) }</textarea>
-        <h2>Download</h2>
-        <button class="save" data-export="downloadButton">Download zip file</button>
+        ${ isProd ? `
+          <h2>Download</h2>
+          <button class="save" data-export="downloadButton">Download zip file</button>` : '' }
       `,
       `
         <p>
