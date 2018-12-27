@@ -9,7 +9,6 @@ self.addEventListener('install', event => {
           '/static/styles.css',
           '/static/script.js',
           '/static/demoit/styles.css',
-          '/static/demoit/demoit.js',
           '/e/resources/editor.js'
         ])
       )

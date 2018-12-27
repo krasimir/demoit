@@ -1,4 +1,4 @@
-const version = '4.15.1';
+const version = '4.15.2';
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -9,7 +9,6 @@ self.addEventListener('install', event => {
           '/static/styles.css',
           '/static/script.js',
           '/static/demoit/styles.css',
-          '/static/demoit/demoit.js',
           '/e/resources/editor.js'
         ])
       )
