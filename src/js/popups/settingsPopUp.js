@@ -43,7 +43,8 @@ export default function settingsPopUp(
         <h2>Embed</h2>
         <textarea data-export="iframeTextarea">${ generateIframe(window.location.href) }</textarea>
         ${ isProd ? `
-          <h2>Download</h2>
+          <h2 class="mt1">Download/Offline mode</h2>
+          <p>Demo.zip archive contains all the files that you need to run the app locally. Including your dependencies.</p>
           <button class="save" data-export="downloadButton">Download zip file</button>` : '' }
       `,
       `

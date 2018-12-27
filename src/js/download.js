@@ -28,11 +28,26 @@ export default function download(state) {
     try {
       const remoteDeps = await fetchRemoteDependencies();
       
-      await loadDependencies(['./resources/jszip.min.js']);
+      await loadDependencies(['./resources/jszip.min.js', './resources/FileSaver.min.js']);
       
       const zip = await JSZip.loadAsync((await fetchRawFile(ZIP_FILE, true)).content);
 
-      zip.forEach(r => console.log(r));
+      button
+        .prop('disabled', false)
+        .prop('innerHTML', 'Download demoit.zip');
+      button.onClick(async () => {
+        const indexFile = await zip.file('index.html').async("string");
+        const newState = JSON.parse(JSON.stringify(state.dump()));
+
+        newState.dependencies = remoteDeps.map(({ content, url }) => {
+          const fileName = './resources/' + url.split('/').pop();
+
+          zip.file(fileName, content);
+          return fileName;
+        });
+        zip.file('index.html', indexFile.replace('var state = null;', `var state = ${ JSON.stringify(newState) };`));
+        saveAs(await zip.generateAsync({ type: 'blob' }), 'demoit.zip');
+      });
       
 
     } catch(error) {
