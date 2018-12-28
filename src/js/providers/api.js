@@ -29,12 +29,9 @@ const saveDemo = async function (state, token) {
   }
 };
 
-const getDemos = async function (token) {
+const getDemos = async function (id) {
   try {
-    const response = await fetch(GET_DEMOS_URL, {
-      headers: { token }
-    });
-
+    const response = await fetch(GET_DEMOS_URL + '/' + id);
     const result = await response.json();
 
     if (result.error) {

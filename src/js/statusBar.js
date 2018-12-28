@@ -111,7 +111,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     });
 
     forkButton && enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
-    profileButton && enableTooltip(profileButton, 'Your profile', 'left', 2);
+    profileButton && enableTooltip(profileButton, state.loggedIn() ? 'Your profile' : 'Log in', 'left', 2);
     enableTooltip(shareButton, 'Embed or save locally', 'right', 60);
     enableTooltip(settingsButton, 'Settings', 'right', 29);
     enableTooltip(closeButton, 'Close status bar', 'right', 2);

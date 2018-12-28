@@ -209,7 +209,7 @@ export default async function createState() {
       return profile;
     },
     getDemos() {
-      return API.getDemos(profile.token);
+      return API.getDemos(profile.id);
     }
   }
 

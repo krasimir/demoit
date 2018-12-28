@@ -13,7 +13,7 @@ export default function profilePopUp(profile, getDemos) {
     async onRender({ logoutButton, demosContainer, closePopup }) {
       logoutButton.onClick(() => window.location.href = '/logout');
 
-      const demos = await getDemos();
+      const { demos } = await getDemos();
 
       if (demos.length === 0) {
         demosContainer.content('You have no demos.');
