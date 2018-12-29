@@ -1,5 +1,5 @@
 import el from './utils/element';
-import { isProd } from './utils';
+import { IS_PROD } from './constants';
 import layout from './layout';
 import editor from './editor';
 import createState from './state';
@@ -9,9 +9,10 @@ import editNamePopUp from './popups/editNamePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import profile from './profile';
+import story from './story';
 
 createState().then(state => {
-  async function render() {      
+  async function render() {
     layout(state);
     
     const executeCurrentFile = await editor(state);
@@ -25,6 +26,8 @@ createState().then(state => {
     );
 
     const showProfile = profile(state).showProfile;
+
+    story(state, () => executeCurrentFile());
   
     statusBar(
       state,
@@ -69,7 +72,7 @@ createState().then(state => {
 });
 
 window.addEventListener('load', () => {
-  if (!('serviceWorker' in navigator) || !isProd()) {
+  if (!('serviceWorker' in navigator) || !IS_PROD) {
     return;
   }
 
@@ -77,4 +80,4 @@ window.addEventListener('load', () => {
     () => {},
     err => console.error('SW registration failed!')
   )
-})
+});

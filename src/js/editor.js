@@ -3,8 +3,11 @@ import executeCode from './execute';
 import createConsole from './console';
 import output from './output';
 import dependencies from './dependencies';
+import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 
 function codeMirror(container, editorSettings, value, onSave, onChange, showFile) {
+  defineCodeMirrorCommands(CodeMirror);
+
   const editor = CodeMirror(container.e, {
     value: value || '',
     mode:  'jsx',
@@ -40,7 +43,11 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     'Ctrl-6': () => showFile(5),
     'Ctrl-7': () => showFile(6),
     'Ctrl-8': () => showFile(7),
-    'Ctrl-9': () => showFile(8)
+    'Ctrl-9': () => showFile(8),
+    "Cmd-D": "selectNextOccurrence",
+    "Ctrl-D": "selectNextOccurrence",
+    "Cmd-/": "toggleCommentIndented",
+    "Ctrl-/": "toggleCommentIndented",
   });
   CodeMirror.normalizeKeyMap();
   editor.focus();

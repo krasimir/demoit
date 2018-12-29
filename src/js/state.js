@@ -1,9 +1,9 @@
 import {
   getParam,
   readFromJSONFile,
-  isProd,
   ensureDemoIdInPageURL
 } from './utils';
+import { IS_PROD } from './constants';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
 import { DEFAULT_LAYOUT } from './layout';
 import API from './providers/api';
@@ -23,7 +23,8 @@ const DEFAULT_STATE = {
     layout: DEFAULT_LAYOUT
   },
   dependencies: [],
-  files: [ EMPTY_FILE ]
+  files: [ EMPTY_FILE ],
+  story: []
 };
 
 const resolveActiveFileIndex = function (files) {
@@ -64,7 +65,7 @@ export default async function createState() {
 
   const onChange = () => onChangeListeners.forEach(c => c());
   const persist = (fork = false, done = () => {}) => {
-    if (isProd() && api.loggedIn()) {
+    if (IS_PROD && api.loggedIn()) {
       if (fork) { delete state.owner; }
       if (state.owner && state.owner !== profile.id) { return; }
       API.saveDemo(state, profile.token).then(demoId => {
@@ -98,10 +99,18 @@ export default async function createState() {
       return activeFileIndex === idx;
     },
     getCurrentFile() {
-      return this.getFiles()[activeFileIndex];
+      if (this.getFiles()[activeFileIndex]) {
+        return this.getFiles()[activeFileIndex];
+      } else {
+        return this.setCurrentIndex(0);
+      }
     },
     getFiles() {
       return state.files;
+    },
+    setFiles(files) {
+      state.files = files;
+      onChange();
     },
     name(value) {
       if (typeof value !== 'undefined') {
@@ -210,6 +219,16 @@ export default async function createState() {
     },
     getDemos() {
       return API.getDemos(profile.id);
+    },
+    // story
+    story(history) {
+      if (typeof history !== 'undefined') {
+        state.story = history;
+        onChange();
+        persist();
+        return;
+      }
+      return state.story;
     }
   }
 

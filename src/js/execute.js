@@ -37,6 +37,7 @@ export default function execute(index, allFiles) {
         module.func(require, module.exports, true);
         return module.exports;
       };
+
       modules[index].func(require, modules[index].exports, false);
     `;
     

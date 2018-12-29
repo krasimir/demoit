@@ -30,7 +30,7 @@ export default function logger() {
     const originalClear = console.clear;
 
     console.error = function (error) {
-      add(error.toString() + error.stack);
+      add(error.stack);
       originalError.apply(console, arguments);
     };
     console.log = function (...args) {

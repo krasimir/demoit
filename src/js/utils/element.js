@@ -3,8 +3,10 @@ var createdElements = [];
 export default function el(selector, parent = document, fallbackToEmpty = false, relaxedCleanup = false) {
   const removeListenersCallbacks = [];
   var e = typeof selector === 'string' ? parent.querySelector(selector) : selector;
+  var found = true;
   
   if (!e) {
+    found = false;
     if (!fallbackToEmpty) {
       throw new Error(`Ops! There is no DOM element matching "${ selector }" selector.`);
     } else {
@@ -14,10 +16,14 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
 
   const api = {
     e,
+    found() {
+      return found;
+    },
     content(str) {
       if (!str) {
         return e.innerHTML;
       }
+      removeListenersCallbacks.forEach(c => c());
       e.innerHTML = str;
       return this.exports();
     },

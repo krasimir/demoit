@@ -1,6 +1,6 @@
 import el from './utils/element';
 import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, NO_USER, FORK, SHARE } from './utils/icons';
-import { isProd } from './utils';
+import { IS_PROD } from './constants';
 
 const STATUS_BAR_HIDDEN_HEIGHT = '6px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
@@ -37,7 +37,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     const files = state.getFiles();
 
     items.push('<div data-export="buttons">');
-    isProd() && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
+    IS_PROD && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
     state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
     files.forEach(({ filename, entryPoint }, idx) => {
       const isCurrentFile = state.isCurrentIndex(idx);
@@ -78,7 +78,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
       buttons.css('display', visibility ? 'grid' : 'none');
       buttons.css('gridTemplateColumns', [
-        isProd() ? '34px' : false,
+        IS_PROD ? '34px' : false,
         state.isForkable() ? '30px' : false,
         createStr('minmax(auto, 135px) ', files.length + 1),
         '30px',
