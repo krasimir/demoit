@@ -1411,6 +1411,11 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
+diff-match-patch@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.4.tgz#6ac4b55237463761c4daf0dc603eb869124744b1"
+  integrity sha512-Uv3SW8bmH9nAtHKaKSanOQmj2DnlH65fUpcrMdfdaOxUG02QQ4YGZ8AE7kKOMisF7UqvOlGKVYWRvezdncW9lg==
+
 diffie-hellman@^5.0.0:
   version "5.0.3"
   resolved "http://registry.npmjs.org/diffie-hellman/-/diffie-hellman-5.0.3.tgz#40e8ee98f55a2149607146921c63e1ae5f3d2875"
@@ -1748,6 +1753,13 @@ get-stream@^3.0.0:
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
+
+gitfred@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/gitfred/-/gitfred-2.0.0.tgz#e3112941916d1381e5aa576f62136908d2f04851"
+  integrity sha512-cqmEZK8ZCaSdxI2LyZlvLgrtV8a4Mmpzj5Dq9UA8fwOUhaxifncOaMqtWgJiIriQGdnq0S5kMRZ4aRWMFaPQPg==
+  dependencies:
+    diff-match-patch "1.0.4"
 
 glob-base@^0.3.0:
   version "0.3.0"

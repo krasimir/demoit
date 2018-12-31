@@ -39,13 +39,14 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     items.push('<div data-export="buttons">');
     IS_PROD && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
     state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
-    files.forEach(({ filename, entryPoint }, idx) => {
-      const isCurrentFile = state.isCurrentIndex(idx);
+    Object.keys(files).forEach(filename => {
+      const file = files[filename];
+      const isCurrentFile = state.isCurrentFile(file)
 
       items.push(createStatusBarLink(
         'file',
         `<span>${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
-        `file${ isCurrentFile ? ' active' : '' }${ entryPoint ? ' entry' : ''}`
+        `file${ isCurrentFile ? ' active' : '' }${ file.en ? ' entry' : ''}`
       ))
     });
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
@@ -55,14 +56,12 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
     items.push('</div>');
 
-    bar.content(items.join('')).reduce((index, button) => {
+    bar.content(items.join('')).forEach(button => {
       if (button.attr('data-export') === 'file') {
         button.onClick(() => showFile(index));
         button.onRightClick(() => editFile(index));
-        return index + 1;
       }
-      return index;
-    }, 0);
+    });
     
     const {
       newFileButton,
@@ -80,7 +79,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       buttons.css('gridTemplateColumns', [
         IS_PROD ? '34px' : false,
         state.isForkable() ? '30px' : false,
-        createStr('minmax(auto, 135px) ', files.length + 1),
+        createStr('minmax(auto, 135px) ', state.getNumOfFiles() + 1),
         '30px',
         '1fr',
         '30px',

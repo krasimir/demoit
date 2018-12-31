@@ -49,6 +49,7 @@
     "zip-folder": "1.0.0"
   },
   "dependencies": {
+    "gitfred": "2.0.0",
     "hashids": "1.2.2",
     "jszip": "3.1.5",
     "layout-architect": "3.0.0"

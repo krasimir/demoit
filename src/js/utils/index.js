@@ -74,3 +74,22 @@ export const ensureDemoIdInPageURL = demoId => {
 
 	history.pushState(null, null, `/e/${ demoId }${ hash ? '#' + hash : '' }`);
 }
+
+export const ensureUniqueFileName = (filename) => {
+	const tmp = filename.split('.');
+
+	if (tmp.length === 1) {
+		return tmp[0] + '.1';
+	} else if (tmp.length === 2) {
+		return `${ tmp[0] }.1.${ tmp[1] }`;
+	} else {
+		const ext = tmp.pop();
+		const num = tmp.pop();
+
+		if (isNaN(parseInt(num))) {
+			return `${ tmp.join('.') }.${ num }.1.${ ext }`;
+		} else {
+			return `${ tmp.join('.') }.${ (parseInt(num)+1) }.${ ext }`;
+		}
+	}
+}

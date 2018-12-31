@@ -27,12 +27,12 @@ createState().then(state => {
 
     const showProfile = profile(state).showProfile;
 
-    story(state, () => executeCurrentFile());
+    // story(state, () => executeCurrentFile());
   
     statusBar(
       state,
-      function showFile(index) {
-        state.setCurrentIndex(index);
+      function showFile(filename) {
+        state.setCurrentFile(filename);
         executeCurrentFile();
       },
       async function newFile() {
@@ -43,12 +43,12 @@ createState().then(state => {
           executeCurrentFile();
         }
       },
-      async function editFile(index) {
+      async function editFile(filename) {
         editFilePopUp(
-          state.getFileAt(index).filename,
-          state.getFiles().length,
+          filename,
+          getNumOfFiles,
           function onDelete() {
-            state.deleteFile(index);
+            state.deleteFile(filename);
             executeCurrentFile();
           },
           function onRename(newName) {
@@ -56,7 +56,7 @@ createState().then(state => {
             executeCurrentFile();
           },
           function onSetAsEntryPoint() {
-            state.setEntryPoint(index)
+            state.setEntryPoint(filename)
             executeCurrentFile();
           }
         );

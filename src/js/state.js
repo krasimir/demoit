@@ -1,7 +1,9 @@
+import gitfred from 'gitfred';
 import {
   getParam,
   readFromJSONFile,
-  ensureDemoIdInPageURL
+  ensureDemoIdInPageURL,
+  ensureUniqueFileName
 } from './utils';
 import { IS_PROD } from './constants';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
@@ -9,11 +11,7 @@ import { DEFAULT_LAYOUT } from './layout';
 import API from './providers/api';
 import LS from './utils/localStorage';
 
-const EMPTY_FILE = {
-  content: '',
-  filename: 'untitled.js',
-  editing: false
-};
+const git = gitfred();
 const LS_PROFILE_KEY = 'DEMOIT_PROFILE';
 const DEFAULT_STATE = {
   name: '',
@@ -23,21 +21,26 @@ const DEFAULT_STATE = {
     layout: DEFAULT_LAYOUT
   },
   dependencies: [],
-  files: [ EMPTY_FILE ],
+  files: {},
   story: []
 };
 
-const resolveActiveFileIndex = function (files) {
-  const hash = location.hash.replace(/^#/, '');
+const getFirstFile = function () {
+  const working = git.working();
 
-  if (hash !== '') {
-    const found = files.findIndex(({ filename }) => filename === hash);
-
-    if (found >= 0) {
-      return found;
-    }
+  for (let filepath in working) {
+    return { filepath, file: working[filepath] };
   }
-  return 0;
+}
+const resolveActiveFile = function () {
+  const hash = location.hash.replace(/^#/, '');
+  const working = git.working();
+
+  if (hash !== '' && working[hash]) return working[hash];
+  return getFirstFile().file;
+}
+const exists = function (filename) {
+  return Object.keys(git.working()).indexOf(filename) >= 0;
 }
 
 export default async function createState() {
@@ -61,9 +64,11 @@ export default async function createState() {
     }
   }
 
-  var activeFileIndex = resolveActiveFileIndex(state.files);
+  git.import(state.files);
+  git.listen(() => onChangeListeners.forEach(c => c()));
 
-  const onChange = () => onChangeListeners.forEach(c => c());
+  var activeFile = resolveActiveFile(state.files);
+
   const persist = (fork = false, done = () => {}) => {
     if (IS_PROD && api.loggedIn()) {
       if (fork) { delete state.owner; }
@@ -86,36 +91,31 @@ export default async function createState() {
       }
       return state.demoId;
     },
-    getCurrentIndex() {
-      return activeFileIndex;
-    },
-    setCurrentIndex(idx) {
-      activeFileIndex = idx;
-      location.hash = state.files[idx].filename;
-      onChange();
-      return state.files[idx];
-    },
-    isCurrentIndex(idx) {
-      return activeFileIndex === idx;
-    },
     getCurrentFile() {
-      if (this.getFiles()[activeFileIndex]) {
-        return this.getFiles()[activeFileIndex];
-      } else {
-        return this.setCurrentIndex(0);
+      return activeFile;
+    },
+    setCurrentFile(filename) {
+      activeFile = git.working()[filename];
+      if (!activeFile) {
+        const { file, filepath } = getFirstFile();
+        activeFile = file;
+        filename = filepath;
       }
+      location.hash = filename;
+      return activeFile;
+    },
+    isCurrentFile(file) {
+      return activeFile === file;
     },
     getFiles() {
-      return state.files;
+      return git.working();
     },
-    setFiles(files) {
-      state.files = files;
-      onChange();
+    getNumOfFiles() {
+      return Object.keys(this.getFiles()).length;
     },
     name(value) {
       if (typeof value !== 'undefined') {
         state.name = value;
-        onChange();
         persist();
         return;
       }
@@ -126,7 +126,6 @@ export default async function createState() {
     },
     setDependencies(dependencies) {
       state.dependencies = dependencies;
-      onChange();
       persist();
     },
     getEditorSettings() {
@@ -135,68 +134,47 @@ export default async function createState() {
     getFileAt(index) {
       return this.getFiles()[index];
     },
-    editFile(index, updates) {
-      state.files[index] = {
-        ...state.files[index],
-        ...updates
-      };
-      onChange();
+    editFile(filename, updates) {
+      git.save({ filepath: filename, ...updates });
       persist();
-      this.setCurrentIndex(activeFileIndex);
     },
-    editCurrentFile(updates) {
-      this.editFile(activeFileIndex, updates);
+    renameFile(oldName, newName) {
+      git.rename(oldName, newName);
+      persist();
     },
     addNewFile(filename = 'untitled.js') {
-      state.files.push({ ...EMPTY_FILE, filename });
-      this.setCurrentIndex(state.files.length - 1);
-      onChange();
+      filename = exists(filename) ? ensureUniqueFileName(filename) : filename;
+      git.save({ filepath: filename, c: '' });
+      this.setCurrentFile(filename);
       persist();
     },
-    deleteFile(index) {
+    deleteFile(filename) {
       cleanUpExecutedCSS(this.getFileAt(index).filename);
-      if (index === activeFileIndex) {
-        state.files.splice(index, 1);
-        onChange();
-        persist();
-        this.setCurrentIndex(0);
-      } else {
-        const currentFile = this.getCurrentFile();
-        state.files.splice(index, 1);
-        onChange();
-        persist();
-        this.setCurrentIndex(this.getFiles().findIndex(file => file === currentFile) || 0);
+      if (filename === activeFile) {
+        this.setCurrentFile(getFirstFile().filepath);
       }
+      git.del({ filepath: filename });
+      persist();
     },
     listen(callback) {
       onChangeListeners.push(callback);
     },
     updateLayout(newLayout) {
       state.editor.layout = newLayout;
-      onChange();
     },
     updateTheme(newTheme) {
       state.editor.theme = newTheme;
-      onChange();
       persist();
     },
     updateStatusBarVisibility(value) {
       state.editor.statusBar = value;
     },
-    setEntryPoint(index) {
-      state.files = state.files.map((file, i) => {
-        if (i === index) {
-          file.entryPoint = !file.entryPoint;
-        } else {
-          delete file.entryPoint;
-        }
-        return file;
-      });
+    setEntryPoint(filename) {
+      Object.keys(git.working()).forEach(f => git.save({ filepath: f, ed: f === filename }));
     },
     pendingChanges(status) {
       if (typeof status !== 'undefined') {
         pendingChanges = status;
-        onChange();
       }
       return pendingChanges;
     },
@@ -219,16 +197,6 @@ export default async function createState() {
     },
     getDemos() {
       return API.getDemos(profile.id);
-    },
-    // story
-    story(history) {
-      if (typeof history !== 'undefined') {
-        state.story = history;
-        onChange();
-        persist();
-        return;
-      }
-      return state.story;
     }
   }
 

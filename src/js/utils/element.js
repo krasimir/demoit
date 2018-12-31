@@ -79,6 +79,14 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       removeListenersCallbacks.push(removeListener);
       return removeListener;
     },
+    onKeyDown(callback) {
+      e.addEventListener('keydown', callback);
+      
+      const removeListener = () => e.removeEventListener('keydown', callback);
+
+      removeListenersCallbacks.push(removeListener);
+      return removeListener;
+    },
     onMouseOver(callback) {
       e.addEventListener('mouseover', callback);
       

@@ -3,7 +3,7 @@ import './utils/executeCSS';
 import './utils/executeHTML';
 
 const getExt = file => file.split(/\./).pop().toLowerCase();
-const prepareExecution = ({ filename, content }) => {
+const prepareExecution = (filename, content) => {
   const ext = getExt(filename || '');
 
   if (ext === 'css') {
@@ -24,10 +24,19 @@ const formatModule = ({ filename, content }) => `
   }
 `;
 
-export default function execute(index, allFiles) {
+export default function execute(files) {
+  const formattedFiles = [];
+  let index = 0;
+  let entryPoint = 0;
+
+  for (let filename in files) {
+    formattedFiles.push(formatModule(prepareExecution(filename, files[filename].c)));
+    if (files[filename].en === true) entryPoint = index;
+    index += 1;
+  }
   try {
     const code = `
-      const modules = [${ allFiles.map(prepareExecution).map(formatModule).join(',') }];
+      const modules = [${ formattedFiles.join(',') }];
       const require = function(file) {
         const module = modules.find(({ filename }) => filename === file);
 
@@ -42,10 +51,8 @@ export default function execute(index, allFiles) {
     `;
     
     const transpiledCode = transpile(code);
-    const entryPoint = allFiles.findIndex(({ entryPoint }) => entryPoint === true);
-    const fileToExecuteIndex = entryPoint >= 0 ? entryPoint : index;
 
-    (new Function('index', transpiledCode))(fileToExecuteIndex);
+    (new Function('index', transpiledCode))(entryPoint);
 
     return transpiledCode;
   } catch (error) {

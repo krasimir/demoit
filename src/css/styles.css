@@ -468,3 +468,76 @@ svg {
 .la-selector a:hover {
   background-color: #000;
 }
+/*************************** STORIES */
+.story {
+  overflow-y: auto;
+}
+.story .add-button {
+  display: block;
+  color: #000;
+  transition: transform 300ms ease-out;
+  -webkit-transition: transform 300ms ease-out;
+  margin: 4em auto;
+  width: 24px;
+}
+.story .add-button:hover {
+  transform: scale(1.2);
+  -webkit-transform: scale(2);
+}
+.story .commit {
+  text-align: center;
+  color: #000;
+  display: block;
+  text-decoration: none;
+  padding: 0.8em;
+  border-bottom: solid 1px #c7c7c7;
+}
+.dark .story .commit {
+  color: #999;
+  border-bottom: solid 1px #2e414c;
+}
+.story .commit.selected {
+  border: none;
+}
+.story .commit.selected:hover {
+  background: none;
+}
+.story .commit:hover {
+  background: #eaeaea;
+}
+.dark .story .commit:hover {
+  background: #2e414c;
+}
+.edit-story {
+  border-bottom: solid 1px #c7c7c7;
+}
+.dark .edit-story {
+  border-bottom: solid 1px #2e414e;
+}
+.commit-title, .commit-text {
+  border: none;
+  padding: 1em;
+  display: block;
+  width: 100%;
+  background: #f7f7f7;
+  outline: none;
+  font-size: 1em;
+}
+.dark .commit-title, .dark .commit-text {
+  background: #374f5f;
+  color: #fff;
+}
+.commit-text {
+  height: 300px;
+  border-top: solid 1px #cacaca;
+}
+.dark .commit-text {
+  border-top: solid 1px #2e414d;
+}
+.delete-commit {
+  color: #000;
+  float: right;
+}
+.dark .delete-commit {
+  color: #fff;
+}
