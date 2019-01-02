@@ -24,16 +24,17 @@ const formatModule = ({ filename, content }) => `
   }
 `;
 
-export default function execute(files) {
+export default function execute(activeFile, files) {
   const formattedFiles = [];
   let index = 0;
-  let entryPoint = 0;
+  let entryPoint = files.findIndex(([ filename ]) => filename === activeFile);
 
-  for (let filename in files) {
-    formattedFiles.push(formatModule(prepareExecution(filename, files[filename].c)));
-    if (files[filename].en === true) entryPoint = index;
+  files.forEach(([filename, file ]) => {
+    formattedFiles.push(formatModule(prepareExecution(filename, file.c)));
+    if (file.en === true) entryPoint = index;
     index += 1;
-  }
+  });
+
   try {
     const code = `
       const modules = [${ formattedFiles.join(',') }];

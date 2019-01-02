@@ -19,12 +19,13 @@ export default function profilePopUp(profile, getDemos) {
         demosContainer.content('You have no demos.');
       } else {
         demosContainer.content(
-          demos.map(({ demoId, name, files }) => `
-            <a href="/e/${ demoId }">
-              ${ name || 'unnamed' }<br />
-              <small>${ files.map(({ filename }) => filename).join(', ') }</small>
-            </a>
-          `).join('')
+          demos.map(({ demoId, name }) => {
+            return `
+              <a href="/e/${ demoId }">
+                ${ name || 'unnamed' }
+              </a>
+            `;
+          }).join('')
         );
       }
     }

@@ -3,7 +3,8 @@ import {
   getParam,
   readFromJSONFile,
   ensureDemoIdInPageURL,
-  ensureUniqueFileName
+  ensureUniqueFileName,
+  isArray
 } from './utils';
 import { IS_PROD } from './constants';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
@@ -26,25 +27,23 @@ const DEFAULT_STATE = {
 };
 
 const getFirstFile = function () {
-  const working = git.working();
+  const allFiles = git.getAll();
 
-  for (let filepath in working) {
-    return { filepath, file: working[filepath] };
+  if (allFiles.length === 0) {
+    return 'untitled.js';
   }
+  return git.getAll()[0][0];
 }
 const resolveActiveFile = function () {
   const hash = location.hash.replace(/^#/, '');
-  const working = git.working();
 
-  if (hash !== '' && working[hash]) return working[hash];
-  return getFirstFile().file;
-}
-const exists = function (filename) {
-  return Object.keys(git.working()).indexOf(filename) >= 0;
+  if (hash !== '' && git.get(hash)) return hash;
+  return getFirstFile();
 }
 
 export default async function createState() {
   const onChangeListeners = [];
+  const onChange = () => onChangeListeners.forEach(c => c());
   let profile = LS(LS_PROFILE_KEY);
   let pendingChanges = false;
 
@@ -65,9 +64,9 @@ export default async function createState() {
   }
 
   git.import(state.files);
-  git.listen(() => onChangeListeners.forEach(c => c()));
+  git.listen(onChange);
 
-  var activeFile = resolveActiveFile(state.files);
+  var activeFile = resolveActiveFile();
 
   const persist = (fork = false, done = () => {}) => {
     if (IS_PROD && api.loggedIn()) {
@@ -91,27 +90,34 @@ export default async function createState() {
       }
       return state.demoId;
     },
-    getCurrentFile() {
+    getActiveFile() {
       return activeFile;
     },
-    setCurrentFile(filename) {
-      activeFile = git.working()[filename];
-      if (!activeFile) {
-        const { file, filepath } = getFirstFile();
-        activeFile = file;
-        filename = filepath;
-      }
+    getActiveFileContent() {
+      return git.get(activeFile).c;
+    },
+    setActiveFile(filename) {
+      activeFile = filename;
       location.hash = filename;
-      return activeFile;
+      onChange();
+      return filename;
     },
-    isCurrentFile(file) {
-      return activeFile === file;
+    setActiveFileByIndex(index) {
+      const filename = git.getAll()[index][0];
+
+      if (filename) {
+        this.setActiveFile(filename);
+        onChangeListeners.forEach(c => c());
+      }
+    },
+    isCurrentFile(filename) {
+      return activeFile === filename;
     },
     getFiles() {
-      return git.working();
+      return git.getAll();
     },
     getNumOfFiles() {
-      return Object.keys(this.getFiles()).length;
+      return git.getAll().length;
     },
     name(value) {
       if (typeof value !== 'undefined') {
@@ -131,29 +137,29 @@ export default async function createState() {
     getEditorSettings() {
       return state.editor;
     },
-    getFileAt(index) {
-      return this.getFiles()[index];
-    },
     editFile(filename, updates) {
-      git.save({ filepath: filename, ...updates });
+      git.save(filename, updates);
       persist();
     },
-    renameFile(oldName, newName) {
-      git.rename(oldName, newName);
+    renameFile(filename, newName) {
+      if (activeFile === filename) {
+        this.setActiveFile(newName);
+      }
+      git.rename(filename, newName);
       persist();
     },
     addNewFile(filename = 'untitled.js') {
-      filename = exists(filename) ? ensureUniqueFileName(filename) : filename;
-      git.save({ filepath: filename, c: '' });
-      this.setCurrentFile(filename);
+      filename = git.get(filename) ? ensureUniqueFileName(filename) : filename;
+      git.save(filename, { c: '' });
+      this.setActiveFile(filename);
       persist();
     },
     deleteFile(filename) {
-      cleanUpExecutedCSS(this.getFileAt(index).filename);
+      cleanUpExecutedCSS(filename);
+      git.del(filename);
       if (filename === activeFile) {
-        this.setCurrentFile(getFirstFile().filepath);
+        this.setActiveFile(getFirstFile());
       }
-      git.del({ filepath: filename });
       persist();
     },
     listen(callback) {
@@ -170,11 +176,15 @@ export default async function createState() {
       state.editor.statusBar = value;
     },
     setEntryPoint(filename) {
-      Object.keys(git.working()).forEach(f => git.save({ filepath: f, ed: f === filename }));
+      const newValue = !git.get(filename).en;
+
+      git.saveAll({ en: false }),
+      git.save(filename, { en: newValue });
     },
     pendingChanges(status) {
       if (typeof status !== 'undefined') {
         pendingChanges = status;
+        onChange();
       }
       return pendingChanges;
     },

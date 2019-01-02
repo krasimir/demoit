@@ -32,7 +32,7 @@ createState().then(state => {
     statusBar(
       state,
       function showFile(filename) {
-        state.setCurrentFile(filename);
+        state.setActiveFile(filename);
         executeCurrentFile();
       },
       async function newFile() {
@@ -46,13 +46,13 @@ createState().then(state => {
       async function editFile(filename) {
         editFilePopUp(
           filename,
-          getNumOfFiles,
+          state.getNumOfFiles(),
           function onDelete() {
             state.deleteFile(filename);
             executeCurrentFile();
           },
           function onRename(newName) {
-            state.editFile(index, { filename: newName });
+            state.renameFile(filename, newName);
             executeCurrentFile();
           },
           function onSetAsEntryPoint() {

@@ -70,7 +70,7 @@ export default async function editor(state) {
     await loadDependencies();
     clearConsole();
     clearOutput();
-    executeCode(state.getFiles())
+    executeCode(state.getActiveFile(), state.getFiles())
   }
   const container = el.withFallback('.js-code-editor');
 
@@ -79,26 +79,27 @@ export default async function editor(state) {
   const codeMirrorEditor = window.__editor = codeMirror(
     container.empty(),
     state.getEditorSettings(),
-    state.getCurrentFile().c,
+    state.getActiveFileContent(),
     async function onSave(code) {
       await clearOutput();
       clearConsole();
-      state.editFile(filename, { c: code });
+      state.editFile(state.getActiveFile(), { c: code });
       state.pendingChanges(false);
       execute();
     },
     function onChange() {
       state.pendingChanges(true);
     },
-    function showFile(filename) {
-      loadFileInEditor(state.setCurrentFile(filename));
+    function showFile(index) {
+      state.setActiveFileByIndex(index);
+      loadFileInEditor();
     }
   );
 
   async function loadFileInEditor() {
     await clearOutput();
     clearConsole();
-    codeMirrorEditor.setValue(state.getCurrentFile().c);
+    codeMirrorEditor.setValue(state.getActiveFileContent());
     codeMirrorEditor.focus();
     // we have to do this because we fire the onChange handler of the editor which sets editing=true;
     state.pendingChanges(false);

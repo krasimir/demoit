@@ -39,12 +39,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     items.push('<div data-export="buttons">');
     IS_PROD && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
     state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
-    Object.keys(files).forEach(filename => {
-      const file = files[filename];
-      const isCurrentFile = state.isCurrentFile(file)
+    files.forEach(([ filename, file ]) => {
+      const isCurrentFile = state.isCurrentFile(filename);
 
       items.push(createStatusBarLink(
-        'file',
+        'file:' + filename,
         `<span>${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
         `file${ isCurrentFile ? ' active' : '' }${ file.en ? ' entry' : ''}`
       ))
@@ -57,9 +56,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     items.push('</div>');
 
     bar.content(items.join('')).forEach(button => {
-      if (button.attr('data-export') === 'file') {
-        button.onClick(() => showFile(index));
-        button.onRightClick(() => editFile(index));
+      if (button.attr('data-export').indexOf('file') === 0) {
+        const filename = button.attr('data-export').split(':').pop();
+
+        button.onClick(() => showFile(filename));
+        button.onRightClick(() => editFile(filename));
       }
     });
     
