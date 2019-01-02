@@ -1,174 +1,142 @@
 import el from './utils/element';
 import { PLUS_ICON, TRASH_ICON } from './utils/icons';
+import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 
-var dmpInstance;
-const createDMP = () => {
-  if (dmpInstance) return dmpInstance;
-  return new diff_match_patch();
+function form () {
+  return `
+    <div class="story-form">
+      <div data-export="messageArea" class="message-area"></div>
+    </div>
+  `;
 }
-const accumulate = (story, selected) => {
-  if (story.length === 1) return story[0].files;
+function codeMirror(container, editorSettings, value, onSave, onChange, onCancel) {
+  defineCodeMirrorCommands(CodeMirror);
 
-  const dmp = createDMP();
-  const tillIndex = selected === null ? story.length : selected;
+  const editor = CodeMirror(container.e, {
+    value: value || '',
+    mode:  'jsx',
+    tabSize: 2,
+    lineNumbers: false,
+    autofocus: true,
+    foldGutter: false,
+    gutters: [],
+    styleSelectedText: true,
+    ...editorSettings
+  });
+  const save = () => onSave(editor.getValue());
+  const change = () => onChange(editor.getValue());
 
-  return story.reduce((result, { files }, index) => {
-    if (index > tillIndex) return result;
-    if (index == 0) return files;
-    return dmp.patch_apply(dmp.patch_fromText(files), result).shift();
-  }, '');
-}
-const deleteCommit = (story, indexToRemove) => {
-  /*
-    a, b, c
+  editor.on('change', change);
+  editor.on('blur', onCancel)
+  editor.setOption("extraKeys", {
+    'Ctrl-S': save,
+    'Cmd-S': save,
+    'Esc': onCancel
+  });
+  CodeMirror.normalizeKeyMap();
+  setTimeout(() => editor.focus(), 50);
 
-  */
-  if (story.length > 1) {
-    const dmp = createDMP();
+  return editor;
+};
 
-    if (indexToRemove === 0) {
-      story[1].files = dmp.patch_apply(dmp.patch_fromText(story[1].files), story[0].files).shift();
-    } else if (indexToRemove < story.length - 1) {
-      
+function renderCommits(git, editMode) {
+  const commits = Object.keys(git.log()).map(hash => ({ hash, ...git.log()[hash]}));
+  const r = ({ hash, message }, indent = 0) => {
+    let html = '';
+    const cssClasses = ['commit-dot'];
+
+    if (git.head() === hash) cssClasses.push('commit-dot-head');
+    if (git.head() === hash && editMode) cssClasses.push('commit-dot-edit');
+
+    html += `
+    <div class="commit">
+      <div class="${ cssClasses.join(' ') }"><span></span></div>
+    `;
+    if (git.head() === hash && editMode) {
+      html += form();
+    } else {
+      html += `
+        <div class="commit-content">
+          <div class="commit-nav">
+            <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${ hash }">story</a>
+          </div>
+          <a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${ hash }">${ message.split('\n').shift() }</a>
+        </div>
+      `;
     }
+    html += '</div>';
+    html += commits
+      .filter(({ parent }) => parent === hash)
+      .map(commit => r(commit, indent + 1))
+      .join('')
+    return html;
   }
-  story.splice(indexToRemove, 1);
-}
-const snapshot = state => JSON.stringify(state.getFiles().map(file => {
-  delete file.editing;
-  return file;
-}));
-const editStory = (commit, link, commitTitle, commitText, onSave, onClose) => {
-  setTimeout(() => commitTitle.e.focus(), 10);
-  const handler = e => {
-    if ((e.metaKey || e.ctrlKey) && e.keyCode === 83) { // save
-      e.preventDefault();
-      commit.t = commitTitle.prop('value');
-      commit.m = commitText.prop('value');
-      link.content(commit.t);
-      onSave();
-    } else if (e.keyCode === 27) { // escape
-      onClose();
-    } else if (e.keyCode !== 9) { // tag
-      link.content(commit.t + '*');
-    }
-  };
-  commitTitle.attr('value', commit.t || '');
-  commitText.content(commit.m || '');
-  commitTitle.onKeyDown(handler);
-  commitText.onKeyDown(handler);
+  const firstCommit = commits.find(({ parent }) => parent === null);
+
+  if (firstCommit) {
+    return r(firstCommit);
+  }
+  return '';
 }
 
-export default function story(state, filesUpdated) {
-  var selected = null;
+export default function story(state, onChange) {
   const container = el.withFallback('.story');
-  const story = state.story() || [];
-  const persist = () => {
-    state.story(story);
-    console.log(JSON.stringify(story, null, 2));
-  };
+  const git = state.git();
+  let editMode = false;
 
   if (!container.found()) return;
 
-  container.content(`
-    <div data-export="list"></div>
-    <div class="${ story.length === 0 ? 'centered' : '' }">
-      <a href="javascript:void(0)" data-export="addButton" class="add-button">${ PLUS_ICON() }</a>
-    </div>
-  `);
-
-  const { addButton, list } = container.namedExports();
   const render = () => {
-    const htmlString = story.map(({ files, t }, index) => {
-      if (selected === index) {
-        return `
-          <div data-index="${ index }" class="commit selected">
-            <span>${ t || (index + 1) }</span>
-            <a href="javascript:void(0);" data-index="${ index }" data-export="deleteButton" class="delete-commit">${ TRASH_ICON(16) }</a>
-          </div>
-          <div class="edit-story">
-            <input type="text" data-export="commitTitle" placeholder="Title" class="commit-title"/>
-            <textarea data-export="commitText" class="commit-text" placeholder="Text"></textarea>
-          </div>
-        `;
+    container.content(`
+      <div data-export="list">` + renderCommits(git, editMode) + `</div>
+      <div class="${ Object.keys(git.log()).length === 0 ? 'centered' : '' }">
+        <a href="javascript:void(0)" data-export="addButton" class="add-button">${ PLUS_ICON() }</a>
+      </div>
+    `).forEach(el => {
+      if (el.attr('data-export') === 'checkoutLink') {
+        el.onClick(() => {
+          if (el.attr('data-commit-hash')) {
+            git.checkout(el.attr('data-commit-hash'));
+            render();
+            onChange();
+          }
+        });
       }
-      return `
-        <a href="javascript:void(0);" data-export="link" data-index="${ index }" class="commit">
-          ${ t || (index + 1) }
-        </a>
-      `;
-    }).join('');
-    
-    if (htmlString !== '') {
-      const elements = list.content(htmlString);
+      if (el.attr('data-export') === 'editMessage') {
+        el.onClick(() => {
+          if (el.attr('data-commit-hash')) {
+            editMode = true;
+            render();
+          }
+        });
+      }
+    });
 
-      elements.forEach(link => {
-        if (link.attr('data-export') === 'link') {
-          link.onClick(() => {
-            try {
-              selected = parseInt(link.attr('data-index'));
-              state.setFiles(JSON.parse(accumulate(story, selected)));
-              filesUpdated();
-              render();
-            } catch(error) {
-              console.error(error);
-              render();
-            }
-          });
-        }
-      });
-    }
-    
-    const { commitTitle, commitText, deleteButton } = list.namedExports();
+    const { addButton, messageArea } = container.namedExports();
 
-    if (commitText && commitTitle) {
-      editStory(
-        story[selected],
-        el(`[data-index="${ selected }"] span`),
-        commitTitle,
-        commitText,
-        function onSave() {
-          persist();
-        },
-        function onClose() {
-          selected = null;
-          render();
-        }
-      );
-      deleteButton.onClick(() => {
-        selected = null;
-        deleteCommit(story, parseInt(deleteButton.attr('data-index')));
-        persist();
+    addButton.onClick(() => {
+      // editMode = true;
+      // git.add();
+      // git.commit('');
+      // render();
+    });
+
+    messageArea && codeMirror(
+      messageArea,
+      state.getEditorSettings(),
+      git.show(git.head()).message,
+      function onSave(message) {
+        git.amend(git.head(), message);
+      },
+      function onChange(message) {
+        
+      },
+      function onCancel() {
+        editMode = false;
         render();
-        console.log(JSON.stringify(story, null, 2));
-      });
-    }
-  }
-
-  addButton.onClick(() => {
-    if (story.length === 0) {
-      story.push({
-        files: snapshot(state),
-        t: (story.length + 1)
-      });
-    } else {
-      const dmp = createDMP();
-      const text1 = accumulate(story, selected);
-      const text2 = snapshot(state);
-      const diff = dmp.diff_main(text1, text2, true);
-
-      if (diff.length > 2) {
-        dmp.diff_cleanupSemantic(diff);
       }
-      story.push({
-        files: dmp.patch_toText(dmp.patch_make(text1, text2, diff)),
-        t: (story.length + 1)
-      });
-    }
-    selected = story.length - 1;
-    persist();
-    render();
-  });
+    )
+  }
 
   render();
 }

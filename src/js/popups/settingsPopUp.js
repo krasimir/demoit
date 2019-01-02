@@ -11,7 +11,8 @@ export default function settingsPopUp(
   dependenciesStr,
   onDepsUpdated,
   onGeneralUpdate,
-  defaultTab
+  defaultTab,
+  version
 ) {
   return new Promise(done => createPopup({
     defaultTab: defaultTab || 0,
@@ -49,6 +50,7 @@ export default function settingsPopUp(
       `,
       `
         <p>
+          v${ version }<br />
           On the web: <a href="https://demoit.app" target="_blank">demoit.app</a><br />
           GitHub repo: <a href="https://github.com/krasimir/demoit" target="_blank">github.com/krasimir/demoit</a>
         </p>

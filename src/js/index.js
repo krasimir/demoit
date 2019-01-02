@@ -1,3 +1,4 @@
+import pkg from '../../package.json';
 import el from './utils/element';
 import { IS_PROD } from './constants';
 import layout from './layout';
@@ -11,7 +12,7 @@ import statusBar from './statusBar';
 import profile from './profile';
 import story from './story';
 
-createState().then(state => {
+createState(pkg.version).then(state => {
   async function render() {
     layout(state);
     
@@ -27,7 +28,7 @@ createState().then(state => {
 
     const showProfile = profile(state).showProfile;
 
-    // story(state, () => executeCurrentFile());
+    story(state, () => executeCurrentFile());
   
     statusBar(
       state,
@@ -76,7 +77,7 @@ window.addEventListener('load', () => {
     return;
   }
 
-  navigator.serviceWorker.register('/sw.js').then(
+  navigator.serviceWorker.register('/sw.js?id=' + pkg.version).then(
     () => {},
     err => console.error('SW registration failed!')
   )

@@ -484,60 +484,81 @@ svg {
   transform: scale(1.2);
   -webkit-transform: scale(2);
 }
-.story .commit {
-  text-align: center;
-  color: #000;
-  display: block;
-  text-decoration: none;
-  padding: 0.8em;
-  border-bottom: solid 1px #c7c7c7;
-}
-.dark .story .commit {
-  color: #999;
-  border-bottom: solid 1px #2e414c;
-}
-.story .commit.selected {
-  border: none;
-}
-.story .commit.selected:hover {
-  background: none;
-}
-.story .commit:hover {
-  background: #eaeaea;
-}
-.dark .story .commit:hover {
-  background: #2e414c;
-}
-.edit-story {
-  border-bottom: solid 1px #c7c7c7;
-}
-.dark .edit-story {
-  border-bottom: solid 1px #2e414e;
-}
-.commit-title, .commit-text {
-  border: none;
-  padding: 1em;
-  display: block;
+.story .message-area {
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  border-bottom: solid 1px #eaeaea;
   width: 100%;
-  background: #f7f7f7;
-  outline: none;
-  font-size: 1em;
+  display: block;
 }
-.dark .commit-title, .dark .commit-text {
-  background: #374f5f;
-  color: #fff;
+.story .commit {
+  border-bottom: solid 1px #eaeaea;
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 1fr;
 }
-.commit-text {
-  height: 300px;
-  border-top: solid 1px #cacaca;
+.story .commit .commit-content {
+  display: inline-block;
+  padding: 1.2em;
 }
-.dark .commit-text {
-  border-top: solid 1px #2e414d;
+.story .commit-dot {
+  display: inline-block;
+  position: relative;
 }
-.delete-commit {
-  color: #000;
+.story .commit-dot span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #999;
+  border-radius: 5px;
+  position: absolute;
+  top: 20px;
+  left: 1.2em;
+}
+.story .commit-dot::before, .story .commit-dot::after  {
+  display: none;
+  content: " ";
+  width: 2px;
+  height: 14px;
+  background: #999;
+  position: absolute;
+  top: 0;
+  left: calc(1.2em + 4px);
+}
+.story .commit-dot::after {
+  top: 36px;
+  left: calc(1.2em + 4px);
+}
+.story .commit + .commit .commit-dot::before {
+  display: block;
+}
+.story .commit:not(:last-child) .commit-dot::after {
+  display: block;
+}
+.story .commit-dot-head > span {
+  background: #006d00;
+}
+.story .commit-dot-edit::before, .story .commit-dot-edit::after {
+  display: none !important;
+}
+.story .commit-nav {
   float: right;
 }
-.dark .delete-commit {
-  color: #fff;
+.story .commit-nav a {
+  color: inherit;
+  font-size: 0.8em;
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.story .commit-nav a:hover {
+  background: #eaeaea;
+}
+.story .commit-content a {
+  color: inherit;
+  text-decoration: none;
+}
+.story .commit-content a:hover {
+  background: #eaeaea;
 }

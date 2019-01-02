@@ -19,7 +19,8 @@ export default function settings(state, render, executeCurrentFile) {
       state.updateLayout(newLayout);
       render();
     },
-    tab
+    tab,
+    state.version()
   );
 
   return showSettingsPopUp;

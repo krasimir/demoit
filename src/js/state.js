@@ -41,7 +41,7 @@ const resolveActiveFile = function () {
   return getFirstFile();
 }
 
-export default async function createState() {
+export default async function createState(version) {
   const onChangeListeners = [];
   const onChange = () => onChangeListeners.forEach(c => c());
   let profile = LS(LS_PROFILE_KEY);
@@ -63,8 +63,15 @@ export default async function createState() {
     }
   }
 
+  state.v = version;
+
   git.import(state.files);
-  git.listen(onChange);
+  git.listen(event => {
+    if (event === git.ON_COMMIT || event === git.ON_CHECKOUT) {
+      // persist();
+    }
+    onChange();
+  });
 
   var activeFile = resolveActiveFile();
 
@@ -207,6 +214,13 @@ export default async function createState() {
     },
     getDemos() {
       return API.getDemos(profile.id);
+    },
+    // misc
+    version() {
+      return state.v;
+    },
+    git() {
+      return git;
     }
   }
 
