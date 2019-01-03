@@ -472,17 +472,30 @@ svg {
 .story {
   overflow-y: auto;
 }
+.story a:hover {
+  background: #eaeaea;
+}
 .story .add-button {
   display: block;
   color: #000;
-  transition: transform 300ms ease-out;
-  -webkit-transition: transform 300ms ease-out;
-  margin: 4em auto;
-  width: 24px;
+  text-align: center;
+  text-decoration: none;
+  padding: 1em;
 }
-.story .add-button:hover {
-  transform: scale(1.2);
-  -webkit-transform: scale(2);
+.story .working-directory {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+}
+.story .working-directory .diff {
+  padding: 1em;
+  margin: 1em;
+  border: solid 1px #e2e2e2;
+}
+.story .working-directory .diff ins {
+  background: #a7fba7;
+}
+.story .working-directory .diff del {
+  background: #f99e9e;
 }
 .story .message-area {
   border-left: none;
@@ -552,13 +565,7 @@ svg {
   text-decoration: none;
   border-radius: 3px;
 }
-.story .commit-nav a:hover {
-  background: #eaeaea;
-}
 .story .commit-content a {
   color: inherit;
   text-decoration: none;
-}
-.story .commit-content a:hover {
-  background: #eaeaea;
 }

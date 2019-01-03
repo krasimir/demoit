@@ -18,7 +18,9 @@
     "dev": "yarn build && concurrently \"webpack\" \"onchange ./src/css/*.css -- yarn produce-css\" \"onchange ./.tmp/*.js -- yarn produce-js\" \"cpx ./src/index.html ./dist/ -w\" \"cpx ./src/sw.js ./dist/ -w\"",
     "build": "yarn clean && yarn copy-static && yarn produce-css && yarn produce-editor-js && webpack --config ./webpack.config.prod.js && yarn produce-minified-js",
     "zip": "node ./scripts/zipit.js",
-    "release": "yarn build && yarn zip"
+    "release": "yarn test && yarn build && yarn zip",
+    "test": "jest",
+    "test-watch": "jest --watch --verbose false"
   },
   "keywords": [
     "demo",
@@ -46,10 +48,14 @@
     "uglifycss": "0.0.29",
     "webpack": "4.25.1",
     "webpack-cli": "3.1.2",
-    "zip-folder": "1.0.0"
+    "zip-folder": "1.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "regenerator-runtime": "0.13.1"
   },
   "dependencies": {
-    "gitfred": "4.2.0",
+    "gitfred": "5.1.0",
     "hashids": "1.2.2",
     "jszip": "3.1.5",
     "layout-architect": "3.0.0"
