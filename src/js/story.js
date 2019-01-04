@@ -10,6 +10,8 @@ const SVG_Y = 48.5;
 export default function story(state, onChange) {
   const container = el.withFallback('.story');
   const git = state.git();
+  let editor = null;
+  let editorCursorPosition = null;
   let editMode = false, currentlyEditingHash;
   
   if (!container.found()) return;
@@ -67,7 +69,7 @@ export default function story(state, onChange) {
     });
 
     workingIndicator && workingIndicator.css('display', 'none');
-    messageArea && codeMirror(
+    messageArea && (editor = codeMirror(
       messageArea,
       state.getEditorSettings(),
       git.show(currentlyEditingHash).message,
@@ -80,12 +82,17 @@ export default function story(state, onChange) {
       },
       function onCancel(message) {
         editMode = false;
+        editor = null;
+        editorCursorPosition = null;
         if (message === '') {
           git.amend(currentlyEditingHash, formatDate());
         }
         render();
+      },
+      function onBlur() {
+        editorCursorPosition = editor ? editor.getCursor() : null;
       }
-    );
+    ));
 
     if (showGraph) {
       const { connections, yValues } = renderCommitGraphs(git.logAsTree());
@@ -99,6 +106,17 @@ export default function story(state, onChange) {
   });
 
   render();
+
+  return function addToStory(code, otherEditor) {
+    if (editMode && editor) {
+      otherEditor.setCursor({ line: 0, ch: 0 });
+      setTimeout(() => {
+        editor.focus();
+        editor.refresh();
+        editor.replaceSelection(code);
+      }, 50);
+    }
+  }
 }
 function renderCommits(git, editMode, allowCheckout, currentlyEditingHash) {
   const root = git.logAsTree();
@@ -135,7 +153,7 @@ function form () {
     </div>
   `;
 }
-function codeMirror(container, editorSettings, value, onSave, onChange, onCancel) {
+function codeMirror(container, editorSettings, value, onSave, onChange, onCancel, onBlur) {
   defineCodeMirrorCommands(CodeMirror);
 
   const editor = CodeMirror(container.e, {
@@ -155,6 +173,7 @@ function codeMirror(container, editorSettings, value, onSave, onChange, onCancel
   const change = () => onChange(editor.getValue());
 
   editor.on('change', change);
+  editor.on('blur', onBlur);
   editor.setOption("extraKeys", {
     'Ctrl-S': save,
     'Cmd-S': save,

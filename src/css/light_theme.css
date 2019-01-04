@@ -104,3 +104,7 @@
   box-shadow: 11px 6px 21px 0 rgba(111, 111, 111, 0.75);
   -webkit-box-shadow: 11px 6px 21px 0 rgba(111, 111, 111, 0.75);
 }
+.cm-s-light .cm-error {color: #f00;}
+.cm-s-light .cm-number {color: #164;}
+.cm-s-light .cm-atom {color: #219;}
+.cm-s-light .cm-string {color: #a11;}

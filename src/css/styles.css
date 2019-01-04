@@ -539,7 +539,7 @@ svg {
 }
 .story .working-directory .diffs {
   padding: 1em;
-  margin: 1em;
+  margin-right: 1em;
   border: solid 1px #e2e2e2;
 }
 .dark .story .working-directory .diffs {
@@ -556,7 +556,7 @@ svg {
   background: #f99e9e;
   text-decoration: none;
 }
-.story .working-directory .diffs del {
+.dark .story .working-directory .diffs del {
   background: #480d0d;
 }
 .story .diff {

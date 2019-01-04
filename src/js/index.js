@@ -2,7 +2,7 @@ import pkg from '../../package.json';
 import el from './utils/element';
 import { IS_PROD } from './constants';
 import layout from './layout';
-import editor from './editor';
+import editor, { ON_SELECT } from './editor';
 import createState from './state';
 import newFilePopUp from './popups/newFilePopUp';
 import editFilePopUp from './popups/editFilePopUp';
@@ -16,7 +16,10 @@ createState(pkg.version).then(state => {
   async function render() {
     layout(state);
     
-    const executeCurrentFile = await editor(state);
+    const addToStory = story(state, () => executeCurrentFile());
+    const { loadFileInEditor: executeCurrentFile } = await editor(state, [
+      (event, data, editor) => (event === ON_SELECT && addToStory(data, editor))
+    ]);
   
     executeCurrentFile();
   
@@ -25,10 +28,7 @@ createState(pkg.version).then(state => {
       () => (el.destroy(), render()), 
       () => executeCurrentFile()
     );
-
     const showProfile = profile(state).showProfile;
-
-    story(state, () => executeCurrentFile());
   
     statusBar(
       state,

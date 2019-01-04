@@ -14,6 +14,15 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
     }
   }
 
+  const registerEventListener = (type, callback) => {
+    e.addEventListener(type, callback);
+    
+    const removeListener = () => e.removeEventListener(type, callback);
+
+    removeListenersCallbacks.push(removeListener);
+    return removeListener;
+  }
+
   const api = {
     e,
     found() {
@@ -64,44 +73,22 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       }
     },
     onClick(callback) {
-      e.addEventListener('click', callback);
-      
-      const removeListener = () => e.removeEventListener('click', callback);
-
-      removeListenersCallbacks.push(removeListener);
-      return removeListener;
+      return registerEventListener('click', callback);
     },
     onKeyUp(callback) {
-      e.addEventListener('keyup', callback);
-      
-      const removeListener = () => e.removeEventListener('keyup', callback);
-
-      removeListenersCallbacks.push(removeListener);
-      return removeListener;
+      return registerEventListener('keyup', callback);
     },
     onKeyDown(callback) {
-      e.addEventListener('keydown', callback);
-      
-      const removeListener = () => e.removeEventListener('keydown', callback);
-
-      removeListenersCallbacks.push(removeListener);
-      return removeListener;
+      return registerEventListener('keydown', callback);
     },
     onMouseOver(callback) {
-      e.addEventListener('mouseover', callback);
-      
-      const removeListener = () => e.removeEventListener('mouseover', callback);
-
-      removeListenersCallbacks.push(removeListener);
-      return removeListener;
+      return registerEventListener('mouseover', callback);
     },
     onMouseOut(callback) {
-      e.addEventListener('mouseout', callback);
-      
-      const removeListener = () => e.removeEventListener('mouseout', callback);
-
-      removeListenersCallbacks.push(removeListener);
-      return removeListener;
+      return registerEventListener('mouseout', callback);
+    },
+    onMouseUp(callback) {
+      return registerEventListener('mouseup', callback);
     },
     onRightClick(callback) {
       const handler = event => {

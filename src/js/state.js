@@ -3,8 +3,7 @@ import {
   getParam,
   readFromJSONFile,
   ensureDemoIdInPageURL,
-  ensureUniqueFileName,
-  isArray
+  ensureUniqueFileName
 } from './utils';
 import { IS_PROD } from './constants';
 import { cleanUpExecutedCSS } from './utils/executeCSS';
@@ -129,6 +128,7 @@ export default async function createState(version) {
     name(value) {
       if (typeof value !== 'undefined') {
         state.name = value;
+        onChange();
         persist();
         return;
       }

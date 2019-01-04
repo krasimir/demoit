@@ -5,19 +5,90 @@ import output from './output';
 import dependencies from './dependencies';
 import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 
-function codeMirror(container, editorSettings, value, onSave, onChange, showFile) {
+export const ON_SELECT = 'e_s';
+
+export default async function editor(state, listeners) {
+  const clearConsole = createConsole();
+  const clearOutput = output();
+  const loadDependencies = async () => {
+    await dependencies(state, (percents, file) => {
+      const content = `<div class="centered"><div class="spinner"></div></div>`;
+
+      clearConsole(content);
+      clearOutput(content);
+    });
+  }
+  const execute = async () => {
+    await loadDependencies();
+    clearConsole();
+    clearOutput();
+    executeCode(state.getActiveFile(), state.getFiles())
+  }
+  const container = el.withFallback('.js-code-editor');
+
+  await loadDependencies();
+
+  // Initializing CodeMirror
+  const codeMirrorEditor = codeMirror(
+    container.empty(),
+    state.getEditorSettings(),
+    state.getActiveFileContent(),
+    async function onSave(code) {
+      await clearOutput();
+      clearConsole();
+      state.editFile(state.getActiveFile(), { c: code });
+      state.pendingChanges(false);
+      execute();
+    },
+    function onChange() {
+      state.pendingChanges(true);
+    },
+    function showFile(index) {
+      state.setActiveFileByIndex(index);
+      loadFileInEditor();
+    },
+    function onSelection(code) {
+      listeners.forEach(c => c(ON_SELECT, code, codeMirrorEditor));
+    }
+  );
+
+  // The function that we call to execute a file
+  async function loadFileInEditor() {
+    await clearOutput();
+    clearConsole();
+    codeMirrorEditor.setValue(state.getActiveFileContent());
+    codeMirrorEditor.focus();
+    switch(state.getActiveFile().split('.').pop().toLowerCase()) {
+      case 'css': codeMirrorEditor.setOption('mode', 'css'); break;
+      case 'html': codeMirrorEditor.setOption('mode', 'htmlmixed'); break;
+      default: codeMirrorEditor.setOption('mode', 'jsx'); break;
+    }
+    // we have to do this because we fire the onChange handler of the editor which sets editing=true;
+    state.pendingChanges(false);
+    execute();
+  }
+
+  // Subscribing to events happening in the editor
+  function listen(cb) {
+
+  }
+
+  return { loadFileInEditor, listen };
+}
+
+function codeMirror(container, editorSettings, value, onSave, onChange, showFile, onSelection) {
   defineCodeMirrorCommands(CodeMirror);
 
   const editor = CodeMirror(container.e, {
     value: value || '',
-    mode:  'jsx',
+    mode: 'jsx',
     tabSize: 2,
     lineNumbers: false,
     autofocus: true,
     foldGutter: false,
     gutters: [],
     styleSelectedText: true,
-    ...editorSettings
+    theme: editorSettings.theme
   });
   const save = () => onSave(editor.getValue());
   const change = () => onChange(editor.getValue());
@@ -52,59 +123,11 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
   CodeMirror.normalizeKeyMap();
   editor.focus();
 
+  container.onMouseUp(() => {
+    const selection = editor.getSelection();
+
+    selection !== '' && onSelection(selection);
+  });
+
   return editor;
 };
-
-export default async function editor(state) {
-  const clearConsole = createConsole();
-  const clearOutput = output();
-  const loadDependencies = async () => {
-    await dependencies(state, (percents, file) => {
-      const content = `<div class="centered"><div class="spinner"></div></div>`;
-
-      clearConsole(content);
-      clearOutput(content);
-    });
-  }
-  const execute = async () => {
-    await loadDependencies();
-    clearConsole();
-    clearOutput();
-    executeCode(state.getActiveFile(), state.getFiles())
-  }
-  const container = el.withFallback('.js-code-editor');
-
-  await loadDependencies();
-
-  const codeMirrorEditor = codeMirror(
-    container.empty(),
-    state.getEditorSettings(),
-    state.getActiveFileContent(),
-    async function onSave(code) {
-      await clearOutput();
-      clearConsole();
-      state.editFile(state.getActiveFile(), { c: code });
-      state.pendingChanges(false);
-      execute();
-    },
-    function onChange() {
-      state.pendingChanges(true);
-    },
-    function showFile(index) {
-      state.setActiveFileByIndex(index);
-      loadFileInEditor();
-    }
-  );
-
-  async function loadFileInEditor() {
-    await clearOutput();
-    clearConsole();
-    codeMirrorEditor.setValue(state.getActiveFileContent());
-    codeMirrorEditor.focus();
-    // we have to do this because we fire the onChange handler of the editor which sets editing=true;
-    state.pendingChanges(false);
-    execute();
-  }
-
-  return loadFileInEditor;
-}

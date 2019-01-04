@@ -6,6 +6,7 @@ export const cleanUpExecutedCSS = function (filename) {
 
   if (node) {
     node.parentNode.removeChild(node);
+    delete STYLES_CACHE[filename];
   }
 }
 
@@ -23,7 +24,7 @@ export const injectCSS = function (css, id) {
   }
 }
 
-window.executeCSS = function (filename, content) {
+export const executeCSS = function (filename, content) {
   if (!STYLES_CACHE[filename]) {
     const node = document.createElement('style');
 
@@ -35,4 +36,7 @@ window.executeCSS = function (filename, content) {
     STYLES_CACHE[filename].innerHTML = content;
   }
 }
+
+window.cleanUpExecutedCSS = cleanUpExecutedCSS;
+window.executeCSS = executeCSS;
 
