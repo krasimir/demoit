@@ -68,7 +68,7 @@ export default async function createState(version) {
   git.import(state.files);
   git.listen(event => {
     if (event === git.ON_COMMIT || event === git.ON_CHECKOUT) {
-      // persist();
+      persist();
     }
     onChange();
   });

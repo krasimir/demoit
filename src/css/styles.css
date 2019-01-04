@@ -471,9 +471,17 @@ svg {
 /*************************** STORIES */
 .story {
   overflow-y: auto;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+}
+.story-arrows {
+  position: relative;
 }
 .story a:hover {
   background: #eaeaea;
+}
+.dark .story a:hover {
+  background: #30434e;
 }
 .story .add-button {
   display: block;
@@ -481,79 +489,36 @@ svg {
   text-align: center;
   text-decoration: none;
   padding: 1em;
+  font-size: 0.8em;
 }
-.story .working-directory {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-}
-.story .working-directory .diff {
-  padding: 1em;
-  margin: 1em;
-  border: solid 1px #e2e2e2;
-}
-.story .working-directory .diff ins {
-  background: #a7fba7;
-}
-.story .working-directory .diff del {
-  background: #f99e9e;
+.dark .story .add-button {
+  color: #fff;
 }
 .story .message-area {
-  border-left: none;
-  border-top: none;
-  border-right: none;
-  border-bottom: solid 1px #eaeaea;
   width: 100%;
+  max-width: 100%;
   display: block;
 }
 .story .commit {
-  border-bottom: solid 1px #eaeaea;
   position: relative;
-  display: grid;
-  grid-template-columns: 30px 1fr;
-}
-.story .commit .commit-content {
-  display: inline-block;
   padding: 1.2em;
 }
-.story .commit-dot {
+.story .commit-edit {
+  padding: 0;
+}
+.story .commit-head {
   display: inline-block;
-  position: relative;
+  font-size: 1.8em;
+  margin-right: 10px;
+  transform: translateY(2px);
+  -webkit-transform: translateY(2px);
+  line-height: 0;
 }
-.story .commit-dot span {
-  display: block;
-  width: 10px;
-  height: 10px;
-  background: #999;
-  border-radius: 5px;
-  position: absolute;
-  top: 20px;
-  left: 1.2em;
+.story .commit + .commit {
+  border-top: solid 1px #eaeaea;
 }
-.story .commit-dot::before, .story .commit-dot::after  {
-  display: none;
-  content: " ";
-  width: 2px;
-  height: 14px;
-  background: #999;
-  position: absolute;
-  top: 0;
-  left: calc(1.2em + 4px);
-}
-.story .commit-dot::after {
-  top: 36px;
-  left: calc(1.2em + 4px);
-}
-.story .commit + .commit .commit-dot::before {
-  display: block;
-}
-.story .commit:not(:last-child) .commit-dot::after {
-  display: block;
-}
-.story .commit-dot-head > span {
-  background: #006d00;
-}
-.story .commit-dot-edit::before, .story .commit-dot-edit::after {
-  display: none !important;
+.dark .story .commit + .commit {
+  border-top: solid 1px #2e414d;
 }
 .story .commit-nav {
   float: right;
@@ -565,7 +530,79 @@ svg {
   text-decoration: none;
   border-radius: 3px;
 }
-.story .commit-content a {
+.story .commit-nav a + a {
+  margin-left: 1em;
+}
+.story .commit a {
   color: inherit;
   text-decoration: none;
+}
+.story .working-directory .diffs {
+  padding: 1em;
+  margin: 1em;
+  border: solid 1px #e2e2e2;
+}
+.dark .story .working-directory .diffs {
+  border: solid 1px #2e414c;
+}
+.story .working-directory .diffs ins {
+  background: #a7fba7;
+  text-decoration: none;
+}
+.dark .story .working-directory .diffs ins {
+  background: #006e00;
+}
+.story .working-directory .diffs del {
+  background: #f99e9e;
+  text-decoration: none;
+}
+.story .working-directory .diffs del {
+  background: #480d0d;
+}
+.story .diff {
+  display: grid;
+  grid-template-columns: 10% 25% 65%;
+}
+.story .diff + .diff {
+  padding-top: 1em;
+  margin-top: 1em;
+  border-top: dotted 1px #e2e2e2;
+}
+.story .diffs .label {
+  font-size: 0.7em;
+  padding: 0.5em;
+  border-radius: 2px;
+}
+.story .diffs .label-E {
+  background: #e2e2e2;
+}
+.dark .story .diffs .label-E {
+  background: #304958;
+}
+.story .diffs .label-N {
+  background: #a7fba7;
+}
+.dark .story .diffs .label-N {
+  background: #006e00;
+}
+.story .diffs .label-D {
+  background: #f99e9e;
+}
+.dark .story .diffs .label-D {
+  background: #480d0d;
+}
+.story .diffs .label-R {
+  background: #ccf0f9;
+}
+.dark .story .diffs .label-R {
+  background: #1c5e67;
+}
+.story-form {
+  position: relative;
+}
+.story .working-indicator {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 9;
 }
