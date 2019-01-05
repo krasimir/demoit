@@ -475,7 +475,7 @@ svg {
 .story {
   overflow-y: auto;
   display: grid;
-  grid-template-columns: 1fr 35px;
+  grid-template-columns: 1fr 32px;
 }
 .story-arrows {
   position: relative;
@@ -604,9 +604,28 @@ svg {
 .story-form {
   position: relative;
 }
-.story .working-indicator {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  z-index: 9;
+.story .story-form-bar {
+  padding-bottom: 1em;
+  padding-left: 5px;
+  border-bottom: dotted 1px #e2e2e2;
+  margin-top: 1em;
+  margin-left: 1em;
+  font-size: 0.8em;
+}
+.dark .story .story-form-bar {
+  border-bottom: dotted 1px #2e414c;
+}
+.story .story-form-bar a {
+  opacity: 0.3;
+  display: inline-block;
+}
+.story .story-form-bar a:hover {
+  opacity: 1;
+}
+.story .story-form-bar a + a {
+  margin-left: 1em;
+}
+.story .story-form-bar a svg {
+  transform: translateY(2px);
+  -webkit-transform: translateY(2px);
 }

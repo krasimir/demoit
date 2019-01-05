@@ -8,7 +8,7 @@ export default function newFilePopUp() {
     title: 'New file',
     content: `
       <input name="filename" data-export="filenameInput" placeholder="untitled.js"/>
-      <button class="save secondary" data-export="saveButton">${ CHECK_ICON }<span>Create</span></button>
+      <button class="save secondary" data-export="saveButton">${ CHECK_ICON() }<span>Create</span></button>
     `,
     cleanUp() {
       done();

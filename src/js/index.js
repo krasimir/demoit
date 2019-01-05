@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define, no-sequences */
 import pkg from '../../package.json';
 import el from './utils/element';
 import { IS_PROD } from './constants';
@@ -15,21 +16,21 @@ import story from './story';
 createState(pkg.version).then(state => {
   async function render() {
     layout(state);
-    
+
     const addToStory = story(state, () => executeCurrentFile());
     const { loadFileInEditor: executeCurrentFile } = await editor(state, [
       (event, data, editor) => (event === ON_SELECT && addToStory(data, editor))
     ]);
-  
+
     executeCurrentFile();
-  
+
     const showSettings = settings(
       state,
-      () => (el.destroy(), render()), 
+      () => (el.destroy(), render()),
       () => executeCurrentFile()
     );
     const showProfile = profile(state).showProfile;
-  
+
     statusBar(
       state,
       function showFile(filename) {
@@ -38,7 +39,7 @@ createState(pkg.version).then(state => {
       },
       async function newFile() {
         const newFilename = await newFilePopUp();
-  
+
         if (newFilename) {
           state.addNewFile(newFilename);
           executeCurrentFile();
@@ -57,7 +58,7 @@ createState(pkg.version).then(state => {
             executeCurrentFile();
           },
           function onSetAsEntryPoint() {
-            state.setEntryPoint(filename)
+            state.setEntryPoint(filename);
             executeCurrentFile();
           }
         );
@@ -79,6 +80,6 @@ window.addEventListener('load', () => {
 
   navigator.serviceWorker.register('/sw.js?id=' + pkg.version).then(
     () => {},
-    err => console.error('SW registration failed!')
-  )
+    () => console.error('SW registration failed!')
+  );
 });

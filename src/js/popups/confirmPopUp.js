@@ -6,7 +6,7 @@ export default function confirmPopUp(title, message, onChange) {
     title,
     content: `
       <p class="mb3">${ message }</p>
-      <button class="save secondary" data-export="yesButton">${ CHECK_ICON }<span>Yes</span></button>
+      <button class="save secondary" data-export="yesButton">${ CHECK_ICON() }<span>Yes</span></button>
       <button class="save secondary right" data-export="noButton">${ CLOSE_ICON() }<span>No</span></button>
     `,
     onRender({ yesButton, noButton, closePopup }) {

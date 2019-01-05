@@ -8,7 +8,7 @@ export default function editNamePopUp(currentName, onChange) {
     title: 'Edit demo name',
     content: `
       <input data-export="nameInput" value="${ currentName }"/>
-      <button class="save secondary" data-export="saveButton">${ CHECK_ICON }<span>Update</span></button>
+      <button class="save secondary" data-export="saveButton">${ CHECK_ICON() }<span>Update</span></button>
     `,
     onRender({ nameInput, saveButton, closePopup }) {
       const save = () => {
@@ -17,7 +17,7 @@ export default function editNamePopUp(currentName, onChange) {
       };
 
       nameInput.e.focus();
-      nameInput.e.setSelectionRange(0, currentName.lastIndexOf('.'))
+      nameInput.e.setSelectionRange(0, currentName.lastIndexOf('.'));
       nameInput.onKeyUp(e => {
         if (e.keyCode === ENTER_KEY) {
           save();

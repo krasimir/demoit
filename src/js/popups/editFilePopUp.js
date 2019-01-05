@@ -9,7 +9,7 @@ export default function editFilePopUp(filename, totalNumOfFiles, deleteFile, ren
     title: 'Edit',
     content: `
       <input name="filename" data-export="filenameInput" value="${ filename }"/>
-      <button class="save secondary" data-export="saveButton">${ CHECK_ICON }<span>Update</span></button>
+      <button class="save secondary" data-export="saveButton">${ CHECK_ICON() }<span>Update</span></button>
       <button class="save secondary" data-export="setAsEntryPointButton">${ DOT_CIRCLE(20) }<span>Entry point</span></button>
       <button class="delete secondary right" data-export="deleteButton">${ TRASH_ICON() }<span>Delete</span></button>
     `,

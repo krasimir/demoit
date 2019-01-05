@@ -4,6 +4,8 @@ import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 import commitDiff from './utils/commitDiff';
 import { connectCommits, empty as emptySVGGraph } from './utils/svg';
 import confirmPopUp from './popups/confirmPopUp';
+import { CHECK_ICON, CLOSE_ICON } from './utils/icons';
+import { truncate } from './utils';
 
 const SVG_X = 4;
 const SVG_INITIAL_Y = 25;
@@ -12,6 +14,15 @@ export default function story(state, onChange) {
   const container = el.withFallback('.story');
   const git = state.git();
   let editor = null, editMode = false, currentlyEditingHash;
+  const onSave = message => git.amend(currentlyEditingHash, message);
+  const onCancel = message => {
+    editMode = false;
+    editor = null;
+    if (message === '') {
+      git.amend(currentlyEditingHash, formatDate());
+    }
+    render();
+  };
 
   if (!container.found()) return false;
 
@@ -39,7 +50,7 @@ export default function story(state, onChange) {
           </div>
           ` : '' }
       </div>
-      <div class="story-arrows"><svg id="svg-canvas" width="40px" height="98%"></svg></div>
+      <div class="story-arrows"><svg id="svg-canvas" width="32px" height="98%"></svg></div>
     `).forEach(el => {
       if (el.attr('data-export') === 'checkoutLink') {
         el.onClick(() => {
@@ -65,7 +76,7 @@ export default function story(state, onChange) {
       }
     });
 
-    const { addButton, messageArea, workingIndicator } = container.namedExports();
+    const { addButton, messageArea, confirmButton, closeButton } = container.namedExports();
 
     addButton && addButton.onClick(() => {
       editMode = true;
@@ -74,28 +85,33 @@ export default function story(state, onChange) {
       render();
     });
 
-    workingIndicator && workingIndicator.css('display', 'none');
-    messageArea && (editor = codeMirror(
-      messageArea,
-      state.getEditorSettings(),
-      git.show(currentlyEditingHash).message,
-      function onSave(message) {
-        workingIndicator.css('display', 'none');
-        git.amend(currentlyEditingHash, message);
-      },
-      function onChange() {
-        workingIndicator.css('display', 'block');
-        renderGraph(git.logAsTree());
-      },
-      function onCancel(message) {
+    if (messageArea) {
+      editor = codeMirror(
+        messageArea,
+        state.getEditorSettings(),
+        git.show(currentlyEditingHash).message,
+        message => {
+          confirmButton.css('opacity', '0.3');
+          onSave(message);
+        },
+        function onChange() {
+          confirmButton.css('opacity', '1');
+          renderGraph(git.logAsTree());
+        },
+        onCancel
+      );
+      confirmButton.onClick(() => {
+        onSave(editor.getValue());
         editMode = false;
         editor = null;
-        if (message === '') {
-          git.amend(currentlyEditingHash, formatDate());
-        }
         render();
-      }
-    ));
+      });
+      closeButton.onClick(() => {
+        editMode = false;
+        editor = null;
+        render();
+      });
+    }
 
     renderGraph(git.logAsTree());
   };
@@ -122,7 +138,7 @@ function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
 
   function process(commit) {
     const { hash, message, derivatives } = commit;
-    const messageFirstLine = message.split('\n').shift();
+    const messageFirstLine = truncate(message.split('\n').shift(), 36);
     const linkLabel = (git.head() === hash ? '<span class="commit-head">&#8594;</span>' : '') + messageFirstLine;
     const link = !unstaged && !editMode ?
       `<a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${ hash }">${ linkLabel }</a>` :
@@ -131,27 +147,29 @@ function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
     return `
       <div class="commit${ currentlyEditingHash === hash && editMode ? ' commit-edit' : ''}" id="c${ hash }">
         ${
-          currentlyEditingHash === hash && editMode ? form() : `
-            <div class="commit-nav">
-              <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${ hash }">&#9998; story</a>
-              ${ !unstaged ? `<a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${ hash }" data-commit-message="${ messageFirstLine }">&#10006; delete</a>` : '' }
-            </div>
-            ${ link }
-          `
+          currentlyEditingHash === hash && editMode ?
+            `
+              <div class="story-form">
+                <div class="story-form-bar">
+                  <a href="javascript:void(0);" data-export="confirmButton">${ CHECK_ICON(12) } save</a>
+                  <a href="javascript:void(0);" data-export="closeButton">${ CLOSE_ICON(12) } cancel</a>
+                </div>
+                <div data-export="messageArea" class="message-area"></div>
+              </div>
+            ` :
+            `
+              <div class="commit-nav">
+                <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${ hash }">&#9998; story</a>
+                ${ !unstaged ? `<a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${ hash }" data-commit-message="${ messageFirstLine }">&#10006; delete</a>` : '' }
+              </div>
+              ${ link }
+            `
         }
       </div>
     ` + derivatives.map(process).join('');
   }
 
   return root !== null ? process(root, 0) : '';
-}
-function form() {
-  return `
-    <div class="story-form">
-      <div data-export="workingIndicator" class="working-indicator">&#10035;</div>
-      <div data-export="messageArea" class="message-area"></div>
-    </div>
-  `;
 }
 function codeMirror(container, editorSettings, value, onSave, onChange, onCancel) {
   defineCodeMirrorCommands(CodeMirror);
