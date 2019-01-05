@@ -76,7 +76,7 @@ export default function story(state, onChange) {
       }
     });
 
-    const { addButton, messageArea, confirmButton, closeButton } = container.namedExports();
+    const { addButton, messageArea, confirmButton, closeButton, publishStatus } = container.namedExports();
 
     addButton && addButton.onClick(() => {
       editMode = true;
@@ -111,6 +111,12 @@ export default function story(state, onChange) {
         editor = null;
         render();
       });
+      publishStatus.onChange(position => {
+        git.amend(currentlyEditingHash, git.show(currentlyEditingHash).message, { position });
+        editMode = false;
+        editor = null;
+        render();
+      });
     }
 
     renderGraph(git.logAsTree());
@@ -137,8 +143,9 @@ function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
   const root = git.logAsTree();
 
   function process(commit) {
-    const { hash, message, derivatives } = commit;
-    const messageFirstLine = truncate(message.split('\n').shift(), 36);
+    const { hash, message, derivatives, meta } = commit;
+    const currentPosition = meta && parseInt(meta.position, 10) > 0 ? `#${ parseInt(meta.position, 10) }` : '';
+    const messageFirstLine = getTitleFromCommitMessage(message);
     const linkLabel = (git.head() === hash ? '<span class="commit-head">&#8594;</span>' : '') + messageFirstLine;
     const link = !unstaged && !editMode ?
       `<a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${ hash }">${ linkLabel }</a>` :
@@ -153,12 +160,16 @@ function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
                 <div class="story-form-bar">
                   <a href="javascript:void(0);" data-export="confirmButton">${ CHECK_ICON(12) } save</a>
                   <a href="javascript:void(0);" data-export="closeButton">${ CLOSE_ICON(12) } cancel</a>
+                  <select data-export="publishStatus">
+                    ${ getPublishOptions(git, hash) }
+                  </select>
                 </div>
                 <div data-export="messageArea" class="message-area"></div>
               </div>
             ` :
             `
               <div class="commit-nav">
+                <span class="current-position">${ currentPosition }</span>
                 <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${ hash }">&#9998; story</a>
                 ${ !unstaged ? `<a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${ hash }" data-commit-message="${ messageFirstLine }">&#10006; delete</a>` : '' }
               </div>
@@ -258,4 +269,19 @@ function renderCommitGraphs({ parent, hash, derivatives }, result = { y: SVG_INI
   }
   return result;
 }
+function getPublishOptions(git, currentHash) {
+  const allCommits = git.log();
+  const { meta } = allCommits[currentHash];
+  const currentPosition = meta ? parseInt(meta.position, 10) : null;
+  let options = [];
 
+  options.push(`<option value="0"${ currentPosition === 0 ? 'selected="selected"' : '' }>unpublished</option>`);
+  for (let i = 1; i < Object.keys(allCommits).length + 1; i++) {
+    options.push(`<option value="${ i }" ${ currentPosition === i ? 'selected="selected"' : '' }>#${ i }</option>`);
+  }
+
+  return options.join('');
+}
+function getTitleFromCommitMessage(text) {
+  return truncate(text.split('\n').shift(), 36);
+}
