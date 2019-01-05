@@ -4,7 +4,7 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
   const removeListenersCallbacks = [];
   var e = typeof selector === 'string' ? parent.querySelector(selector) : selector;
   var found = true;
-  
+
   if (!e) {
     found = false;
     if (!fallbackToEmpty) {
@@ -16,12 +16,12 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
 
   const registerEventListener = (type, callback) => {
     e.addEventListener(type, callback);
-    
+
     const removeListener = () => e.removeEventListener(type, callback);
 
     removeListenersCallbacks.push(removeListener);
     return removeListener;
-  }
+  };
 
   const api = {
     e,
@@ -48,9 +48,8 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       if (typeof value !== 'undefined') {
         e.style[prop] = value;
         return this;
-      } else {
-        return e.style[prop];
       }
+      return e.style[prop];
     },
     clearCSS() {
       e.style = {};
@@ -60,17 +59,15 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       if (typeof value !== 'undefined') {
         e[name] = value;
         return this;
-      } else {
-        return e[name];
       }
+      return e[name];
     },
     attr(attr, value) {
       if (typeof value !== 'undefined') {
         e.setAttribute(attr, value);
         return this;
-      } else {
-        return e.getAttribute(attr);
       }
+      return e.getAttribute(attr);
     },
     onClick(callback) {
       return registerEventListener('click', callback);
@@ -95,8 +92,9 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
         event.preventDefault();
         callback();
       };
+
       e.addEventListener('contextmenu', handler);
-      
+
       const removeListener = () => e.removeEventListener('oncontextmenu', handler);
 
       removeListenersCallbacks.push(removeListener);
@@ -104,7 +102,7 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
     },
     onChange(callback) {
       e.addEventListener('change', () => callback(e.value));
-      
+
       const removeListener = () => e.removeEventListener('change', callback);
 
       removeListenersCallbacks.push(removeListener);
@@ -154,7 +152,7 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
         removeListener();
       });
     }
-  }
+  };
 
   createdElements.push(api);
 
@@ -172,7 +170,7 @@ el.fromString = str => {
     return el(filteredNodes[0]);
   }
   throw new Error('fromString accepts HTMl with a single parent.');
-}
+};
 el.wrap = elements => el(document.createElement('div')).appendChildren(elements);
 el.fromTemplate = selector => el.fromString(document.querySelector(selector).innerHTML);
 el.withFallback = selector => el(selector, document, true);
@@ -180,4 +178,4 @@ el.withRelaxedCleanup = selector => el(selector, document, false, true);
 el.destroy = () => {
   createdElements.forEach(elInstance => elInstance.destroy());
   createdElements = [];
-}
+};

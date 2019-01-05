@@ -14,8 +14,8 @@ export default function editNamePopUp(currentName, onChange) {
       const save = () => {
         nameInput.e.value !== '' && onChange(nameInput.e.value);
         closePopup();
-      }
-      
+      };
+
       nameInput.e.focus();
       nameInput.e.setSelectionRange(0, currentName.lastIndexOf('.'))
       nameInput.onKeyUp(e => {
@@ -26,4 +26,4 @@ export default function editNamePopUp(currentName, onChange) {
       saveButton.onClick(save);
     }
   });
-}
+};

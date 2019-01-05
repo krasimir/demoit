@@ -35,6 +35,9 @@ svg {
 .mb1 {
   margin-bottom: 1em !important;
 }
+.mb3 {
+  margin-bottom: 3em !important;
+}
 /*************************** APP main */
 .app {
   position: fixed;
@@ -472,7 +475,7 @@ svg {
 .story {
   overflow-y: auto;
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 1fr 35px;
 }
 .story-arrows {
   position: relative;
@@ -489,6 +492,7 @@ svg {
   text-align: center;
   text-decoration: none;
   padding: 1em;
+  margin-top: 1em;
   font-size: 0.8em;
 }
 .dark .story .add-button {
@@ -539,7 +543,7 @@ svg {
 }
 .story .working-directory .diffs {
   padding: 1em;
-  margin-right: 1em;
+  margin-left: 1em;
   border: solid 1px #e2e2e2;
 }
 .dark .story .working-directory .diffs {

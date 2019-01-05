@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Layout from 'layout-architect';
 import createPopup from './popup';
 import { LAYOUT_BLOCKS, DEFAULT_LAYOUT } from '../layout';
@@ -72,6 +73,7 @@ export default function settingsPopUp(
       // general settings
       if (layoutArchitectContainer && themePicker) {
         const la = Layout(layoutArchitectContainer.e, LAYOUT_BLOCKS, layout);
+
         themePicker.e.value = theme || 'light';
         saveGeneral.onClick(() => {
           onGeneralUpdate(themePicker.e.value, la.get() || DEFAULT_LAYOUT);
@@ -86,7 +88,7 @@ export default function settingsPopUp(
         enableDownload(downloadButton);
       }
       // managing dependencies
-      if (dependenciesTextarea && saveDependenciesButton) {        
+      if (dependenciesTextarea && saveDependenciesButton) {
         dependenciesTextarea.prop('value', dependenciesStr);
         saveDependenciesButton.onClick(() => {
           onDepsUpdated(dependenciesTextarea.prop('value').split(/\r?\n/));
@@ -95,4 +97,4 @@ export default function settingsPopUp(
       }
     }
   }));
-}
+};

@@ -17,8 +17,8 @@ export default function newFilePopUp() {
       const save = () => {
         filenameInput.e.value !== '' && done(filenameInput.e.value);
         closePopup();
-      }
-      
+      };
+
       filenameInput.e.focus();
       filenameInput.onKeyUp(e => {
         if (e.keyCode === ENTER_KEY) {
@@ -28,4 +28,4 @@ export default function newFilePopUp() {
       saveButton.onClick(save);
     }
   }));
-}
+};

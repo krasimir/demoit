@@ -1,45 +1,45 @@
+/* eslint-disable max-len, no-use-before-define, no-sequences */
 import el from './utils/element';
 import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 import commitDiff from './utils/commitDiff';
-import connectCommits from './utils/svg';
+import { connectCommits, empty as emptySVGGraph } from './utils/svg';
+import confirmPopUp from './popups/confirmPopUp';
 
-const SVG_X = 34;
+const SVG_X = 4;
 const SVG_INITIAL_Y = 25;
-const SVG_Y = 48.5;
 
 export default function story(state, onChange) {
   const container = el.withFallback('.story');
   const git = state.git();
-  let editor = null;
-  let editorCursorPosition = null;
-  let editMode = false, currentlyEditingHash;
-  
-  if (!container.found()) return;
-  
+  let editor = null, editMode = false, currentlyEditingHash;
+
+  if (!container.found()) return false;
+
   const render = () => {
-    const showGraph = !editMode && Object.keys(git.log()).length > 1;
     const areThereAnyCommits = git.head() !== null;
     const diffs = commitDiff(areThereAnyCommits ? git.show().files : [], git.getAll());
-    const renderedCommits = renderCommits(git, editMode, diffs.length === 0, currentlyEditingHash);
+    const renderedCommits = renderCommits(git, editMode, diffs.length > 0, currentlyEditingHash);
 
-    container.css('display', !showGraph ? 'block' : 'grid');
     container.content(`
-      ${ showGraph ? '<div class="story-arrows"><svg id="svg-canvas" width="40px" height="98%"></svg></div>' : '' }
       <div>
-        ${ renderedCommits ? `<div data-export="list">` + renderedCommits + `</div>` : '' }
-        ${ diffs.length > 0 ? 
+        ${ renderedCommits ? '<div data-export="list">' + renderedCommits + '</div>' : '' }
+        ${ diffs.length > 0 ?
           `<div class="working-directory">
             <div class="diffs">
               ${ diffs.map(renderDiff).join('') }
             </div>
             <div class="centered">
               <a href="javascript:void(0)" data-export="addButton" class="add-button">
-                ${ areThereAnyCommits ? '&#10010; You have unstaged changes. Commit them by clicking here.' : '&#10010; Click here to make your first commit.' }
+                ${ areThereAnyCommits ?
+                  '&#10010; You have unstaged changes. Commit them by clicking here.' :
+                  '&#10010; Click here to make your first commit.'
+                }
               </a>
             </div>
           </div>
           ` : '' }
       </div>
+      <div class="story-arrows"><svg id="svg-canvas" width="40px" height="98%"></svg></div>
     `).forEach(el => {
       if (el.attr('data-export') === 'checkoutLink') {
         el.onClick(() => {
@@ -55,7 +55,13 @@ export default function story(state, onChange) {
         });
       }
       if (el.attr('data-export') === 'deleteCommit') {
-        el.onClick(() => git.adios(el.attr('data-commit-hash')));
+        el.onClick(() => {
+          confirmPopUp('Deleting a commit', `Deleting "${ el.attr('data-commit-message') }" commit. Are you sure?`, decision => {
+            if (decision) {
+              git.adios(el.attr('data-commit-hash'));
+            }
+          });
+        });
       }
     });
 
@@ -79,27 +85,20 @@ export default function story(state, onChange) {
       },
       function onChange() {
         workingIndicator.css('display', 'block');
+        renderGraph(git.logAsTree());
       },
       function onCancel(message) {
         editMode = false;
         editor = null;
-        editorCursorPosition = null;
         if (message === '') {
           git.amend(currentlyEditingHash, formatDate());
         }
         render();
-      },
-      function onBlur() {
-        editorCursorPosition = editor ? editor.getCursor() : null;
       }
     ));
 
-    if (showGraph) {
-      const { connections, yValues } = renderCommitGraphs(git.logAsTree());
-
-      connections.forEach(([top, down]) => connectCommits(SVG_X, yValues[top], yValues[down]));
-    }
-  }
+    renderGraph(git.logAsTree());
+  };
 
   git.listen(event => {
     if (!editMode) render();
@@ -114,19 +113,20 @@ export default function story(state, onChange) {
         editor.focus();
         editor.refresh();
         editor.replaceSelection(code);
-      }, 50);
+      }, 1);
     }
-  }
+  };
 }
-function renderCommits(git, editMode, allowCheckout, currentlyEditingHash) {
+function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
   const root = git.logAsTree();
 
   function process(commit) {
     const { hash, message, derivatives } = commit;
-    const linkLabel = (git.head() === hash ? '<span class="commit-head">&#8594;</span>' : '') + message.split('\n').shift();
-    const link = allowCheckout && !editMode ?
+    const messageFirstLine = message.split('\n').shift();
+    const linkLabel = (git.head() === hash ? '<span class="commit-head">&#8594;</span>' : '') + messageFirstLine;
+    const link = !unstaged && !editMode ?
       `<a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${ hash }">${ linkLabel }</a>` :
-      `<span style="opacity:0.4;">${ linkLabel }</span>`
+      `<span style="opacity:0.4;">${ linkLabel }</span>`;
 
     return `
       <div class="commit${ currentlyEditingHash === hash && editMode ? ' commit-edit' : ''}" id="c${ hash }">
@@ -134,7 +134,7 @@ function renderCommits(git, editMode, allowCheckout, currentlyEditingHash) {
           currentlyEditingHash === hash && editMode ? form() : `
             <div class="commit-nav">
               <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${ hash }">&#9998; story</a>
-              <a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${ hash }">&#10006; delete</a>
+              ${ !unstaged ? `<a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${ hash }" data-commit-message="${ messageFirstLine }">&#10006; delete</a>` : '' }
             </div>
             ${ link }
           `
@@ -145,7 +145,7 @@ function renderCommits(git, editMode, allowCheckout, currentlyEditingHash) {
 
   return root !== null ? process(root, 0) : '';
 }
-function form () {
+function form() {
   return `
     <div class="story-form">
       <div data-export="workingIndicator" class="working-indicator">&#10035;</div>
@@ -153,7 +153,7 @@ function form () {
     </div>
   `;
 }
-function codeMirror(container, editorSettings, value, onSave, onChange, onCancel, onBlur) {
+function codeMirror(container, editorSettings, value, onSave, onChange, onCancel) {
   defineCodeMirrorCommands(CodeMirror);
 
   const editor = CodeMirror(container.e, {
@@ -173,8 +173,7 @@ function codeMirror(container, editorSettings, value, onSave, onChange, onCancel
   const change = () => onChange(editor.getValue());
 
   editor.on('change', change);
-  editor.on('blur', onBlur);
-  editor.setOption("extraKeys", {
+  editor.setOption('extraKeys', {
     'Ctrl-S': save,
     'Cmd-S': save,
     'Esc': () => onCancel(editor.getValue()),
@@ -190,8 +189,8 @@ function renderDiff(diff) {
   let diffChangeLabel = '';
   let diffAdditionalInfo = '';
 
-  switch(diff[0]) {
-    case 'E': 
+  switch (diff[0]) {
+    case 'E':
       diffChangeLabel = 'edit';
       diffAdditionalInfo = diff[2].html;
     break;
@@ -216,16 +215,23 @@ function renderDiff(diff) {
   `;
 }
 function formatDate(date = new Date()) {
-  var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var day = date.getDate(), monthIndex = date.getMonth(), year = date.getFullYear().toString().substr(-2);
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = date.getDate(), monthIndex = date.getMonth(), year = date.getFullYear().toString().substr(-2);
+
   return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + date.getHours() + ':' + date.getMinutes();
 }
-function renderCommitGraphs(
-  { parent, hash, derivatives },
-  result = { y: SVG_INITIAL_Y, connections: [], yValues: {} }
-) {
+function renderGraph(tree) {
+  setTimeout(() => {
+    emptySVGGraph();
+
+    const { connections, yValues } = renderCommitGraphs(tree);
+
+    connections.forEach(([top, down]) => connectCommits(SVG_X, yValues[top], yValues[down]));
+  }, 30);
+}
+function renderCommitGraphs({ parent, hash, derivatives }, result = { y: SVG_INITIAL_Y, connections: [], yValues: {} }) {
   result.yValues[hash] = result.y;
-  result.y += SVG_Y;
+  result.y += el('#c' + hash).e.offsetHeight + 0.3;
   if (parent !== null) {
     result.connections.push([parent, hash]);
   }

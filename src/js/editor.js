@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import el from './utils/element';
 import executeCode from './execute';
 import createConsole from './console';
@@ -12,18 +13,18 @@ export default async function editor(state, listeners) {
   const clearOutput = output();
   const loadDependencies = async () => {
     await dependencies(state, (percents, file) => {
-      const content = `<div class="centered"><div class="spinner"></div></div>`;
+      const content = '<div class="centered"><div class="spinner"></div></div>';
 
       clearConsole(content);
       clearOutput(content);
     });
-  }
+  };
   const execute = async () => {
     await loadDependencies();
     clearConsole();
     clearOutput();
-    executeCode(state.getActiveFile(), state.getFiles())
-  }
+    executeCode(state.getActiveFile(), state.getFiles());
+  };
   const container = el.withFallback('.js-code-editor');
 
   await loadDependencies();
@@ -58,7 +59,7 @@ export default async function editor(state, listeners) {
     clearConsole();
     codeMirrorEditor.setValue(state.getActiveFileContent());
     codeMirrorEditor.focus();
-    switch(state.getActiveFile().split('.').pop().toLowerCase()) {
+    switch (state.getActiveFile().split('.').pop().toLowerCase()) {
       case 'css': codeMirrorEditor.setOption('mode', 'css'); break;
       case 'html': codeMirrorEditor.setOption('mode', 'htmlmixed'); break;
       default: codeMirrorEditor.setOption('mode', 'jsx'); break;
@@ -94,7 +95,7 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
   const change = () => onChange(editor.getValue());
 
   editor.on('change', change);
-  editor.setOption("extraKeys", {
+  editor.setOption('extraKeys', {
     'Ctrl-S': save,
     'Cmd-S': save,
     'Cmd-1': () => showFile(0),
@@ -115,10 +116,10 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     'Ctrl-7': () => showFile(6),
     'Ctrl-8': () => showFile(7),
     'Ctrl-9': () => showFile(8),
-    "Cmd-D": "selectNextOccurrence",
-    "Ctrl-D": "selectNextOccurrence",
-    "Cmd-/": "toggleCommentIndented",
-    "Ctrl-/": "toggleCommentIndented",
+    'Cmd-D': 'selectNextOccurrence',
+    'Ctrl-D': 'selectNextOccurrence',
+    'Cmd-/': 'toggleCommentIndented',
+    'Ctrl-/': 'toggleCommentIndented'
   });
   CodeMirror.normalizeKeyMap();
   editor.focus();

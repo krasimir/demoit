@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-sequences */
 import createPopup from './popup';
 import { TRASH_ICON, CHECK_ICON, DOT_CIRCLE } from '../utils/icons';
 
@@ -16,20 +17,20 @@ export default function editFilePopUp(filename, totalNumOfFiles, deleteFile, ren
       const save = () => {
         filenameInput.e.value !== '' && rename(filenameInput.e.value);
         closePopup();
-      }
-      
+      };
+
       filenameInput.e.focus();
-      filenameInput.e.setSelectionRange(0, filename.lastIndexOf('.'))
+      filenameInput.e.setSelectionRange(0, filename.lastIndexOf('.'));
       filenameInput.onKeyUp(e => {
         if (e.keyCode === ENTER_KEY) {
           save();
         }
       });
       saveButton.onClick(save);
-  
+
       totalNumOfFiles > 1 ? deleteButton.css('display', 'block') : deleteButton.css('display', 'none');
       deleteButton.onClick(() => (deleteFile(), closePopup()));
       setAsEntryPointButton.onClick(() => (setAsEntryPoint(), closePopup()));
     }
   });
-}
+};

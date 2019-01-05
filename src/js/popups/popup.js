@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-use-before-define */
 import el from '../utils/element';
 import { CLOSE_ICON } from '../utils/icons';
 
@@ -32,7 +33,7 @@ export default function popup(config) {
   const render = (markup) => {
     container.content(markup).forEach(button => {
       const dataExport = button.attr('data-export');
-  
+
       if (dataExport === 'close') {
         button.onClick(close);
       } else if (dataExport.match(/^page/)) {
@@ -41,12 +42,12 @@ export default function popup(config) {
     });
     config.onRender && config.onRender({
       closePopup: close,
-      ...container.namedExports(),
+      ...container.namedExports()
     });
-  }
+  };
 
   layout.css('filter', 'blur(2px)');
   container.appendTo(body);
   render('buttons' in config ? MULTIPLE_PAGES_MARKUP(config, config.defaultTab) : DEFAULT_MARKUP(config));
   setTimeout(() => container.css('opacity', 1), 1);
-}
+};
