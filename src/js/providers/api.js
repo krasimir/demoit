@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { SAVE_DEMO_URL, GET_DEMOS_URL } from '../constants';
 
 let requestInFlight = false;
@@ -21,17 +22,16 @@ const saveDemo = async function (state, token) {
       console.error(result.error);
     } else if (result.demoId) {
       return result.demoId;
-    } else {
-      console.log(result);
     }
-  } catch(error) {
+    console.log(result);
+  } catch (error) {
     console.error(error);
   }
 };
 
-const getDemos = async function (id) {
+const getDemos = async function (id, token) {
   try {
-    const response = await fetch(GET_DEMOS_URL + '/' + id);
+    const response = await fetch(GET_DEMOS_URL + '/' + id, { headers: { token } });
     const result = await response.json();
 
     if (result.error) {
@@ -41,7 +41,7 @@ const getDemos = async function (id) {
     } else {
       console.log(result);
     }
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   }
 };

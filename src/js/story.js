@@ -275,9 +275,9 @@ function getPublishOptions(git, currentHash) {
   const currentPosition = meta ? parseInt(meta.position, 10) : null;
   let options = [];
 
-  options.push(`<option value="0"${ currentPosition === 0 ? 'selected="selected"' : '' }>unpublished</option>`);
+  options.push(`<option value="0"${ currentPosition === 0 ? 'selected="selected"' : '' }>not in story</option>`);
   for (let i = 1; i < Object.keys(allCommits).length + 1; i++) {
-    options.push(`<option value="${ i }" ${ currentPosition === i ? 'selected="selected"' : '' }>#${ i }</option>`);
+    options.push(`<option value="${ i }" ${ currentPosition === i ? 'selected="selected"' : '' }>position #${ i }</option>`);
   }
 
   return options.join('');

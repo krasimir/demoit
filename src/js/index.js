@@ -66,7 +66,7 @@ createState(pkg.version).then(state => {
       showSettings,
       showProfile,
       function editName() {
-        editNamePopUp(state.name(), newName => state.name(newName));
+        editNamePopUp(state.meta(), meta => state.meta(meta));
       }
     );
   };

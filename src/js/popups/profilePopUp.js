@@ -16,6 +16,7 @@ export default function profilePopUp(profile, getDemos) {
       if (demos.length === 0) {
         demosContainer.content('You have no demos.');
       } else {
+        demos.reverse();
         demosContainer.content(
           demos.map(({ demoId, name }) => {
             return `

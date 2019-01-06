@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import el from './utils/element';
 import { CLOSE_ICON, PLUS_ICON, SETTINGS_ICON, NO_USER, FORK, SHARE } from './utils/icons';
 import { IS_PROD } from './constants';
@@ -6,11 +7,11 @@ const STATUS_BAR_HIDDEN_HEIGHT = '6px';
 const STATUS_BAR_VISIBLE_HEIGHT = '36px';
 
 const showProfilePicAndName = profile => {
-  return `<img src="${ profile.avatar }"/>`
+  return `<img src="${ profile.avatar }"/>`;
 };
 const createStatusBarLink = (exportKey, label, className = '') => {
   return `<a data-export="${ exportKey }" class="${ className }" href="javascript:void(0)">${ label }</a>`;
-}
+};
 const createStr = (str, n) => Array(n).join(str);
 
 export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile, editName) {
@@ -29,11 +30,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     });
     button.onMouseOut(() => {
       tooltip.clearCSS().css('display', 'none');
-    })
-  }
+    });
+  };
 
   const render = () => {
-    const items  = [];
+    const items = [];
     const files = state.getFiles();
 
     items.push('<div data-export="buttons">');
@@ -46,10 +47,10 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         'file:' + filename,
         `<span>${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
         `file${ isCurrentFile ? ' active' : '' }${ file.en ? ' entry' : ''}`
-      ))
+      ));
     });
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
-    items.push(createStatusBarLink('nameButton', state.name() ? state.name() : 'unnamed', 'name'));
+    items.push(createStatusBarLink('nameButton', state.meta().name ? state.meta().name : 'unnamed', 'name'));
     items.push(createStatusBarLink('shareButton', SHARE(14)));
     items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
@@ -63,7 +64,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         button.onRightClick(() => editFile(filename));
       }
     });
-    
+
     const {
       newFileButton,
       closeButton,
@@ -85,12 +86,12 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         '1fr',
         '30px',
         '30px',
-        '30px',
+        '30px'
       ].filter(value => value).join(' '));
       bar.css('height', visibility ? STATUS_BAR_VISIBLE_HEIGHT : STATUS_BAR_HIDDEN_HEIGHT);
       layout.css('height', visibility ? `calc(100% - ${ STATUS_BAR_VISIBLE_HEIGHT })` : `calc(100% - ${ STATUS_BAR_HIDDEN_HEIGHT })`);
       state.updateStatusBarVisibility(visibility);
-    }
+    };
 
     newFileButton && newFileButton.onClick(newFile);
     shareButton && shareButton.onClick(() => showSettings(2));
@@ -117,7 +118,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     enableTooltip(closeButton, 'Close status bar', 'right', 2);
 
     manageVisibility();
-  }
+  };
 
   render();
 

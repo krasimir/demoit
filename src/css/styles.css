@@ -366,6 +366,14 @@ svg {
   margin-bottom: 1em;
   font-size: 1em;
 }
+.popup input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+}
+.popup label {
+  display: block;
+  margin-bottom: 1em;
+}
 .popup select {
   font-size: 1em;
 }

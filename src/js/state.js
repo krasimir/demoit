@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import gitfred from 'gitfred';
 import {
   getParam,
@@ -15,6 +16,8 @@ const git = gitfred();
 const LS_PROFILE_KEY = 'DEMOIT_PROFILE';
 const DEFAULT_STATE = {
   name: '',
+  desc: '',
+  published: false,
   editor: {
     theme: 'light',
     statusBar: false,
@@ -32,13 +35,13 @@ const getFirstFile = function () {
     return 'untitled.js';
   }
   return git.getAll()[0][0];
-}
+};
 const resolveActiveFile = function () {
   const hash = location.hash.replace(/^#/, '');
 
   if (hash !== '' && git.get(hash)) return hash;
   return getFirstFile();
-}
+};
 
 export default async function createState(version) {
   const onChangeListeners = [];
@@ -47,14 +50,14 @@ export default async function createState(version) {
   let pendingChanges = false;
 
   var state = window.state;
-  
+
   if (!state) {
     const stateFromURL = getParam('state');
-    
+
     if (stateFromURL) {
       try {
         state = await readFromJSONFile(stateFromURL);
-      } catch(error) {
+      } catch (error) {
         console.error(`Error reading ${ stateFromURL }`);
       }
     } else {
@@ -72,7 +75,7 @@ export default async function createState(version) {
     onChange();
   });
 
-  var activeFile = resolveActiveFile();
+  let activeFile = resolveActiveFile();
 
   const persist = (fork = false, done = () => {}) => {
     if (IS_PROD && api.loggedIn()) {
@@ -87,8 +90,8 @@ export default async function createState(version) {
         done();
       });
     }
-  }
-  
+  };
+
   const api = {
     getDemoId() {
       if (!state.demoId) {
@@ -125,14 +128,23 @@ export default async function createState(version) {
     getNumOfFiles() {
       return git.getAll().length;
     },
-    name(value) {
-      if (typeof value !== 'undefined') {
-        state.name = value;
+    meta(meta) {
+      if (meta) {
+        const { name, description, published } = meta;
+
+        state.name = name;
+        state.desc = description;
+        state.published = !!published;
         onChange();
         persist();
-        return;
+        return null;
       }
-      return state.name || '';
+      return {
+        id: this.getDemoId(),
+        name: state.name,
+        description: state.desc,
+        published: !!state.published
+      };
     },
     getDependencies() {
       return state.dependencies;
@@ -185,7 +197,7 @@ export default async function createState(version) {
     setEntryPoint(filename) {
       const newValue = !git.get(filename).en;
 
-      git.saveAll({ en: false }),
+      git.saveAll({ en: false });
       git.save(filename, { en: newValue });
     },
     pendingChanges(status) {
@@ -213,7 +225,7 @@ export default async function createState(version) {
       return profile;
     },
     getDemos() {
-      return API.getDemos(profile.id);
+      return API.getDemos(profile.id, profile.token);
     },
     // misc
     version() {
@@ -222,7 +234,7 @@ export default async function createState(version) {
     git() {
       return git;
     }
-  }
+  };
 
   return api;
 }
