@@ -123,7 +123,7 @@ export default function story(state, onChange) {
         setTimeout(() => {
           editor.focus();
           editor.refresh();
-          editor.replaceSelection(str + '\n\n');
+          editor.replaceSelection(str);
           injectFile.e.value = '';
         }, 1);
       });

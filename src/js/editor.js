@@ -25,6 +25,13 @@ export default async function editor(state, listeners) {
     clearOutput();
     executeCode(state.getActiveFile(), state.getFiles());
   };
+  const onSave = async (code) => {
+    await clearOutput();
+    clearConsole();
+    state.editFile(state.getActiveFile(), { c: code });
+    state.pendingChanges(false);
+    execute();
+  };
   const container = el.withFallback('.js-code-editor');
 
   await loadDependencies();
@@ -34,13 +41,7 @@ export default async function editor(state, listeners) {
     container.empty(),
     state.getEditorSettings(),
     state.getActiveFileContent(),
-    async function onSave(code) {
-      await clearOutput();
-      clearConsole();
-      state.editFile(state.getActiveFile(), { c: code });
-      state.pendingChanges(false);
-      execute();
-    },
+    onSave,
     function onChange() {
       state.pendingChanges(true);
     },
@@ -69,12 +70,7 @@ export default async function editor(state, listeners) {
     execute();
   }
 
-  // Subscribing to events happening in the editor
-  function listen(cb) {
-
-  }
-
-  return { loadFileInEditor, listen };
+  return { loadFileInEditor, save: () => onSave(codeMirrorEditor.getValue()) };
 }
 
 function codeMirror(container, editorSettings, value, onSave, onChange, showFile, onSelection) {

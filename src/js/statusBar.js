@@ -14,7 +14,7 @@ const createStatusBarLink = (exportKey, label, className = '') => {
 };
 const createStr = (str, n) => Array(n).join(str);
 
-export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile, editName) {
+export default function statusBar(state, showFile, newFile, editFile, showSettings, showProfile, saveCurrentFile, editName) {
   const bar = el.withRelaxedCleanup('.status-bar');
   const layout = el.withRelaxedCleanup('.app .layout');
   const tooltip = el.withRelaxedCleanup('.status-bar-tooltip');
@@ -60,7 +60,13 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       if (button.attr('data-export').indexOf('file') === 0) {
         const filename = button.attr('data-export').split(':').pop();
 
-        button.onClick(() => showFile(filename));
+        button.onClick(() => {
+          if (!state.isCurrentFile(filename)) {
+            showFile(filename);
+          } else if (state.pendingChanges()) {
+            saveCurrentFile();
+          }
+        });
         button.onRightClick(() => editFile(filename));
       }
     });

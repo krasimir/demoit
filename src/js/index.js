@@ -18,7 +18,7 @@ createState(pkg.version).then(state => {
     layout(state);
 
     const addToStory = story(state, () => executeCurrentFile());
-    const { loadFileInEditor: executeCurrentFile } = await editor(state, [
+    const { loadFileInEditor: executeCurrentFile, save: saveCurrentFile } = await editor(state, [
       (event, data, editor) => (event === ON_SELECT && addToStory(data, editor))
     ]);
 
@@ -65,6 +65,7 @@ createState(pkg.version).then(state => {
       },
       showSettings,
       showProfile,
+      saveCurrentFile,
       function editName() {
         editNamePopUp(state.meta(), meta => state.meta(meta));
       }
