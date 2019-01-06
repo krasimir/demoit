@@ -97,7 +97,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     shareButton && shareButton.onClick(() => showSettings(2));
     settingsButton && settingsButton.onClick(() => showSettings());
     profileButton && profileButton.onClick(showProfile);
-    nameButton && nameButton.onClick(editName);
+    state.isDemoOwner() && nameButton && nameButton.onClick(editName);
     forkButton && forkButton.onClick(() => state.fork());
     closeButton.onClick(e => {
       e.stopPropagation();

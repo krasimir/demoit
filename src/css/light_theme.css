@@ -53,7 +53,7 @@
   text-decoration: none;
   color: #6f42c1; }
 
-.cm-s-light .cm-keyword {
+.cm-s-light .cm-keyword, .cm-s-light .cm-qualifier {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
@@ -73,6 +73,13 @@
   font-style: normal;
   text-decoration: none;
   color: #005cc5; }
+
+.cm-s-light .cm-property {
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  color: #245082;
+}
 
 .cm-s-light .cm-variable {
   font-weight: normal;

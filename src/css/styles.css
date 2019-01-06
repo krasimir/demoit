@@ -485,6 +485,10 @@ svg {
   display: grid;
   grid-template-columns: 1fr 32px;
 }
+.story.no-graph {
+  display: block;
+  padding-right: 1em;
+}
 .story-arrows {
   position: relative;
 }
@@ -552,6 +556,7 @@ svg {
 .story .working-directory .diffs {
   padding: 1em;
   margin-left: 1em;
+  margin-top: 1em;
   border: solid 1px #e2e2e2;
 }
 .dark .story .working-directory .diffs {
@@ -638,7 +643,7 @@ svg {
   -webkit-transform: translateY(2px);
 }
 .story .story-form-bar select {
-  font-size: 0.8em;
+  font-size: 0.9em;
   opacity: 0.8;
   float: right;
   margin-right: 13px;

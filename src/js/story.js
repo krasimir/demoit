@@ -27,10 +27,12 @@ export default function story(state, onChange) {
   if (!container.found()) return false;
 
   const render = () => {
-    const areThereAnyCommits = git.head() !== null;
+    const numOfCommits = Object.keys(git.log()).length;
+    const areThereAnyCommits = numOfCommits > 0;
     const diffs = commitDiff(areThereAnyCommits ? git.show().files : [], git.getAll());
     const renderedCommits = renderCommits(git, editMode, diffs.length > 0, currentlyEditingHash);
 
+    container.attr('class', numOfCommits <= 1 ? 'editor-section story no-graph' : 'editor-section story');
     container.content(`
       <div>
         ${ renderedCommits ? '<div data-export="list">' + renderedCommits + '</div>' : '' }
@@ -76,7 +78,7 @@ export default function story(state, onChange) {
       }
     });
 
-    const { addButton, messageArea, confirmButton, closeButton, publishStatus } = container.namedExports();
+    const { addButton, messageArea, confirmButton, closeButton, publishStatus, injectFile } = container.namedExports();
 
     addButton && addButton.onClick(() => {
       editMode = true;
@@ -96,7 +98,7 @@ export default function story(state, onChange) {
         },
         function onChange() {
           confirmButton.css('opacity', '1');
-          renderGraph(git.logAsTree());
+          numOfCommits > 1 && renderGraph(git.logAsTree());
         },
         onCancel
       );
@@ -117,9 +119,17 @@ export default function story(state, onChange) {
         editor = null;
         render();
       });
+      injectFile.onChange(str => {
+        setTimeout(() => {
+          editor.focus();
+          editor.refresh();
+          editor.replaceSelection(str + '\n\n');
+          injectFile.e.value = '';
+        }, 1);
+      });
     }
 
-    renderGraph(git.logAsTree());
+    numOfCommits > 1 && renderGraph(git.logAsTree());
   };
 
   git.listen(event => {
@@ -144,6 +154,7 @@ function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
 
   function process(commit) {
     const { hash, message, derivatives, meta } = commit;
+
     const currentPosition = meta && parseInt(meta.position, 10) > 0 ? `#${ parseInt(meta.position, 10) }` : '';
     const messageFirstLine = getTitleFromCommitMessage(message);
     const linkLabel = (git.head() === hash ? '<span class="commit-head">&#8594;</span>' : '') + messageFirstLine;
@@ -162,6 +173,10 @@ function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
                   <a href="javascript:void(0);" data-export="closeButton">${ CLOSE_ICON(12) } cancel</a>
                   <select data-export="publishStatus">
                     ${ getPublishOptions(git, hash) }
+                  </select>
+                  <select data-export="injectFile">
+                    <option value="">inject a file</option>
+                    ${ getFileInjectionOptions(git, hash) }
                   </select>
                 </div>
                 <div data-export="messageArea" class="message-area"></div>
@@ -281,6 +296,11 @@ function getPublishOptions(git, currentHash) {
   }
 
   return options.join('');
+}
+function getFileInjectionOptions(git, currentHash) {
+  const files = git.show(currentHash).files;
+
+  return files.map(file => `<option value="{file:${ file[0] }}">${ file[0] }</option>`);
 }
 function getTitleFromCommitMessage(text) {
   return truncate(text.split('\n').shift(), 36);

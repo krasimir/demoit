@@ -80,7 +80,7 @@ export default async function createState(version) {
   const persist = (fork = false, done = () => {}) => {
     if (IS_PROD && api.loggedIn()) {
       if (fork) { delete state.owner; }
-      if (state.owner && state.owner !== profile.id) { return; }
+      if (!api.isDemoOwner()) { return; }
       API.saveDemo(state, profile.token).then(demoId => {
         if (demoId && demoId !== state.demoId) {
           state.demoId = demoId;
@@ -121,6 +121,9 @@ export default async function createState(version) {
     },
     isCurrentFile(filename) {
       return activeFile === filename;
+    },
+    isDemoOwner() {
+      return state.owner && state.owner === profile.id;
     },
     getFiles() {
       return git.getAll();
