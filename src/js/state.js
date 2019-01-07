@@ -123,7 +123,7 @@ export default async function createState(version) {
       return activeFile === filename;
     },
     isDemoOwner() {
-      return state.owner && state.owner === profile.id;
+      return state.owner && profile && state.owner === profile.id;
     },
     getFiles() {
       return git.getAll();

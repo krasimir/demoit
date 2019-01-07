@@ -1,20 +1,20 @@
+/* eslint-disable max-len */
 import { removeParam } from './utils';
 import el from './utils/element';
 import auth from './providers/auth';
-import profilePopUp from './popups/profilePopUp';
 
 export default function profile(state) {
   return {
     showProfile() {
       if (state.loggedIn()) {
-        profilePopUp(state.getProfile(), () => state.getDemos());
+        window.location.href = '/u/' + state.getProfile().id;
       } else {
         auth.grandAccess(state.getDemoId());
       }
     },
     fallbackUI(error) {
       const fallback = el('.layout');
-      
+
       fallback.content(`
         <div class="authentication-failed">
           <h1>Authentication failed</h1>
@@ -25,7 +25,7 @@ export default function profile(state) {
           </p>
         </div>
       `);
-      fallback.namedExports().goBack.onClick(() => window.top.location.href = removeParam('code', window.top.location.href));
+      fallback.namedExports().goBack.onClick(() => (window.top.location.href = removeParam('code', window.top.location.href)));
     }
-  }
+  };
 }

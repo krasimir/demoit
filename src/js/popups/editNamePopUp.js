@@ -5,6 +5,8 @@ import { CHECK_ICON } from '../utils/icons';
 const ENTER_KEY = 13;
 
 export default function editNamePopUp({ name, id, description, published }, onChange) {
+  name = name || '';
+
   createPopup({
     title: 'Edit demo name',
     content: `
