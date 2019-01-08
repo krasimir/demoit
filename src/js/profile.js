@@ -21,7 +21,7 @@ export default function profile(state) {
           <p>Reason: ${ error && error.message ? error.message : 'Unknown' }</p>
           <p>
             <a href="javascript:void(0);" data-export="goBack">Go back</a><br />
-            <a href="https://github.com/krasimir/demoit/issues">Report an issue</a><br />
+            <a href="https://github.com/krasimir/poet.codes.feedback/issues">Report an issue</a><br />
           </p>
         </div>
       `);

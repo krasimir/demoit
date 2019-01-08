@@ -38,8 +38,6 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     const files = state.getFiles();
 
     items.push('<div data-export="buttons">');
-    IS_PROD && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
-    state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
     files.forEach(([ filename, file ]) => {
       const isCurrentFile = state.isCurrentFile(filename);
 
@@ -51,6 +49,8 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     });
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
     items.push(createStatusBarLink('nameButton', state.meta().name ? state.meta().name : 'unnamed', 'name'));
+    IS_PROD && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));
+    state.isForkable() && items.push(createStatusBarLink('forkButton', FORK(14)));
     items.push(createStatusBarLink('shareButton', SHARE(14)));
     items.push(createStatusBarLink('settingsButton', SETTINGS_ICON(14)));
     items.push(createStatusBarLink('closeButton', CLOSE_ICON(14)));
@@ -85,11 +85,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
       buttons.css('display', visibility ? 'grid' : 'none');
       buttons.css('gridTemplateColumns', [
-        IS_PROD ? '34px' : false,
-        state.isForkable() ? '30px' : false,
         createStr('minmax(auto, 135px) ', state.getNumOfFiles() + 1),
         '30px',
         '1fr',
+        IS_PROD ? '34px' : false,
+        state.isForkable() ? '30px' : false,
         '30px',
         '30px',
         '30px'
@@ -117,8 +117,8 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       }
     });
 
-    forkButton && enableTooltip(forkButton, '&#8600; Fork this demo', 'left', 34);
-    profileButton && enableTooltip(profileButton, state.loggedIn() ? 'Your profile' : 'Log in', 'left', 2);
+    profileButton && enableTooltip(profileButton, state.loggedIn() ? 'Your profile' : 'Log in', 'right', 122);
+    forkButton && enableTooltip(forkButton, '&#8600; Fork this story', 'right', 90);
     enableTooltip(shareButton, 'Embed or save locally', 'right', 60);
     enableTooltip(settingsButton, 'Settings', 'right', 29);
     enableTooltip(closeButton, 'Close status bar', 'right', 2);

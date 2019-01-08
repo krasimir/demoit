@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define, no-sequences */
 import pkg from '../../package.json';
 import el from './utils/element';
-import { IS_PROD } from './constants';
 import layout from './layout';
 import editor, { ON_SELECT } from './editor';
 import createState from './state';
@@ -12,6 +11,8 @@ import settings from './settings';
 import statusBar from './statusBar';
 import profile from './profile';
 import story from './story';
+
+console.log('HELLO__');
 
 createState(pkg.version).then(state => {
   async function render() {
@@ -72,15 +73,4 @@ createState(pkg.version).then(state => {
     );
   };
   render();
-});
-
-window.addEventListener('load', () => {
-  if (!('serviceWorker' in navigator) || !IS_PROD) {
-    return;
-  }
-
-  navigator.serviceWorker.register('/sw.js?id=' + pkg.version).then(
-    () => {},
-    () => console.error('SW registration failed!')
-  );
 });

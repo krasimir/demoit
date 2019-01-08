@@ -1,9 +1,7 @@
 ![demoit](./_assets/demoit_light.png)
 ![demoit](./_assets/demoit_dark.png)
 
-# **Demoit** is a interactive JavaScript playground
-
-[https://demoit.app](https://demoit.app)
+# **Demoit** is the front-end app behind [Poet](https://poet.codes)
 
 * No installation.
 * No server needed. It works offline.
@@ -16,15 +14,13 @@
 
 ## Demo :rocket:
 
-* React - [https://demoit.app/e/react](https://demoit.app/e/react)
-* Vue - [https://demoit.app/e/vue](https://demoit.app/e/vue)
-* HTML+CSS - [https://demoit.app/e/htmlcss](https://demoit.app/e/htmlcss)
+[https://poet.codes/new](https://poet.codes/new)
 
 ---
 
 ## Usage
 
-* Online at [demoit.app](https://demoit.app)
+* Online at [poet.codes](https://poet.codes)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
 ## Configuration

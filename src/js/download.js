@@ -1,12 +1,13 @@
+/* eslint-disable no-undef */
 import { load as loadDependencies, cache } from './dependencies';
 
-const ZIP_FILE = '/demoit.zip';
+const ZIP_FILE = '/poet.code.zip';
 
 async function fetchRawFile(url, blob = false) {
   return {
     content: await (await fetch(url))[ blob ? 'blob' : 'text'](),
     url
-  }
+  };
 }
 async function fetchRemoteDependencies() {
   const depsToLoad = Object.keys(cache());
@@ -23,20 +24,19 @@ export default function download(state) {
     button
       .prop('disabled', 'disabled')
       .prop('innerHTML', 'Please wait. Preparing the zip file.');
-    
-      
+
     try {
       const remoteDeps = await fetchRemoteDependencies();
-      
+
       await loadDependencies(['./resources/jszip.min.js', './resources/FileSaver.min.js']);
-      
+
       const zip = await JSZip.loadAsync((await fetchRawFile(ZIP_FILE, true)).content);
 
       button
         .prop('disabled', false)
-        .prop('innerHTML', 'Download demoit.zip');
+        .prop('innerHTML', 'Download poet.code.zip');
       button.onClick(async () => {
-        const indexFile = await zip.file('index.html').async("string");
+        const indexFile = await zip.file('index.html').async('string');
         const newState = JSON.parse(JSON.stringify(state.dump()));
 
         newState.dependencies = remoteDeps.map(({ content, url }) => {
@@ -46,13 +46,12 @@ export default function download(state) {
           return fileName;
         });
         zip.file('index.html', indexFile.replace('var state = null;', `var state = ${ JSON.stringify(newState) };`));
-        saveAs(await zip.generateAsync({ type: 'blob' }), 'demoit.zip');
+        saveAs(await zip.generateAsync({ type: 'blob' }), 'poet.code.zip');
       });
-      
 
-    } catch(error) {
+    } catch (error) {
       console.error(error);
-      button.prop('innerHTML', 'There is an error creating the zip file.')
+      button.prop('innerHTML', 'There is an error creating the zip file.');
     }
-  }
+  };
 };
