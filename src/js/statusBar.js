@@ -47,6 +47,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         `file${ isCurrentFile ? ' active' : '' }${ file.en ? ' entry' : ''}`
       ));
     });
+
     items.push(createStatusBarLink('newFileButton', PLUS_ICON(14), ''));
     items.push(createStatusBarLink('nameButton', state.meta().name ? state.meta().name : 'unnamed', 'name'));
     IS_PROD && items.push(createStatusBarLink('profileButton', state.loggedIn() ? showProfilePicAndName(state.getProfile()) : NO_USER(), 'profile'));

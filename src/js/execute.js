@@ -1,3 +1,4 @@
+/* eslint-disable no-new-func */
 import transpile from './utils/transpile';
 import './utils/executeCSS';
 import './utils/executeHTML';
@@ -13,7 +14,7 @@ const prepareExecution = (filename, content) => {
   }
 
   return { filename, content };
-}
+};
 const formatModule = ({ filename, content }) => `
   {
     filename: "${ filename }",
@@ -27,7 +28,7 @@ const formatModule = ({ filename, content }) => `
 export default function execute(activeFile, files) {
   const formattedFiles = [];
   let index = 0;
-  
+
   try {
     let entryPoint = files.findIndex(([ filename ]) => filename === activeFile);
 
@@ -51,7 +52,7 @@ export default function execute(activeFile, files) {
         const module = modules.find(({ filename }) => filename === file);
 
         if (!module) {
-          throw new Error('Demoit can not find "' + file + '" file.');
+          throw new Error('Can not find "' + file + '" file.');
         }
         imported.push(file);
         module.func(require, module.exports);
@@ -61,7 +62,7 @@ export default function execute(activeFile, files) {
       modules[index].func(require, modules[index].exports);
       cleanUpCSS();
     `;
-    
+
     const transpiledCode = transpile(code);
 
     (new Function('index', transpiledCode))(entryPoint);
@@ -69,5 +70,6 @@ export default function execute(activeFile, files) {
     return transpiledCode;
   } catch (error) {
     console.error(error);
+    return null;
   }
 }

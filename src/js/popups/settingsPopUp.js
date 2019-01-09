@@ -52,8 +52,8 @@ export default function settingsPopUp(
       `
         <p>
           v${ version }<br />
-          On the web: <a href="https://demoit.app" target="_blank">demoit.app</a><br />
-          GitHub repo: <a href="https://github.com/krasimir/demoit" target="_blank">github.com/krasimir/demoit</a>
+          On the web: <a href="https://poet.codes" target="_blank">Poet.Codes</a><br />
+          GitHub repo: <a href="https://github.com/krasimir/poet.codes.feedback/issues" target="_blank">github.com/krasimir/poet.codes.feedback</a>
         </p>
       `
     ],
