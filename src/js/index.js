@@ -12,8 +12,6 @@ import statusBar from './statusBar';
 import profile from './profile';
 import story from './story';
 
-console.log('HELLO__');
-
 createState(pkg.version).then(state => {
   async function render() {
     layout(state);

@@ -117,7 +117,11 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       }
     });
 
-    profileButton && enableTooltip(profileButton, state.loggedIn() ? 'Your profile' : 'Log in', 'right', 122);
+    profileButton && enableTooltip(
+      profileButton, state.loggedIn() ? 'Your profile' : 'Log in',
+      'right',
+      state.loggedIn() ? 122 : 94
+    );
     forkButton && enableTooltip(forkButton, '&#8600; Fork this story', 'right', 90);
     enableTooltip(shareButton, 'Embed or save locally', 'right', 60);
     enableTooltip(settingsButton, 'Settings', 'right', 29);
