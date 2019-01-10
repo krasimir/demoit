@@ -12,10 +12,12 @@ module.exports = function commitDiff(oldFiles, newFiles) {
   const dictB = toDict(newFiles);
 
   Object.keys(dictA).forEach(filename => {
-    if (dictB[filename]) {
+    if (dictB.hasOwnProperty(filename)) {
       const strDiff = git.calcStrDiff(dictA[filename], dictB[filename]);
 
-      if (strDiff !== null) diffs.push(['E', filename, strDiff]);
+      if (strDiff !== null) {
+        diffs.push(['E', filename, strDiff]);
+      }
     } else {
       diffs.push(['D', filename, dictA[filename]]);
       Object.keys(dictB).forEach(filenameInB => {
@@ -27,10 +29,10 @@ module.exports = function commitDiff(oldFiles, newFiles) {
     }
   });
   Object.keys(dictB).forEach(filename => {
-    if (!dictA[filename]) {
-      diffs.push(['N', filename, dictB[filename]])
+    if (!dictA.hasOwnProperty(filename)) {
+      diffs.push(['N', filename, dictB[filename]]);
     }
   });
 
   return diffs;
-}
+};

@@ -151,6 +151,9 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
         e.select();
         removeListener();
       });
+    },
+    exists(selector) {
+      return !!document.querySelector(selector);
     }
   };
 

@@ -275,7 +275,9 @@ function renderGraph(tree) {
 }
 function renderCommitGraphs({ parent, hash, derivatives }, result = { y: SVG_INITIAL_Y, connections: [], yValues: {} }) {
   result.yValues[hash] = result.y;
-  result.y += el('#c' + hash).e.offsetHeight + 0.3;
+  if (el.exists('#c' + hash)) {
+    result.y += el('#c' + hash).e.offsetHeight + 0.3;
+  }
   if (parent !== null) {
     result.connections.push([parent, hash]);
   }

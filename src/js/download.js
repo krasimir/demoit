@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { load as loadDependencies, cache } from './dependencies';
 
-const ZIP_FILE = '/poet.code.zip';
+const ZIP_FILE = '/poet.codes.zip';
 
 async function fetchRawFile(url, blob = false) {
   return {

@@ -18,6 +18,7 @@ const DEFAULT_STATE = {
   name: '',
   desc: '',
   published: false,
+  storyWithCode: true,
   editor: {
     theme: 'light',
     statusBar: false,
@@ -78,9 +79,9 @@ export default async function createState(version) {
   let activeFile = resolveActiveFile();
 
   const persist = (fork = false, done = () => {}) => {
-    if (IS_PROD && api.loggedIn()) {
+    if (api.isForkable()) {
+      if (!fork && !api.isDemoOwner()) { return; }
       if (fork) { delete state.owner; }
-      if (!api.isDemoOwner()) { return; }
       API.saveDemo(state, profile.token).then(demoId => {
         if (demoId && demoId !== state.demoId) {
           state.demoId = demoId;
@@ -133,11 +134,12 @@ export default async function createState(version) {
     },
     meta(meta) {
       if (meta) {
-        const { name, description, published } = meta;
+        const { name, description, published, storyWithCode } = meta;
 
         state.name = name;
         state.desc = description;
         state.published = !!published;
+        state.storyWithCode = !!storyWithCode;
         onChange();
         persist();
         return null;
@@ -146,7 +148,8 @@ export default async function createState(version) {
         id: this.getDemoId(),
         name: state.name,
         description: state.desc,
-        published: !!state.published
+        published: !!state.published,
+        storyWithCode: !!state.storyWithCode
       };
     },
     getDependencies() {
@@ -215,7 +218,7 @@ export default async function createState(version) {
     },
     // forking
     isForkable() {
-      return this.loggedIn() && !!state.owner;
+      return IS_PROD && api.loggedIn();
     },
     fork() {
       persist(true, onChange);
@@ -238,6 +241,8 @@ export default async function createState(version) {
       return git;
     }
   };
+
+  window.__state = api;
 
   return api;
 }

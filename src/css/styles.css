@@ -120,7 +120,6 @@ svg {
   width: 100%;
   height: 8px;
   background: #ccc;
-  cursor: pointer;
   transition: height 200ms ease-out;
   overflow: hidden;
 }
@@ -139,19 +138,6 @@ svg {
   opacity: 0.7;
   overflow: hidden;
   position: relative;
-}
-.status-bar a::before {
-  content: "";
-  display: block;
-  width: 1px;
-  height: 18px;
-  background: #999;
-  position: absolute;
-  top: 9px;
-  left: 0;
-}
-.dark .status-bar a::before {
-  background: #4e4e4e;
 }
 .status-bar a span {
   display: block;
@@ -194,6 +180,19 @@ svg {
   position: relative;
   top: 0;
 }
+.status-bar .file::before, .status-bar .new-file::before {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 18px;
+  background: #999;
+  position: absolute;
+  top: 9px;
+  left: 0;
+}
+.dark .status-bar .file::before, .dark .status-bar .new-file::before {
+  background: #4e4e4e;
+}
 .status-bar .file::after {
   display: block;
   position: absolute;
@@ -228,17 +227,18 @@ svg {
   font-style: italic;
   opacity: 0.4;
 }
-.status-bar-tooltip {
+.status-bar-menu {
   position: absolute;
   display: none;
   top: 47px;
+  right: 30px;
   background: #cccccc;
   font-size: 0.8em;
   padding: 1em;
   z-index: 9;
   border-radius: 4px;
 }
-.status-bar-tooltip::before {
+.status-bar-menu::before {
   position: absolute;
   display: block;
   content: "";
@@ -248,18 +248,72 @@ svg {
   border-right: 10px solid transparent;
   border-bottom: 10px solid #cccccc;
   top: -7px;
-  left: 5px;
+  right: 5px;
 }
-.status-bar-tooltip.right::before {
+.status-bar-menu.right::before {
   left: auto;
   right: 5px;
 }
-.dark .status-bar-tooltip {
+.dark .status-bar-menu {
   background-color: #000;
   border-color: #2b2b2b;
 }
-.dark .status-bar-tooltip::before {
+.dark .status-bar-menu::before {
   border-bottom: 10px solid #000;
+}
+.status-bar-menu a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  padding-bottom: 8px;
+}
+.status-bar-menu a:hover {
+  color: #4c0000;
+}
+.dark .status-bar-menu a:hover {
+  color: #7b6d6d;
+}
+.status-bar-menu a img, .status-bar-menu a svg {
+  transform: translateY(6px);
+  -webkit-transform: translateY(4px);
+}
+.status-bar-menu a + a {
+  padding-top: 8px;
+  border-top: solid 1px #afafaf;
+}
+.status-bar-menu a:last-child {
+  padding-bottom: 0;
+}
+.dark .status-bar-menu a + a {
+  border-top: solid 1px #292929;
+}
+.meta-and-status {
+  text-align: center;
+  padding: 10px 8px 8px 8px;
+  font-size: 0.9em;
+}
+.meta-and-status .badge {
+  font-size: 0.8em;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+.meta-and-status .badge.info {
+  background: #bbd5ef;
+}
+.meta-and-status .badge.ok {
+  background: #b6eab6;
+}
+.meta-and-status .badge.warning {
+  background: #e2b5b5;
+}
+.dark .meta-and-status .badge.info {
+  background: #1f476f;
+}
+.dark .meta-and-status .badge.ok {
+  background: #164216;
+}
+.dark .meta-and-status .badge.warning {
+  background: #420000;
 }
 /*************************** POPUP */
 .popup {
@@ -372,6 +426,8 @@ svg {
 }
 .popup label {
   display: block;
+}
+.popup label:last-of-type {
   margin-bottom: 1em;
 }
 .popup select {

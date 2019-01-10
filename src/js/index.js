@@ -9,7 +9,6 @@ import editFilePopUp from './popups/editFilePopUp';
 import editNamePopUp from './popups/editNamePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
-import profile from './profile';
 import story from './story';
 
 createState(pkg.version).then(state => {
@@ -28,7 +27,6 @@ createState(pkg.version).then(state => {
       () => (el.destroy(), render()),
       () => executeCurrentFile()
     );
-    const showProfile = profile(state).showProfile;
 
     statusBar(
       state,
@@ -63,7 +61,6 @@ createState(pkg.version).then(state => {
         );
       },
       showSettings,
-      showProfile,
       saveCurrentFile,
       function editName() {
         editNamePopUp(state.meta(), meta => state.meta(meta));

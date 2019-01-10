@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 const commitDiff = require('../utils/commitDiff');
 
 describe('Given the Story commit diff helper', () => {
@@ -47,7 +48,7 @@ describe('Given the Story commit diff helper', () => {
           ],
           [
             "N", "b.js", "d"
-          ]          
+          ]
         ]
       },
 
@@ -66,11 +67,21 @@ describe('Given the Story commit diff helper', () => {
           ],
           [
             "R", "a.js", "b.js"
-          ]          
+          ]
         ]
+      },
+
+      {
+        A: [
+          [ "code.js", { "c": "" } ]
+        ],
+        B: [
+          [ "code.js", { "c": "" } ]
+        ],
+        result: []
       }
     ].forEach((testCase, i) => {
-      it('should calculate the diff #' + (i+1), () => {
+      it('should calculate the diff #' + (i + 1), () => {
         // if (i == 3) console.log(JSON.stringify(commitDiff(testCase.A, testCase.B), null, 2));
         expect(commitDiff(testCase.A, testCase.B)).toStrictEqual(testCase.result);
       });
