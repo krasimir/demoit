@@ -12,7 +12,8 @@ const addJSFile = function (path, done) {
     done();
   });
   document.body.appendChild(node);
-}
+  return true;
+};
 const addCSSFile = function (path, done) {
   if (LOADED_FILES_CACHE[path]) return done();
   LOADED_FILES_CACHE[path] = false;
@@ -27,7 +28,9 @@ const addCSSFile = function (path, done) {
     done();
   });
   document.body.appendChild(node);
-}
+  return true;
+};
+
 export const load = async function (dependencies, onProgress = () => {}) {
   return new Promise(done => {
     (function load(index) {
@@ -42,24 +45,22 @@ export const load = async function (dependencies, onProgress = () => {}) {
 
       const resource = dependencies[index];
       const extension = resource.split('.').pop().toLowerCase();
-  
+
       if (extension === 'js') {
-        addJSFile(resource, () => load(index + 1))
+        addJSFile(resource, () => load(index + 1));
       } else if (extension === 'css') {
         addCSSFile(resource, () => load(index + 1));
       } else {
-        load(index + 1)
+        load(index + 1);
       }
     })(0);
   });
-}
+};
 export const cache = function () {
   return LOADED_FILES_CACHE;
-}
-export default async function dependencies(state, onProgress) {
+};
+export default async function dependencies(onProgress) {
   var dependencies = ['./resources/editor.js'];
-
-  dependencies = dependencies.concat(state.getDependencies());
 
   await load(dependencies, onProgress);
 }

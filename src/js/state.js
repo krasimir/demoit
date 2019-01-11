@@ -7,7 +7,6 @@ import {
   ensureUniqueFileName
 } from './utils';
 import { IS_PROD } from './constants';
-import { cleanUpExecutedCSS } from './utils/executeCSS';
 import { DEFAULT_LAYOUT } from './layout';
 import API from './providers/api';
 import LS from './utils/localStorage';
@@ -15,18 +14,28 @@ import LS from './utils/localStorage';
 const git = gitfred();
 const LS_PROFILE_KEY = 'DEMOIT_PROFILE';
 const DEFAULT_STATE = {
-  name: '',
-  desc: '',
-  published: false,
-  storyWithCode: true,
-  editor: {
-    theme: 'light',
-    statusBar: false,
-    layout: DEFAULT_LAYOUT
+  'editor': {
+    'theme': 'light',
+    'statusBar': true,
+    'layout': DEFAULT_LAYOUT
   },
-  dependencies: [],
-  files: {},
-  story: []
+  'dependencies': [],
+  'files': {
+    'working': [
+      [
+        'code.js',
+        {
+          'c': `document.querySelector('#output').innerHTML = 'Hello world';
+
+console.log('Hello world');`
+        }
+      ]
+    ],
+    'head': null,
+    'i': 0,
+    'stage': [],
+    'commits': {}
+  }
 };
 
 const getFirstFile = function () {
@@ -95,9 +104,6 @@ export default async function createState(version) {
 
   const api = {
     getDemoId() {
-      if (!state.demoId) {
-        throw new Error('There is no demoId!');
-      }
       return state.demoId;
     },
     getActiveFile() {
@@ -144,13 +150,17 @@ export default async function createState(version) {
         persist();
         return null;
       }
-      return {
-        id: this.getDemoId(),
+
+      const m = {
         name: state.name,
         description: state.desc,
         published: !!state.published,
         storyWithCode: !!state.storyWithCode
       };
+
+      if (state.demoId) m.id = state.demoId;
+
+      return m;
     },
     getDependencies() {
       return state.dependencies;
@@ -180,7 +190,6 @@ export default async function createState(version) {
       persist();
     },
     deleteFile(filename) {
-      cleanUpExecutedCSS(filename);
       git.del(filename);
       if (filename === activeFile) {
         this.setActiveFile(getFirstFile());
@@ -239,6 +248,9 @@ export default async function createState(version) {
     },
     git() {
       return git;
+    },
+    export() {
+      return state;
     }
   };
 

@@ -1,15 +1,6 @@
 const STYLES_CACHE = {};
 const guaranteeValidIdName = filename => filename.replace(/\./g, '_');
 
-export const cleanUpExecutedCSS = function (filename) {
-  const node = document.querySelector('#' + guaranteeValidIdName(filename));
-
-  if (node) {
-    node.parentNode.removeChild(node);
-    delete STYLES_CACHE[filename];
-  }
-}
-
 export const injectCSS = function (css, id) {
   const node = document.querySelector('#' + id);
 
@@ -22,7 +13,7 @@ export const injectCSS = function (css, id) {
     node.innerHTML = css;
     document.body.appendChild(node);
   }
-}
+};
 
 export const executeCSS = function (filename, content) {
   if (!STYLES_CACHE[filename]) {
@@ -30,13 +21,12 @@ export const executeCSS = function (filename, content) {
 
     node.setAttribute('id', guaranteeValidIdName(filename));
     node.innerHTML = content;
-    document.body.appendChild(node);
+    setTimeout(function () {
+      document.body.appendChild(node);
+    }, 1);
     STYLES_CACHE[filename] = node;
   } else {
     STYLES_CACHE[filename].innerHTML = content;
   }
-}
-
-window.cleanUpExecutedCSS = cleanUpExecutedCSS;
-window.executeCSS = executeCSS;
+};
 

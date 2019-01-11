@@ -1,8 +1,9 @@
+/* eslint-disable quotes */
 import el from './utils/element';
 
 function htmlEncode(str) {
-  return str.replace(/[&<>"']/g, function($0) {
-      return "&" + {"&":"amp", "<":"lt", ">":"gt", '"':"quot", "'":"#39"}[$0] + ";";
+  return str.replace(/[&<>"']/g, function ($0) {
+      return "&" + {"&": "amp", "<": "lt", ">": "gt", '"': "quot", "'": "#39"}[$0] + ";";
   });
 }
 
@@ -20,9 +21,9 @@ export default function logger() {
     }
     element.appendChild(node);
     element.scrollToBottom();
-  }
+  };
 
-  (function(){
+  (function () {
     const originalError = console.error;
     const originalLog = console.log;
     const originalWarning = console.warn;
@@ -51,8 +52,11 @@ export default function logger() {
     };
   })();
 
-  return function clearConsole(hintValue = '<div class="centered"><div>console.log(...)</div></div>') {
-    empty = true;
-    element.empty().content(hintValue);
-  }
+  return {
+    clearConsole: function clearConsole(hintValue = '<div class="centered"><div>console.log(...)</div></div>') {
+      empty = true;
+      element.empty().content(hintValue);
+    },
+    addToConsole: add
+  };
 }

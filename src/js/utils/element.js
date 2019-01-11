@@ -151,9 +151,6 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
         e.select();
         removeListener();
       });
-    },
-    exists(selector) {
-      return !!document.querySelector(selector);
     }
   };
 
@@ -181,4 +178,7 @@ el.withRelaxedCleanup = selector => el(selector, document, false, true);
 el.destroy = () => {
   createdElements.forEach(elInstance => elInstance.destroy());
   createdElements = [];
+};
+el.exists = (selector) => {
+  return !!document.querySelector(selector);
 };

@@ -3,30 +3,21 @@ import el from './utils/element';
 import executeCode from './execute';
 import createConsole from './console';
 import output from './output';
-import dependencies from './dependencies';
+import loadAppDeps from './dependencies';
 import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 
 export const ON_SELECT = 'e_s';
 
 export default async function editor(state, listeners) {
-  const clearConsole = createConsole();
-  const clearOutput = output();
-  const loadDependencies = async () => {
-    await dependencies(state, (percents, file) => {
-      const content = '<div class="centered"><div class="spinner"></div></div>';
-
-      clearConsole(content);
-      clearOutput(content);
-    });
-  };
+  const { clearConsole, addToConsole } = createConsole();
+  const { resetOutput, loadDependenciesInOutput, executeInOut } = await output(state, addToConsole);
   const execute = async () => {
-    await loadDependencies();
+    await resetOutput();
+    await loadDependenciesInOutput();
     clearConsole();
-    clearOutput();
-    executeCode(state.getActiveFile(), state.getFiles());
+    await executeInOut(executeCode(state.getActiveFile(), state.getFiles()));
   };
   const onSave = async (code) => {
-    await clearOutput();
     clearConsole();
     state.editFile(state.getActiveFile(), { c: code });
     state.pendingChanges(false);
@@ -34,7 +25,8 @@ export default async function editor(state, listeners) {
   };
   const container = el.withFallback('.js-code-editor');
 
-  await loadDependencies();
+  clearConsole('<div class="centered"><div class="spinner"></div></div>');
+  await loadAppDeps();
 
   // Initializing CodeMirror
   const codeMirrorEditor = codeMirror(
@@ -56,7 +48,6 @@ export default async function editor(state, listeners) {
 
   // The function that we call to execute a file
   async function loadFileInEditor() {
-    await clearOutput();
     clearConsole();
     codeMirrorEditor.setValue(state.getActiveFileContent());
     codeMirrorEditor.focus();

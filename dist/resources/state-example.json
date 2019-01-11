@@ -1,0 +1,69 @@
+{
+  "editor": {
+    "theme": "light",
+    "statusBar": true,
+    "layout": {
+      "elements": [
+        {
+          "name": "editor",
+          "elements": []
+        },
+        {
+          "elements": [
+            {
+              "name": "HTML",
+              "elements": []
+            },
+            {
+              "name": "console",
+              "elements": []
+            }
+          ],
+          "direction": "horizontal",
+          "sizes": [
+            50,
+            50
+          ]
+        }
+      ],
+      "direction": "vertical",
+      "sizes": [
+        49.1499227202473,
+        50.8500772797527
+      ]
+    }
+  },
+  "dependencies": [
+    "https://unpkg.com/marked@0.6.0/lib/marked.js"
+  ],
+  "files": {
+    "working": [
+      [
+        "code.js",
+        {
+          "c": "import 'styles.css';\nimport 'markup.html';\n\ndocument.querySelector('#output').innerHTML += marked('# Hello world');\n\nconsole.log('Hello world');",
+          "en": true
+        }
+      ],
+      [
+        "markup.html",
+        {
+          "c": "<p style=\"color: red;\">I am red!</p>",
+          "en": false
+        }
+      ],
+      [
+        "styles.css",
+        {
+          "c": "body {\n  font-size: 24px;\n  padding: 0;\n  margin: 0;\n}",
+          "en": false
+        }
+      ]
+    ],
+    "head": null,
+    "i": 0,
+    "stage": [],
+    "commits": {}
+  },
+  "v": "6.1.0"
+}

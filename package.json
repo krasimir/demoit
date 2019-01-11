@@ -9,12 +9,12 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist/*",
-    "copy-static": "cp ./src/index.html ./dist/index.html && cp -r ./src/resources ./dist && cp -r ./src/img ./dist && cp -r ./src/font ./dist",
+    "copy-static": "cp ./src/index.html ./dist/index.html && cp ./src/sandbox.html ./dist/sandbox.html && cp -r ./src/resources ./dist && cp -r ./src/img ./dist && cp -r ./src/font ./dist",
     "produce-minified-js": "cat ./src/js-vendor/split.js ./.tmp/demoit.js | uglifyjs -c -m -o ./dist/demoit.js",
     "produce-js": "cat ./src/js-vendor/split.js ./.tmp/demoit.js > ./dist/demoit.js",
     "produce-css": "cat ./src/css/font.css ./src/css/codemirror.css ./src/css/la.css ./src/css/styles.css ./src/css/light_theme.css ./src/css/dark_theme.css | uglifycss > ./dist/styles.css",
     "produce-editor-js": "cat ./src/js-vendor/codemirror.js ./src/js-vendor/javascript.js ./src/js-vendor/xml.js ./src/js-vendor/jsx.js ./src/js-vendor/mark-selection.js ./src/js-vendor/comment.js ./src/js-vendor/search_cursor.js ./src/js-vendor/markdown.js ./src/js-vendor/css.js ./src/js-vendor/htmlmixed.js ./src/js-vendor/babel-6.26.0.min.js ./src/js-vendor/babel-polyfill@6.26.0.js ./src/js-vendor/babel-plugin-transform-es2015-modules-commonjs@6.26.2.js | uglifyjs -c -m -o ./dist/resources/editor.js",
-    "dev": "yarn build && concurrently \"webpack\" \"onchange ./src/css/*.css -- yarn produce-css\" \"onchange ./.tmp/*.js -- yarn produce-js\" \"cpx ./src/index.html ./dist/ -w\"",
+    "dev": "yarn build && concurrently \"webpack\" \"onchange ./src/css/*.css -- yarn produce-css\" \"onchange ./.tmp/*.js -- yarn produce-js\" \"cpx ./src/index.html ./dist/ -w\" \"cpx ./src/sandbox.html ./dist/ -w\"",
     "build": "yarn clean && yarn copy-static && yarn produce-css && yarn produce-editor-js && webpack --config ./webpack.config.prod.js && yarn produce-minified-js",
     "zip": "node ./scripts/zipit.js",
     "release": "yarn test && yarn build && yarn zip",
@@ -40,12 +40,13 @@
     "@babel/preset-env": "7.1.5",
     "@babel/runtime": "7.1.5",
     "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "8.0.3",
     "babel-jest": "23.6.0",
     "babel-loader": "8.0.4",
-    "babel-eslint": "8.0.3",
     "clean-css-cli": "4.2.1",
     "concurrently": "4.0.1",
     "cpx": "1.5.0",
+    "eslint": "4.12.1",
     "jest": "23.6.0",
     "onchange": "5.1.3",
     "regenerator-runtime": "0.13.1",
@@ -53,11 +54,10 @@
     "uglifycss": "0.0.29",
     "webpack": "4.25.1",
     "webpack-cli": "3.1.2",
-    "zip-folder": "1.0.0",
-    "eslint": "4.12.1"
+    "zip-folder": "1.0.0"
   },
   "dependencies": {
-    "gitfred": "5.3.1",
+    "gitfred": "5.3.2",
     "hashids": "1.2.2",
     "jszip": "3.1.5",
     "layout-architect": "3.0.0"

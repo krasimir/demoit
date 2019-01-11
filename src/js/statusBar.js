@@ -64,7 +64,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       `/login?did=${ state.getDemoId() }`
     ));
     state.isForkable() && menuItems.push(createLink('forkButton', FORK(14) + ' Fork'));
-    menuItems.push(createLink('shareButton', SHARE(14) + ' Share/Embed'));
+    IS_PROD && menuItems.push(createLink('shareButton', SHARE(14) + ' Share/Embed'));
     state.isDemoOwner() && menuItems.push(createLink('nameButton', SETTINGS_ICON(14) + ' Story'));
     menuItems.push(createLink('settingsButton', SETTINGS_ICON(14) + ' Editor'));
     state.isForkable() && menuItems.push(createLink('', NO_USER() + ' Log out', '', `/logout?r=e/${ state.getDemoId() }`));

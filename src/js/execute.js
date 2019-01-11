@@ -1,7 +1,5 @@
 /* eslint-disable no-new-func */
 import transpile from './utils/transpile';
-import './utils/executeCSS';
-import './utils/executeHTML';
 
 const getExt = file => file.split(/\./).pop().toLowerCase();
 const prepareExecution = (filename, content) => {
@@ -39,13 +37,6 @@ export default function execute(activeFile, files) {
     });
 
     const code = `
-      const cleanUpCSS = function() {
-        modules.forEach(function (module) {
-          if (module.filename.split('.').pop().toLowerCase() === 'css' && imported.indexOf(module.filename) === -1) {
-            cleanUpExecutedCSS(module.filename);
-          }
-        });
-      }
       const imported = [];
       const modules = [${ formattedFiles.join(',') }];
       const require = function(file) {
@@ -60,14 +51,12 @@ export default function execute(activeFile, files) {
       };
 
       modules[index].func(require, modules[index].exports);
-      cleanUpCSS();
     `;
 
-    const transpiledCode = transpile(code);
-
-    (new Function('index', transpiledCode))(entryPoint);
-
-    return transpiledCode;
+    return {
+      code: transpile(code),
+      entryPoint
+    };
   } catch (error) {
     console.error(error);
     return null;

@@ -90,9 +90,7 @@ svg {
 }
 /*************************** OUTPUT PANEL */
 .output {
-	padding: 1em;
-  position: relative;
-  overflow: auto;
+  overflow: hidden;
 }
 /*************************** CONSOLE */
 .console {

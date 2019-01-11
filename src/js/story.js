@@ -24,7 +24,7 @@ export default function story(state, onChange) {
     render();
   };
 
-  if (!container.found()) return false;
+  if (!container.found()) return () => {};
 
   const render = () => {
     const numOfCommits = Object.keys(git.log()).length;
@@ -254,7 +254,7 @@ function renderDiff(diff) {
     <div class="diff">
       <div><span class="label label-${ diff[0] }">${ diffChangeLabel }</span></div>
       <div class="diffA">${ diff[1] }</div>
-      <div class="diffB">${ diffAdditionalInfo }</div>
+      <div class="diffB">${ diffAdditionalInfo.replace(/%0A/g, '<br />') }</div>
     </div>
   `;
 }

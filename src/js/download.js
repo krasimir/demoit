@@ -34,7 +34,7 @@ export default function download(state) {
 
       button
         .prop('disabled', false)
-        .prop('innerHTML', 'Download poet.code.zip');
+        .prop('innerHTML', 'Download poet.codes.zip');
       button.onClick(async () => {
         const indexFile = await zip.file('index.html').async('string');
         const newState = JSON.parse(JSON.stringify(state.dump()));
@@ -46,7 +46,7 @@ export default function download(state) {
           return fileName;
         });
         zip.file('index.html', indexFile.replace('var state = null;', `var state = ${ JSON.stringify(newState) };`));
-        saveAs(await zip.generateAsync({ type: 'blob' }), 'poet.code.zip');
+        saveAs(await zip.generateAsync({ type: 'blob' }), 'poet.codes.zip');
       });
 
     } catch (error) {

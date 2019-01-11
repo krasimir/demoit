@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import el from './utils/element';
 import setTheme from './utils/setTheme';
 
@@ -32,10 +33,10 @@ function validateLayout(item) {
     return {
       name: item,
       elements: []
-    }
+    };
   }
   if (item.elements.length > 0) {
-    item.elements.forEach((i, index) => item.elements[index] = validateLayout(i));
+    item.elements.forEach((i, index) => (item.elements[index] = validateLayout(i)));
   }
   return item;
 }
@@ -63,7 +64,7 @@ export default state => {
       if (item.elements.length > 0) {
         const wrapper = el.wrap(build(item));
 
-        wrapper.attr('class', 'editor-section'); 
+        wrapper.attr('class', 'editor-section');
         return wrapper;
       }
       return elementsMap[item.name];
@@ -89,10 +90,10 @@ export default state => {
     }
 
     return normalizedElements;
-  }
+  };
 
   container.empty().appendChildren(build({
     elements: [layout]
   }));
   setTimeout(() => (splits = splitFuncs.map(f => f())), 1);
-}
+};
