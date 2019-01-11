@@ -41,7 +41,7 @@
       [
         "code.js",
         {
-          "c": "import 'styles.css';\nimport 'markup.html';\n\ndocument.querySelector('#output').innerHTML += marked('# Hello world');\n\nconsole.log('Hello world');",
+          "c": "import 'styles.css';\nimport 'markup.html';\n\ndocument.querySelector('#output').innerHTML += marked('# Hello world');\n\nconsole.log('Hello world');\n\nconst api = {};",
           "en": true
         }
       ],
@@ -65,5 +65,5 @@
     "stage": [],
     "commits": {}
   },
-  "v": "6.1.0"
+  "v": "6.2.0"
 }

@@ -107,10 +107,10 @@
 
 .cm-s-dark .CodeMirror-selectedtext {
   color: #000 !important;
-  background: #fff !important;
+  background: #6b95af !important;
 }
 .cm-s-dark .CodeMirror-selected {
-  background: #20303a !important;
+  background: #6b95af !important;
 }
 .cm-s-dark .CodeMirror-markedText {
   background: #386480;

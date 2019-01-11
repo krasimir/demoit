@@ -318,7 +318,7 @@ div.CodeMirror-dragcursors {
   visibility: visible;
 }
 
-.CodeMirror-selected { background: #d9d9d9; }
+.CodeMirror-selected { background: #d9d9d9 !important; }
 .CodeMirror-focused .CodeMirror-selected { background: #d7d4f0; }
 .CodeMirror-crosshair { cursor: crosshair; }
 .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: #d7d4f0; }
@@ -341,6 +341,3 @@ div.CodeMirror-dragcursors {
 
 /* See issue #2901 */
 .cm-tab-wrap-hack:after { content: ''; }
-
-/* Help users use markselection to safely style text background */
-span.CodeMirror-selectedtext { background: none; }

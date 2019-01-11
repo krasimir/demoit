@@ -78,13 +78,18 @@
         50%  { transform: scale(1.2); }
         100% { transform: scale(0.5); }
       }
+      @keyframes fadein {
+        0%   { opacity: 0 }
+        100% { opacity: 1 }
+      }
       .spinner {
         width: 20px;
         height: 20px;
         background: #999;
         border-radius: 10px;
-        animation: bubble 1.0s infinite;
-        -webkit-animation: bubble 1.0s infinite;
+        opacity: 0;
+        animation: bubble 1.0s infinite, fadein 3.0s;
+        -webkit-animation: bubble 1.0s infinite, fadein 3.0s;
       }
     </style>
   </head>
@@ -125,7 +130,11 @@
               container.removeChild(container.firstChild);
             }
             container.innerHTML = '';
-            (new Function('index', e.data.value.code))(e.data.value.entryPoint);
+            try {
+              (new Function('index', e.data.value.code))(e.data.value.entryPoint);
+            } catch(error) {
+              console.error(error);
+            }
             operationSuccessful(e.data.marker);
           break;
         }

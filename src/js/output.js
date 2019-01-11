@@ -35,24 +35,13 @@ export default async function output(state, addToConsole) {
   const output = el.withFallback('.output');
   const iframe = output.find('#sandbox');
   const sendMessage = createMessageSender(iframe, addToConsole);
-  let animInterval;
-
-  iframe.css('opacity', 0);
 
   return {
     setOutputHTML: async function clearOutput(hintValue = DEFAULT_HINT) {
       return sendMessage('html', hintValue);
     },
     resetOutput: async function () {
-      return new Promise(done => {
-        iframe.css('opacity', 0);
-        clearTimeout(animInterval);
-        animInterval = setTimeout(async () => {
-          await sendMessage('reload', null, 'loaded');
-          done();
-          iframe.css('opacity', 1);
-        }, 300);
-      });
+      return await sendMessage('reload', null, 'loaded');
     },
     loadDependenciesInOutput: async function () {
       return sendMessage('dependencies', state.getDependencies());

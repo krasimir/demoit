@@ -199,11 +199,13 @@ export default async function createState(version) {
     listen(callback) {
       onChangeListeners.push(callback);
     },
-    updateLayout(newLayout) {
-      state.editor.layout = newLayout;
-    },
-    updateTheme(newTheme) {
-      state.editor.theme = newTheme;
+    updateThemeAndLayout(newLayout, newTheme) {
+      if (newLayout) {
+        state.editor.layout = newLayout;
+      }
+      if (newTheme) {
+        state.editor.theme = newTheme;
+      };
       persist();
     },
     updateStatusBarVisibility(value) {

@@ -92,11 +92,6 @@ svg {
 .output {
   overflow: hidden;
 }
-.output iframe {
-  transition: opacity 300ms ease-out;
-  -webkit-transition: opacity 300ms ease-out;
-  opacity: 0;
-}
 /*************************** CONSOLE */
 .console {
   font-size: 0.9em;

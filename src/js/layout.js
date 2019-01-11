@@ -59,7 +59,7 @@ export default state => {
   const splitFuncs = [];
   let splits;
   const build = block => {
-    const { direction, elements, sizes } = block;
+    let { direction, elements, sizes } = block;
     const normalizedElements = elements.map(item => {
       if (item.elements.length > 0) {
         const wrapper = el.wrap(build(item));
@@ -69,6 +69,10 @@ export default state => {
       }
       return elementsMap[item.name];
     });
+
+    if (sizes && sizes.length !== elements.length) {
+      sizes = elements.map(() => (100 / elements.length));
+    }
 
     splitFuncs.push(() => ({
       b: block,
@@ -80,7 +84,7 @@ export default state => {
           splits.forEach(({ b, split }) => {
             b.sizes = split.getSizes();
           });
-          state.updateLayout(layout);
+          state.updateThemeAndLayout(layout);
         }
       })
     }));

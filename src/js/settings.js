@@ -15,8 +15,7 @@ export default function settings(state, render, executeCurrentFile) {
       }
     },
     function onGeneralUpdate(newTheme, newLayout) {
-      state.updateTheme(newTheme);
-      state.updateLayout(newLayout);
+      state.updateThemeAndLayout(newLayout, newTheme);
       render();
     },
     tab,
