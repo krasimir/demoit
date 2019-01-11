@@ -9,6 +9,7 @@ function htmlEncode(str) {
 
 export default function logger() {
   const element = el.withFallback('.console');
+
   let empty = true;
   const add = something => {
     const node = document.createElement('div');
@@ -22,6 +23,8 @@ export default function logger() {
     element.appendChild(node);
     element.scrollToBottom();
   };
+
+  element.css('opacity', 1);
 
   (function () {
     const originalError = console.error;
@@ -53,7 +56,7 @@ export default function logger() {
   })();
 
   return {
-    clearConsole: function clearConsole(hintValue = '<div class="centered"><div>console.log(...)</div></div>') {
+    clearConsole: function clearConsole(hintValue = '') {
       empty = true;
       element.empty().content(hintValue);
     },

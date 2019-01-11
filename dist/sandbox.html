@@ -2,29 +2,66 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-control" content="public">
     <title>Demoit</title>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <style>
-      html {
-        box-sizing: border-box;
-        width: 100%;
-        height: 100%;
-      }
-      *, *:before, *:after {
-        box-sizing: inherit;
-      }
-      body {
+      html, body, div, span, applet, object, iframe,
+      h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+      a, abbr, acronym, address, big, cite, code,
+      del, dfn, em, font, img, ins, kbd, q, s, samp,
+      small, strike, strong, sub, sup, tt, var,
+      dl, dt, dd, ol, ul, li,
+      fieldset, form, label, legend,
+      table, caption, tbody, tfoot, thead, tr, th, td {
         margin: 0;
         padding: 0;
-        width: 100%;
-        height: 100%;
+        border: 0;
+        outline: 0;
+        font-weight: inherit;
+        font-style: inherit;
+        font-size: 100%;
         font-family: "Fira Mono", monospace;
-        font-size: 14px;
-        line-height: 1.2em;
-        background: #fff;
-        color: #000;
-        box-sizing: inherit;
+        vertical-align: baseline;
       }
+      *, *:before, *:after {
+        box-sizing: border-box;
+      }
+      /* remember to define focus styles! */
+      :focus {
+        outline: 0;
+      }
+      html {
+        height: 100%;
+        width: 100%;
+      }
+      body {
+        line-height: 1;
+        color: black;
+        background: white;
+        height: 100%;
+        width: 100%;
+      }
+      ol, ul {
+        list-style: none;
+      }
+      /* tables still need 'cellspacing="0"' in the markup */
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      caption, th, td {
+        text-align: left;
+        font-weight: normal;
+      }
+      blockquote:before, blockquote:after,
+      q:before, q:after {
+        content: "";
+      }
+      blockquote, q {
+        quotes: "" "";
+      }
+
       .output {
         height: 100%;
         font-size: 100%;
