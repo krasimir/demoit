@@ -31,10 +31,6 @@
 .cm-s-light .CodeMirror-activeline-background {
   background: #fafbfc; }
 
-.cm-s-light .CodeMirror-matchingbracket {
-  text-decoration: underline;
-  color: #24292e !important; }
-
 .cm-s-light .CodeMirror-lines {
   font-family: inherit;
   font-size: inherit;
@@ -115,3 +111,7 @@
 .cm-s-light .cm-number {color: #164;}
 .cm-s-light .cm-atom {color: #219;}
 .cm-s-light .cm-string {color: #a11;}
+
+.cm-s-light .cm-matchhighlight {
+  background: #f9f9f9;
+}

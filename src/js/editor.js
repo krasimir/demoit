@@ -77,7 +77,9 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     gutters: [],
     styleSelectedText: true,
     matchBrackets: true,
-    theme: editorSettings.theme
+    autoCloseBrackets: true,
+    theme: editorSettings.theme,
+    highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true }
   });
   const save = () => onSave(editor.getValue());
   const change = () => onChange(editor.getValue());

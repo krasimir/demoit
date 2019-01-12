@@ -13,7 +13,7 @@ export default function logger() {
   let empty = true;
   const add = something => {
     const node = document.createElement('div');
-    const text = something ? htmlEncode(something.toString()) : something;
+    const text = something ? htmlEncode(something) : String(something);
 
     node.innerHTML = '<p>' + text + '</p>';
     if (empty) {

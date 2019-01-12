@@ -41,7 +41,7 @@
       [
         "code.js",
         {
-          "c": "import 'styles.css';\nimport 'markup.html';\n\ndocument.querySelector('#output').innerHTML += marked('# Hello world');\n\nconsole.log('Hello world');\n\nconst api = {};",
+          "c": "import 'styles.css';\nimport 'markup.html';\n\ndocument.querySelector('#output').innerHTML += marked('# Hello world');\n\nconsole.log('Hello world');\n\nconst api = {};\n\nconsole.log('a');\nconsole.log(100);\nconsole.log([1, 2]);\nconsole.log({ foo: 'bar', f: function() { var a=10;}});\nconsole.log([{ a: 10, b: 20}, { a: 10, b: 30}])\nconsole.log(null);\nconsole.log(undefined);\nconsole.log(NaN);\n\nconst a = [{}];\na[0].a = a;\na.push(a);\n\nconsole.log(a);",
           "en": true
         }
       ],

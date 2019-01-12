@@ -106,6 +106,10 @@ svg {
   margin: 0;
   padding: 0.5em;
   white-space: pre-wrap;
+  border-bottom: dotted 1px #f3f3f3;
+}
+.dark .console p {
+  border-bottom: dotted 1px #2f4654;
 }
 /*************************** JS EDITOR */
 .js-code-editor {
