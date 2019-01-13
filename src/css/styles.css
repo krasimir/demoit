@@ -20,6 +20,9 @@ body {
 .right {
   float: right;
 }
+.left {
+  float: left;
+}
 svg {
   fill: currentColor;
 }
@@ -37,6 +40,17 @@ svg {
 }
 .mb3 {
   margin-bottom: 3em !important;
+}
+.p1 {
+  padding: 1em !important;
+}
+.p2 {
+  padding: 2em !important;
+}
+.clear::after {
+  content: " ";
+  display: block;
+  clear: both;
 }
 /*************************** APP main */
 .app {
@@ -559,16 +573,17 @@ svg {
 .dark .story a:hover {
   background: #30434e;
 }
-.story .add-button {
-  display: block;
+.story .commit-button {
   color: #000;
   text-align: center;
   text-decoration: none;
   padding: 1em;
-  margin-top: 1em;
   font-size: 0.8em;
 }
-.dark .story .add-button {
+.story .commit-buttons-nav {
+  padding: 1em 0 1em 1em;
+}
+.dark .story .commit-button {
   color: #fff;
 }
 .story .message-area {

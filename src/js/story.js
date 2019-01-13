@@ -41,13 +41,18 @@ export default function story(state, onChange) {
             <div class="diffs">
               ${ diffs.map(renderDiff).join('') }
             </div>
-            <div class="centered">
-              <a href="javascript:void(0)" data-export="addButton" class="add-button">
+            <div class="clear commit-buttons-nav">
+              <a href="javascript:void(0)" data-export="addButton" class="commit-button left">
                 ${ areThereAnyCommits ?
-                  '&#10010; You have unstaged changes. Commit them by clicking here.' :
-                  '&#10010; Click here to make your first commit.'
+                  '&#10004; Commit your changes' :
+                  '&#10004; Click here to make your first commit.'
                 }
               </a>
+              ${ git.getAll().length > 0 ?
+                `<a href="javascript:void(0)" data-export="discardButton" class="commit-button right">
+                  &#10006; Discard changes
+                </a>` : ''
+              }
             </div>
           </div>
           ` : '' }
@@ -78,13 +83,22 @@ export default function story(state, onChange) {
       }
     });
 
-    const { addButton, messageArea, confirmButton, closeButton, publishStatus, injectFile } = container.namedExports();
+    const { addButton, discardButton, messageArea, confirmButton, closeButton, publishStatus, injectFile } = container.namedExports();
 
     addButton && addButton.onClick(() => {
       editMode = true;
       git.add();
       currentlyEditingHash = git.commit('');
       render();
+    });
+
+    discardButton && discardButton.onClick(() => {
+      confirmPopUp('Discard changes', 'You are about to discard your current changes. Are you sure?', decision => {
+        if (decision) {
+          git.discard();
+          onChange();
+        }
+      });
     });
 
     if (messageArea) {

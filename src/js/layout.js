@@ -46,6 +46,7 @@ function generateSizes(elements) {
 
 export default state => {
   const container = el.withRelaxedCleanup('.app .layout');
+  const body = el.withRelaxedCleanup('body');
 
   setTheme(state.getEditorSettings().theme);
 
@@ -55,6 +56,7 @@ export default state => {
   const editor = el.fromTemplate('#template-editor');
   const story = el.fromTemplate('#template-story');
   const elementsMap = { HTML, console: consoleE, editor, story };
+  const usedBlocks = [];
 
   const splitFuncs = [];
   let splits;
@@ -67,6 +69,7 @@ export default state => {
         wrapper.attr('class', 'editor-section');
         return wrapper;
       }
+      usedBlocks.push(item.name);
       return elementsMap[item.name];
     });
 
@@ -96,8 +99,19 @@ export default state => {
     return normalizedElements;
   };
 
-  container.empty().appendChildren(build({
-    elements: [layout]
-  }));
+  container.empty().appendChildren(build({ elements: [layout] }));
+
+  if (usedBlocks.indexOf('HTML') === -1) {
+    HTML.css('position', 'absolute');
+    HTML.css('width', '10px');
+    HTML.css('height', '10px');
+    HTML.css('overflow', 'hidden');
+    HTML.css('top', '-100px');
+    HTML.css('left', '-100px');
+    HTML.css('visibility', 'hidden');
+    HTML.css('display', 'none');
+    HTML.appendTo(body);
+  }
+
   setTimeout(() => (splits = splitFuncs.map(f => f())), 1);
 };
