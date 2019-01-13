@@ -101,17 +101,17 @@
     var SPINNER = '<div class="centered"><div class="spinner"></div></div>';
     var container = document.querySelector('#output');
     var operationSuccessful = function (marker) {
-      window.top.postMessage({ marker: marker });
+      window.parent.postMessage({ marker: marker });
     }
     var logMessage = function (message) {
-      window.top.postMessage({ log: message });
+      window.parent.postMessage({ log: message });
     }
 
     container.innerHTML = SPINNER;
 
     window.onmessage = function(e) {
       if (e.data && e.data.op) {
-        //console.log('--> ' + e.data.marker + ' ' + e.data.op);
+        // console.log('--> ' + e.data.marker + ' ' + e.data.op);
         switch(e.data.op) {
           case 'html':
             container.innerHTML = e.data.value;

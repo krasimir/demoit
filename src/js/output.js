@@ -18,6 +18,7 @@ const createMessageSender = (iframe, addToConsole) => {
   return (op, value, customMarker = null) => {
     const markerId = ++m;
 
+    // console.log('Demoit -> op=' + op + ' markerId=' + markerId);
     return new Promise(done => {
       markers[customMarker ? customMarker : markerId] = { done, op, value };
       if (iframe.e.contentWindow) {
