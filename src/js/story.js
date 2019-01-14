@@ -166,9 +166,9 @@ export default function story(state, onChange) {
     numOfCommits > 1 && renderGraph(git.logAsTree());
   };
 
-  state.listen(event => {
-    if (!editMode) render();
-  });
+  // state.listen(event => {
+  //   if (!editMode) render();
+  // });
 
   render();
 

@@ -2,6 +2,8 @@ function matchAgainstURL(pattern) {
   return window.location.href.match(pattern);
 }
 
+export const DEBUG = false;
+
 export const IS_PROD = matchAgainstURL(/^https:\/\/poet.codes/) || matchAgainstURL(/^http:\/\/localhost:8004/);
 export const DEV = matchAgainstURL(/^http:\/\/localhost:8004/);
 

@@ -2,7 +2,7 @@
 import pkg from '../../package.json';
 import el from './utils/element';
 import layout from './layout';
-import editor, { ON_SELECT } from './editor';
+import editor, { ON_SELECT, ON_FILE_CHANGE, ON_FILE_SAVE } from './editor';
 import createState from './state';
 import newFilePopUp from './popups/newFilePopUp';
 import editFilePopUp from './popups/editFilePopUp';
@@ -11,15 +11,31 @@ import settings from './settings';
 import statusBar from './statusBar';
 import story from './story';
 import reader from './reader';
+import { DEBUG } from './constants';
 
 createState(pkg.version).then(state => {
   async function render() {
     layout(state);
 
+    let setFilePendingStatus = () => {};
     const addToStory = story(state, () => executeCurrentFile());
-    const { loadFileInEditor: executeCurrentFile, save: saveCurrentFile } = await editor(state, [
-      (event, data, editor) => (event === ON_SELECT && addToStory(data, editor))
-    ]);
+    const { loadFileInEditor: executeCurrentFile, save: saveCurrentFile } = await editor(
+      state,
+      (event, data, editor) => {
+        DEBUG && console.log('editor event=' + event);
+        switch (event) {
+          case ON_SELECT:
+            addToStory(data, editor);
+            break;
+          case ON_FILE_CHANGE:
+            setFilePendingStatus(true);
+            break;
+          case ON_FILE_SAVE:
+            setFilePendingStatus(false);
+            break;
+        }
+      }
+    );
 
     reader(state, () => executeCurrentFile());
     executeCurrentFile();
@@ -34,7 +50,7 @@ createState(pkg.version).then(state => {
       () => executeCurrentFile()
     );
 
-    statusBar(
+    setFilePendingStatus = statusBar(
       state,
       function showFile(filename) {
         state.setActiveFile(filename);

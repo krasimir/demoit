@@ -20,6 +20,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
   const menu = el.withRelaxedCleanup('.status-bar-menu');
   let visibility = !!state.getEditorSettings().statusBar;
   let visibilityMenu = false;
+  let pending = false;
 
   const toggleMenu = () => {
     menu.css('display', (visibilityMenu = !visibilityMenu) ? 'block' : 'none');
@@ -36,7 +37,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
 
       items.push(createLink(
         'file:' + filename,
-        `<span>${ filename }${ isCurrentFile && state.pendingChanges() ? '*' : ''}</span>`,
+        `<span>${ filename }${ isCurrentFile && pending ? '*' : ''}</span>`,
         `file${ isCurrentFile ? ' active' : '' }${ file.en ? ' entry' : ''}`
       ));
     });
@@ -76,7 +77,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
         button.onClick(() => {
           if (!state.isCurrentFile(filename)) {
             showFile(filename);
-          } else if (state.pendingChanges()) {
+          } else if (pending) {
             saveCurrentFile();
           }
         });
@@ -128,4 +129,9 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
   render();
 
   state.listen(render);
+
+  return (value) => {
+    pending = value;
+    render();
+  };
 }

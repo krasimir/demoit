@@ -6,7 +6,7 @@ import {
   ensureDemoIdInPageURL,
   ensureUniqueFileName
 } from './utils';
-import { IS_PROD } from './constants';
+import { IS_PROD, DEBUG } from './constants';
 import { DEFAULT_LAYOUT } from './layout';
 import API from './providers/api';
 import LS from './utils/localStorage';
@@ -57,9 +57,11 @@ export const FILE_CHANGED = 'FILE_CHANGED';
 
 export default async function createState(version) {
   let onChangeListeners = [];
-  const onChange = event => onChangeListeners.forEach(c => c(event));
+  const onChange = event => {
+    DEBUG && console.log('state:onChange event=' + event);
+    onChangeListeners.forEach(c => c(event));
+  };
   let profile = LS(LS_PROFILE_KEY);
-  let pendingChanges = false;
 
   var state = window.state;
 
@@ -81,15 +83,17 @@ export default async function createState(version) {
 
   git.import(state.files);
   git.listen(event => {
+    DEBUG && console.log('state:git event=' + event);
     if (event === git.ON_COMMIT || event === git.ON_CHECKOUT) {
-      persist();
+      persist('git.listen');
     }
     onChange(event);
   });
 
   let activeFile = resolveActiveFile();
 
-  const persist = (fork = false, done = () => {}) => {
+  const persist = (reason, fork = false, done = () => {}) => {
+    DEBUG && console.log('state:persist reason=' + reason);
     if (api.isForkable()) {
       if (!fork && !api.isDemoOwner()) { return; }
       if (fork) { delete state.owner; }
@@ -117,7 +121,7 @@ export default async function createState(version) {
     setActiveFile(filename) {
       activeFile = filename;
       location.hash = filename;
-      onChange();
+      onChange('setActiveFile');
       return filename;
     },
     setActiveFileByIndex(index) {
@@ -148,8 +152,8 @@ export default async function createState(version) {
         state.desc = description;
         state.published = !!published;
         state.storyWithCode = !!storyWithCode;
-        onChange();
-        persist();
+        onChange('meta');
+        persist('meta');
         return null;
       }
 
@@ -169,34 +173,34 @@ export default async function createState(version) {
     },
     setDependencies(dependencies) {
       state.dependencies = dependencies;
-      persist();
+      persist('setDependencies');
     },
     getEditorSettings() {
       return state.editor;
     },
     editFile(filename, updates) {
       git.save(filename, updates);
-      persist();
+      persist('editFile');
     },
     renameFile(filename, newName) {
       if (activeFile === filename) {
         this.setActiveFile(newName);
       }
       git.rename(filename, newName);
-      persist();
+      persist('renameFile');
     },
     addNewFile(filename = 'untitled.js') {
       filename = git.get(filename) ? ensureUniqueFileName(filename) : filename;
       git.save(filename, { c: '' });
       this.setActiveFile(filename);
-      persist();
+      persist('addNewFile');
     },
     deleteFile(filename) {
       git.del(filename);
       if (filename === activeFile) {
         this.setActiveFile(getFirstFile());
       }
-      persist();
+      persist('deleteFile');
     },
     listen(callback) {
       onChangeListeners.push(callback);
@@ -211,23 +215,19 @@ export default async function createState(version) {
       if (newTheme) {
         state.editor.theme = newTheme;
       };
-      persist();
+      persist('updateThemeAndLayout');
     },
     updateStatusBarVisibility(value) {
-      state.editor.statusBar = value;
+      if (state.editor.statusBar !== value) {
+        state.editor.statusBar = value;
+        persist('updateStatusBarVisibility');
+      }
     },
     setEntryPoint(filename) {
       const newValue = !git.get(filename).en;
 
       git.saveAll({ en: false });
       git.save(filename, { en: newValue });
-    },
-    pendingChanges(status) {
-      if (typeof status !== 'undefined') {
-        pendingChanges = status;
-        onChange();
-      }
-      return pendingChanges;
     },
     dump() {
       return state;
@@ -237,7 +237,7 @@ export default async function createState(version) {
       return IS_PROD && api.loggedIn();
     },
     fork() {
-      persist(true, onChange);
+      persist('fork', true, () => onChange('fork'));
     },
     // profile methods
     loggedIn() {

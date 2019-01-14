@@ -26,7 +26,7 @@ const createMessageSender = (iframe, addToConsole) => {
           op,
           value,
           marker: markerId
-        });
+        }, '*');
       }
     });
   };

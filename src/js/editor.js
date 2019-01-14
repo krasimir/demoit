@@ -6,9 +6,11 @@ import output from './output';
 import loadAppDeps from './dependencies';
 import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 
-export const ON_SELECT = 'e_s';
+export const ON_SELECT = 'e_ON_SELECT';
+export const ON_FILE_CHANGE = 'e_ON_FILE_CHANGE';
+export const ON_FILE_SAVE = 'e_ON_FILE_SAVE';
 
-export default async function editor(state, listeners) {
+export default async function editor(state, listener) {
   const { clearConsole, addToConsole } = createConsole();
   const { resetOutput, loadDependenciesInOutput, executeInOut } = await output(state, addToConsole);
   const execute = async () => {
@@ -20,7 +22,7 @@ export default async function editor(state, listeners) {
   const onSave = async (code) => {
     clearConsole();
     state.editFile(state.getActiveFile(), { c: code });
-    state.pendingChanges(false);
+    listener(ON_FILE_SAVE, code, codeMirrorEditor);
     execute();
   };
   const container = el.withFallback('.js-code-editor');
@@ -35,14 +37,14 @@ export default async function editor(state, listeners) {
     state.getActiveFileContent(),
     onSave,
     function onChange() {
-      state.pendingChanges(true);
+      listener(ON_FILE_CHANGE);
     },
     function showFile(index) {
       state.setActiveFileByIndex(index);
       loadFileInEditor();
     },
     function onSelection(code) {
-      listeners.forEach(c => c(ON_SELECT, code, codeMirrorEditor));
+      listener(ON_SELECT, code, codeMirrorEditor);
     }
   );
 
@@ -56,12 +58,13 @@ export default async function editor(state, listeners) {
       case 'html': codeMirrorEditor.setOption('mode', 'htmlmixed'); break;
       default: codeMirrorEditor.setOption('mode', 'jsx'); break;
     }
-    // we have to do this because we fire the onChange handler of the editor which sets editing=true;
-    state.pendingChanges(false);
     execute();
   }
 
-  return { loadFileInEditor, save: () => onSave(codeMirrorEditor.getValue()) };
+  return { loadFileInEditor, save: () => {
+    onSave(codeMirrorEditor.getValue());
+    codeMirrorEditor.focus();
+   }};
 }
 
 function codeMirror(container, editorSettings, value, onSave, onChange, showFile, onSelection) {
@@ -82,7 +85,11 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true }
   });
   const save = () => onSave(editor.getValue());
-  const change = () => onChange(editor.getValue());
+  const change = (instance, { origin }) => {
+    if (origin !== 'setValue') {
+      onChange(editor.getValue());
+    }
+  };
 
   editor.on('change', change);
   editor.setOption('extraKeys', {
