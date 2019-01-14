@@ -2,7 +2,7 @@
 import el from './utils/element';
 import setTheme from './utils/setTheme';
 
-export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console', 'story'];
+export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console', 'story', 'reader'];
 export const DEFAULT_LAYOUT = {
   elements: [
     {
@@ -55,7 +55,8 @@ export default state => {
   const consoleE = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
   const story = el.fromTemplate('#template-story');
-  const elementsMap = { HTML, console: consoleE, editor, story };
+  const reader = el.fromTemplate('#template-reader');
+  const elementsMap = { HTML, console: consoleE, editor, story, reader };
   const usedBlocks = [];
 
   const splitFuncs = [];

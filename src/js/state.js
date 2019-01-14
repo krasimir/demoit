@@ -53,9 +53,11 @@ const resolveActiveFile = function () {
   return getFirstFile();
 };
 
+export const FILE_CHANGED = 'FILE_CHANGED';
+
 export default async function createState(version) {
-  const onChangeListeners = [];
-  const onChange = () => onChangeListeners.forEach(c => c());
+  let onChangeListeners = [];
+  const onChange = event => onChangeListeners.forEach(c => c(event));
   let profile = LS(LS_PROFILE_KEY);
   let pendingChanges = false;
 
@@ -82,7 +84,7 @@ export default async function createState(version) {
     if (event === git.ON_COMMIT || event === git.ON_CHECKOUT) {
       persist();
     }
-    onChange();
+    onChange(event);
   });
 
   let activeFile = resolveActiveFile();
@@ -123,7 +125,7 @@ export default async function createState(version) {
 
       if (filename) {
         this.setActiveFile(filename);
-        onChangeListeners.forEach(c => c());
+        onChange(FILE_CHANGED);
       }
     },
     isCurrentFile(filename) {
@@ -198,6 +200,9 @@ export default async function createState(version) {
     },
     listen(callback) {
       onChangeListeners.push(callback);
+    },
+    removeListeners() {
+      onChangeListeners = [];
     },
     updateThemeAndLayout(newLayout, newTheme) {
       if (newLayout) {

@@ -6,6 +6,7 @@ import { connectCommits, empty as emptySVGGraph } from './utils/svg';
 import confirmPopUp from './popups/confirmPopUp';
 import { CHECK_ICON, CLOSE_ICON } from './utils/icons';
 import { truncate } from './utils';
+import cleanUpMarkdown from './utils/cleanUpMarkdown';
 
 const SVG_X = 4;
 const SVG_INITIAL_Y = 25;
@@ -14,12 +15,14 @@ export default function story(state, onChange) {
   const container = el.withFallback('.story');
   const git = state.git();
   let editor = null, editMode = false, currentlyEditingHash;
-  const onSave = message => git.amend(currentlyEditingHash, message);
+  const onSave = message => git.amend(currentlyEditingHash, { message });
   const onCancel = message => {
     editMode = false;
     editor = null;
     if (message === '') {
-      git.amend(currentlyEditingHash, formatDate());
+      git.amend(currentlyEditingHash, {
+        message: formatDate()
+      });
     }
     render();
   };
@@ -42,11 +45,11 @@ export default function story(state, onChange) {
               ${ diffs.map(renderDiff).join('') }
             </div>
             <div class="clear commit-buttons-nav">
+              <a href="javascript:void(0)" data-export="editButton" class="commit-button left">
+                &#10004; Save
+              </a>
               <a href="javascript:void(0)" data-export="addButton" class="commit-button left">
-                ${ areThereAnyCommits ?
-                  '&#10004; Commit your changes' :
-                  '&#10004; Click here to make your first commit.'
-                }
+                &#10004; New commit
               </a>
               ${ git.getAll().length > 0 ?
                 `<a href="javascript:void(0)" data-export="discardButton" class="commit-button right">
@@ -83,7 +86,21 @@ export default function story(state, onChange) {
       }
     });
 
-    const { addButton, discardButton, messageArea, confirmButton, closeButton, publishStatus, injectFile } = container.namedExports();
+    const {
+      editButton,
+      addButton,
+      discardButton,
+      messageArea,
+      confirmButton,
+      closeButton,
+      publishStatus,
+      injectFile
+    } = container.namedExports();
+
+    editButton && editButton.onClick(() => {
+      git.amend();
+      render();
+    });
 
     addButton && addButton.onClick(() => {
       editMode = true;
@@ -128,7 +145,10 @@ export default function story(state, onChange) {
         render();
       });
       publishStatus.onChange(position => {
-        git.amend(currentlyEditingHash, git.show(currentlyEditingHash).message, { position });
+        git.amend(currentlyEditingHash, {
+          message: git.show(currentlyEditingHash).message,
+          meta: { position }
+        });
         editMode = false;
         editor = null;
         render();
@@ -146,7 +166,7 @@ export default function story(state, onChange) {
     numOfCommits > 1 && renderGraph(git.logAsTree());
   };
 
-  git.listen(event => {
+  state.listen(event => {
     if (!editMode) render();
   });
 
@@ -319,5 +339,5 @@ function getFileInjectionOptions(git, currentHash) {
   return files.map(file => `<option value="{file:${ file[0] }}">${ file[0] }</option>`);
 }
 function getTitleFromCommitMessage(text) {
-  return truncate(text.split('\n').shift(), 36);
+  return cleanUpMarkdown(truncate(text.split('\n').shift(), 36));
 }

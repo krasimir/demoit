@@ -11,7 +11,7 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: "Fira Mono", monospace;
+  font-family: 'Fira Mono', monospace;
   font-size: 14px;
   line-height: 14px;
   background: #fff;
@@ -692,12 +692,12 @@ svg {
 }
 .story-form {
   position: relative;
+  padding-top: 16px;
 }
 .story .story-form-bar {
   padding-bottom: 17px;
   padding-left: 5px;
   border-bottom: dotted 1px #e2e2e2;
-  margin-top: 16px;
   margin-left: 1em;
   font-size: .8em;
 }
@@ -728,4 +728,87 @@ svg {
   font-size: 0.8em;
   opacity: 0.5;
   margin-right: 1em;
+}
+
+/*************************** READER */
+.reader {
+  overflow-y: auto;
+  font-size: 18px;
+  line-height: 1.7em;
+  font-family: 'Roboto', sans-serif;
+}
+.reader a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: bold;
+}
+.reader a:hover {
+  text-decoration: underline;
+}
+.reader-content {
+  max-width: 650px;
+  margin: 3em auto;
+}
+.reader-commit {
+  margin: 2em;
+}
+.reader-story {
+  opacity: 0.4;
+  font-size: 1em;
+  transition: opacity 500ms ease-out;
+  -webkit-transition: opacity 500ms ease-out;
+}
+.reader-story.selected {
+  opacity: 1;
+}
+.reader-story h1,
+.reader-story h2,
+.reader-story h3,
+.reader-story h4,
+.reader-story h5,
+.reader-story p {
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+.reader-story p code {
+  font-size: .8em;
+  padding: 0 .5em;
+  border-radius: 4px;
+  font-family: "Fira Mono", monospace;
+}
+.reader-header {
+  padding-bottom: 2em;
+  text-align: center;
+}
+.reader-header h1 {
+  line-height: 1em;
+}
+.dark .reader-story p code {
+  border: solid 1px #2e414d;
+}
+.reader-story pre {
+  font-family: 'Fira Mono', monospace;
+  padding: 0;
+  margin: 0 0 1em 0;
+  padding: 0.8em;
+  font-size: 0.8em;
+  line-height: 1.4em;
+  overflow: auto;
+  border-radius: 5px;
+  border: solid 1px #e2e2e2;
+  border-radius: 3px;
+  position: relative;
+  transition: opacity 500ms ease-out;
+  -webkit-transition: opacity 500ms ease-out;
+}
+.dark .reader-story pre {
+  border: solid 1px #2e414d;
+}
+.reader-story hr {
+  border-top: none;
+  border-bottom: solid 1px #e2e2e2;
+  margin: 2em 0;
+}
+.dark .reader-story hr {
+  border-bottom: solid 1px #2e414d;
 }

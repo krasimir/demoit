@@ -100,3 +100,16 @@ export const truncate = function (str, len) {
 	}
 	return str;
 };
+
+export const escapeHTML = function (html) {
+	const tagsToReplace = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;'
+	};
+	const replaceTag = (tag) => {
+		return tagsToReplace[tag] || tag;
+	};
+
+	return html.replace(/[&<>]/g, replaceTag);
+};

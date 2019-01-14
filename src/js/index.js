@@ -10,6 +10,7 @@ import editNamePopUp from './popups/editNamePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import story from './story';
+import reader from './reader';
 
 createState(pkg.version).then(state => {
   async function render() {
@@ -20,11 +21,16 @@ createState(pkg.version).then(state => {
       (event, data, editor) => (event === ON_SELECT && addToStory(data, editor))
     ]);
 
+    reader(state, () => executeCurrentFile());
     executeCurrentFile();
 
     const showSettings = settings(
       state,
-      () => (el.destroy(), render()),
+      () => {
+        state.removeListeners(),
+        el.destroy();
+        render();
+      },
       () => executeCurrentFile()
     );
 
