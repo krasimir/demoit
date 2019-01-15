@@ -58,6 +58,13 @@
           "c": "body {\n  font-size: 24px;\n  padding: 0;\n  margin: 0;\n}",
           "en": false
         }
+      ],
+      [
+        "text.md",
+        {
+          "c": "# Markdown text here\n\nThis is text that is using [GitHub](https://github.com)'s **markdown** styling.",
+          "en": false
+        }
       ]
     ],
     "head": null,
@@ -65,5 +72,5 @@
     "stage": [],
     "commits": {}
   },
-  "v": "6.2.0"
+  "v": "6.5.1"
 }

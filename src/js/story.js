@@ -7,6 +7,7 @@ import confirmPopUp from './popups/confirmPopUp';
 import { CHECK_ICON, CLOSE_ICON } from './utils/icons';
 import { truncate } from './utils';
 import cleanUpMarkdown from './utils/cleanUpMarkdown';
+import { DEBUG } from './constants';
 
 const SVG_X = 4;
 const SVG_INITIAL_Y = 25;
@@ -30,6 +31,7 @@ export default function story(state, onChange) {
   if (!container.found()) return () => {};
 
   const render = () => {
+    DEBUG && console.log('story:render');
     const numOfCommits = Object.keys(git.log()).length;
     const areThereAnyCommits = numOfCommits > 0;
     const diffs = commitDiff(areThereAnyCommits ? git.show().files : [], git.getAll());
@@ -123,7 +125,7 @@ export default function story(state, onChange) {
         messageArea,
         state.getEditorSettings(),
         git.show(currentlyEditingHash).message,
-        message => {
+        function onSaveInEditor(message) {
           confirmButton.css('opacity', '0.3');
           onSave(message);
         },
@@ -133,6 +135,7 @@ export default function story(state, onChange) {
         },
         onCancel
       );
+      confirmButton.css('opacity', '0.3');
       confirmButton.onClick(() => {
         onSave(editor.getValue());
         editMode = false;
@@ -166,9 +169,9 @@ export default function story(state, onChange) {
     numOfCommits > 1 && renderGraph(git.logAsTree());
   };
 
-  // state.listen(event => {
-  //   if (!editMode) render();
-  // });
+  state.listen(event => {
+    if (!editMode) render();
+  });
 
   render();
 
@@ -236,7 +239,7 @@ function codeMirror(container, editorSettings, value, onSave, onChange, onCancel
 
   const editor = CodeMirror(container.e, {
     value: value || '',
-    mode: 'markdown',
+    mode: 'gfm',
     tabSize: 2,
     lineNumbers: false,
     autofocus: true,

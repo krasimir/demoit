@@ -83,8 +83,12 @@ export default async function createState(version) {
 
   git.import(state.files);
   git.listen(event => {
-    DEBUG && console.log('state:git event=' + event);
-    if (event === git.ON_COMMIT || event === git.ON_CHECKOUT) {
+    if (event === git.ON_COMMIT) {
+      DEBUG && console.log('state:git:commit event=' + event);
+      persist('git.listen');
+      DEBUG && console.log('state:git:checkout event=' + event);
+    } else if (event === git.ON_CHECKOUT) {
+      api.setActiveFileByIndex(0);
       persist('git.listen');
     }
     onChange(event);

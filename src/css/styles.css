@@ -157,6 +157,7 @@ svg {
   opacity: 0.7;
   overflow: hidden;
   position: relative;
+  line-height: 1.2em;
 }
 .status-bar a span {
   display: block;
@@ -185,19 +186,20 @@ svg {
 }
 .status-bar .entry span::before {
   display: block;
-  content: "•";
+  content: "";
   float: left;
-  margin-right: 4px;
+  margin-right: 6px;
   margin-top: 1px;
-  border: solid 2px black;
-  width: 12px;
-  height: 12px;
-  border-radius: 6px;
-  line-height: 8px;
-  transform: translateY(1px);
-  -webkit-transform: translateY(1px);
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  transform: translateY(4px);
+  -webkit-transform: translateY(4px);
   position: relative;
-  top: 0;
+  background: black;
+}
+.dark .status-bar .entry span::before {
+  background: #6f6f6f;
 }
 .status-bar .file::before, .status-bar .new-file::before {
   content: "";
@@ -705,7 +707,6 @@ svg {
   border-bottom: dotted 1px #2e414c;
 }
 .story .story-form-bar a {
-  opacity: 0.3;
   display: inline-block;
 }
 .story .story-form-bar a:hover {

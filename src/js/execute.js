@@ -5,10 +5,12 @@ const getExt = file => file.split(/\./).pop().toLowerCase();
 const prepareExecution = (filename, content) => {
   const ext = getExt(filename || '');
 
-  if (ext === 'css') {
+  if (ext === 'css' || ext === 'scss') {
     content = `window.executeCSS("${ filename }", ${ JSON.stringify(content) });`;
   } else if (ext === 'html') {
     content = `window.executeHTML("${ filename }", ${ JSON.stringify(content) });`;
+  } else if (ext === 'md') {
+    content = `window.executeMarkdown(${ JSON.stringify(content) });`;
   }
 
   return { filename, content };

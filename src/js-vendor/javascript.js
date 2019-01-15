@@ -1,3 +1,4 @@
+/* eslint-disable */
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 
@@ -11,7 +12,7 @@
 })(function(CodeMirror) {
 "use strict";
 
-CodeMirror.defineMode("javascript", function(config, parserConfig) {
+var modeFunc = function(config, parserConfig) {
   var indentUnit = config.indentUnit;
   var statementIndent = parserConfig.statementIndent;
   var jsonldMode = parserConfig.jsonld;
@@ -881,7 +882,10 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       if (top == expression || top == expressionNoComma) state.cc.pop()
     }
   };
-});
+};
+
+CodeMirror.defineMode("javascript", modeFunc);
+CodeMirror.defineMode("js", modeFunc);
 
 CodeMirror.registerHelper("wordChars", "javascript", /[\w$]/);
 

@@ -55,7 +55,16 @@ export default async function editor(state, listener) {
     codeMirrorEditor.focus();
     switch (state.getActiveFile().split('.').pop().toLowerCase()) {
       case 'css': codeMirrorEditor.setOption('mode', 'css'); break;
+      case 'scss': codeMirrorEditor.setOption('mode', 'css'); break;
       case 'html': codeMirrorEditor.setOption('mode', 'htmlmixed'); break;
+      case 'md':
+        codeMirrorEditor.setOption('mode', {
+          name: 'gfm',
+          highlightFormatting: true,
+          emoji: true,
+          xml: true
+        });
+        break;
       default: codeMirrorEditor.setOption('mode', 'jsx'); break;
     }
     execute();
@@ -81,6 +90,7 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     styleSelectedText: true,
     matchBrackets: true,
     autoCloseBrackets: true,
+    lineWrapping: true,
     theme: editorSettings.theme,
     highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true }
   });
