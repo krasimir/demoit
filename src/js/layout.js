@@ -2,7 +2,7 @@
 import el from './utils/element';
 import setTheme from './utils/setTheme';
 
-export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console', 'story', 'reader'];
+export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console', 'story'];
 export const DEFAULT_LAYOUT = {
   elements: [
     {
@@ -55,8 +55,8 @@ export default state => {
   const consoleE = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
   const story = el.fromTemplate('#template-story');
-  const reader = el.fromTemplate('#template-reader');
-  const elementsMap = { HTML, console: consoleE, editor, story, reader };
+  const empty = el.withFallback('.does-not-exists');
+  const elementsMap = { HTML, console: consoleE, editor, story };
   const usedBlocks = [];
 
   const splitFuncs = [];
@@ -71,7 +71,7 @@ export default state => {
         return wrapper;
       }
       usedBlocks.push(item.name);
-      return elementsMap[item.name];
+      return elementsMap[item.name] ? elementsMap[item.name] : empty;
     });
 
     if (sizes && sizes.length !== elements.length) {

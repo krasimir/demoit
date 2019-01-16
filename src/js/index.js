@@ -10,7 +10,6 @@ import editNamePopUp from './popups/editNamePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import story from './story';
-import reader from './reader';
 import { DEBUG } from './constants';
 
 createState(pkg.version).then(state => {
@@ -37,7 +36,6 @@ createState(pkg.version).then(state => {
       }
     );
 
-    reader(state, () => executeCurrentFile());
     executeCurrentFile();
 
     const showSettings = settings(
