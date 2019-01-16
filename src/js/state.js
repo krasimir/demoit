@@ -105,7 +105,6 @@ export default async function createState(version) {
       if (!fork && !api.isDemoOwner()) { return; }
 
       let diff = DeepDiff.diff(initialState, state);
-      throw new Error('Check out why when you go back to the initial-initial state the save is not happening.');
 
       if (fork) {
         diff = '';
@@ -117,7 +116,7 @@ export default async function createState(version) {
         diff = jsEncode(JSON.stringify(diff));
       }
       API.saveDemo(fork ? state : { demoId: state.demoId, owner: state.owner }, profile.token, diff).then(demoId => {
-        initialState = state;
+        initialState = JSON.parse(JSON.stringify(diff));
         if (demoId && demoId !== state.demoId) {
           state.demoId = demoId;
           state.owner = profile.id;
