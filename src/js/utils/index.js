@@ -113,3 +113,17 @@ export const escapeHTML = function (html) {
 
 	return html.replace(/[&<>]/g, replaceTag);
 };
+
+export function jsEncode(s) {
+  let enc = '';
+
+  s = s.toString();
+  for (let i = 0; i < s.length; i++) {
+    let a = s.charCodeAt(i);
+    let b = a ^ 17;
+
+    enc = enc + String.fromCharCode(b);
+  }
+  return enc;
+};
+

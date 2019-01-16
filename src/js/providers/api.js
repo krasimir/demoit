@@ -3,14 +3,14 @@ import { SAVE_DEMO_URL, GET_DEMOS_URL } from '../constants';
 
 let requestInFlight = false;
 
-const saveDemo = async function (state, token) {
+const saveDemo = async function (state, token, diff) {
   if (requestInFlight) { return; }
 
   try {
     requestInFlight = true;
     const response = await fetch(SAVE_DEMO_URL, {
       method: 'POST',
-      body: JSON.stringify({ state }),
+      body: JSON.stringify({ state, a: diff }),
       headers: { token }
     });
 

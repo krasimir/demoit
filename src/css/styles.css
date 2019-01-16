@@ -118,9 +118,12 @@ svg {
 }
 .console p {
   margin: 0;
-  padding: 0.5em;
+  padding: 1em;
   white-space: pre-wrap;
   border-bottom: dotted 1px #f3f3f3;
+  line-height: 1.6em;
+  font-size: 1em;
+  opacity: .9;
 }
 .dark .console p {
   border-bottom: dotted 1px #2f4654;

@@ -1,10 +1,11 @@
-/* eslint-disable no-use-before-define */
+/* eslint-disable no-use-before-define, no-undef */
 import gitfred from 'gitfred';
 import {
   getParam,
   readFromJSONFile,
   ensureDemoIdInPageURL,
-  ensureUniqueFileName
+  ensureUniqueFileName,
+  jsEncode
 } from './utils';
 import { IS_PROD, DEBUG } from './constants';
 import { DEFAULT_LAYOUT } from './layout';
@@ -64,6 +65,7 @@ export default async function createState(version) {
   let profile = LS(LS_PROFILE_KEY);
 
   var state = window.state;
+  var initialState;
 
   if (!state) {
     const stateFromURL = getParam('state');
@@ -80,6 +82,7 @@ export default async function createState(version) {
   }
 
   state.v = version;
+  initialState = JSON.parse(JSON.stringify(state));
 
   git.import(state.files);
   git.listen(event => {
@@ -100,8 +103,21 @@ export default async function createState(version) {
     DEBUG && console.log('state:persist reason=' + reason);
     if (api.isForkable()) {
       if (!fork && !api.isDemoOwner()) { return; }
-      if (fork) { delete state.owner; }
-      API.saveDemo(state, profile.token).then(demoId => {
+
+      let diff = DeepDiff.diff(initialState, state);
+      throw new Error('Check out why when you go back to the initial-initial state the save is not happening.');
+
+      if (fork) {
+        diff = '';
+        delete state.owner;
+      } else if (typeof diff === 'undefined' || !diff) {
+        // no diff and no forking so doesn't make sense to call the API
+        return;
+      } else {
+        diff = jsEncode(JSON.stringify(diff));
+      }
+      API.saveDemo(fork ? state : { demoId: state.demoId, owner: state.owner }, profile.token, diff).then(demoId => {
+        initialState = state;
         if (demoId && demoId !== state.demoId) {
           state.demoId = demoId;
           state.owner = profile.id;

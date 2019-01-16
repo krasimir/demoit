@@ -4,7 +4,7 @@ import el from './utils/element';
 function htmlEncode(str) {
   if (typeof str !== 'string') return str;
   return str.replace(/[&<>"']/g, function ($0) {
-      return "&" + {"&": "amp", "<": "lt", ">": "gt", '"': "quot", "'": "#39"}[$0] + ";";
+    return "&" + {"&": "amp", "<": "lt", ">": "gt", '"': "quot", "'": "#39"}[$0] + ";";
   });
 }
 
@@ -14,9 +14,16 @@ export default function logger() {
   let empty = true;
   const add = something => {
     const node = document.createElement('div');
-    const text = something ? htmlEncode(something) : String(something);
+    let text = String(something);
+    let parsed;
 
-    node.innerHTML = '<p>' + text + '</p>';
+    try {
+      parsed = String(JSON.parse(text));
+    } catch (error) {
+      parsed = text;
+    }
+
+    node.innerHTML = '<p>' + htmlEncode(parsed).replace(/\\n/, '<br />') + '</p>';
     if (empty) {
       element.empty();
       empty = false;
