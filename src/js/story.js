@@ -286,12 +286,11 @@ function renderDiff(diff) {
       diffAdditionalInfo = diff[2];
     break;
   }
-
   return `
     <div class="diff">
       <div><span class="label label-${ diff[0] }">${ diffChangeLabel }</span></div>
       <div class="diffA">${ diff[1] }</div>
-      <div class="diffB">${ diffAdditionalInfo.replace(/%0A/g, '<br />') }</div>
+      <div class="diffB">${ diffAdditionalInfo }</div>
     </div>
   `;
 }

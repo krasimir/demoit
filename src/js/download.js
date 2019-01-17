@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import { load as loadDependencies, cache } from './dependencies';
+import { clone } from './utils';
 
 const ZIP_FILE = '/poet.codes.zip';
 
@@ -37,7 +38,7 @@ export default function download(state) {
         .prop('innerHTML', 'Download poet.codes.zip');
       button.onClick(async () => {
         const indexFile = await zip.file('index.html').async('string');
-        const newState = JSON.parse(JSON.stringify(state.dump()));
+        const newState = clone(state.dump());
 
         newState.dependencies = remoteDeps.map(({ content, url }) => {
           const fileName = './resources/' + url.split('/').pop();

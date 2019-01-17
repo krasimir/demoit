@@ -640,6 +640,14 @@ svg {
 .dark .story .working-directory .diffs del {
   background: #480d0d;
 }
+.story .working-directory .diffs hr {
+  border-top: none;
+  border-bottom: solid 1px #e2e2e2;
+  display: block;
+}
+.dark .story .working-directory .diffs hr {
+  border-bottom: solid 1px #2e414c;
+}
 .story .diff {
   display: grid;
   grid-template-columns: 10% 25% 65%;

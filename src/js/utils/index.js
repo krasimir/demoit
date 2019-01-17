@@ -120,10 +120,13 @@ export function jsEncode(s) {
   s = s.toString();
   for (let i = 0; i < s.length; i++) {
     let a = s.charCodeAt(i);
-    let b = a ^ 17;
+    let b = a ^ 3;
 
     enc = enc + String.fromCharCode(b);
   }
   return enc;
 };
 
+export const clone = function (data) {
+	return JSON.parse(JSON.stringify(data));
+};

@@ -5,7 +5,8 @@ import {
   readFromJSONFile,
   ensureDemoIdInPageURL,
   ensureUniqueFileName,
-  jsEncode
+  jsEncode,
+  clone
 } from './utils';
 import { IS_PROD, DEBUG } from './constants';
 import { DEFAULT_LAYOUT } from './layout';
@@ -82,7 +83,7 @@ export default async function createState(version) {
   }
 
   state.v = version;
-  initialState = JSON.parse(JSON.stringify(state));
+  initialState = clone(state);
 
   git.import(state.files);
   git.listen(event => {
@@ -105,18 +106,21 @@ export default async function createState(version) {
       if (!fork && !api.isDemoOwner()) { return; }
 
       let diff = DeepDiff.diff(initialState, state);
+      let stateData;
 
+      initialState = clone(state);
       if (fork) {
         diff = '';
         delete state.owner;
+        stateData = state;
       } else if (typeof diff === 'undefined' || !diff) {
         // no diff and no forking so doesn't make sense to call the API
         return;
       } else {
         diff = jsEncode(JSON.stringify(diff));
+        stateData = { demoId: state.demoId, owner: state.owner };
       }
-      API.saveDemo(fork ? state : { demoId: state.demoId, owner: state.owner }, profile.token, diff).then(demoId => {
-        initialState = JSON.parse(JSON.stringify(diff));
+      API.saveDemo(stateData, profile.token, diff).then(demoId => {
         if (demoId && demoId !== state.demoId) {
           state.demoId = demoId;
           state.owner = profile.id;
