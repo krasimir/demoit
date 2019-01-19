@@ -1,4 +1,5 @@
 import el from './utils/element';
+import { DEBUG } from './constants';
 
 var m = 0;
 const markers = {};
@@ -6,7 +7,7 @@ const DEFAULT_HINT = '<div class="centered">&lt;div id="output" /&gt;</div>';
 const createMessageSender = (iframe, addToConsole) => {
   window.onmessage = function (e) {
     if (e.data.marker) {
-      // console.log('<-- ' + e.data.marker);
+      DEBUG && console.log('<-- ' + e.data.marker);
       if (markers[e.data.marker]) {
         markers[e.data.marker].done();
         delete markers[e.data.marker];
@@ -18,7 +19,7 @@ const createMessageSender = (iframe, addToConsole) => {
   return (op, value, customMarker = null) => {
     const markerId = ++m;
 
-    // console.log('Demoit -> op=' + op + ' markerId=' + markerId);
+    DEBUG && console.log('Demoit -> op=' + op + ' markerId=' + markerId);
     return new Promise(done => {
       markers[customMarker ? customMarker : markerId] = { done, op, value };
       if (iframe.e.contentWindow) {

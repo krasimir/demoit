@@ -251,6 +251,7 @@ export default async function createState(version) {
 
       git.saveAll({ en: false });
       git.save(filename, { en: newValue });
+      persist();
     },
     dump() {
       return state;

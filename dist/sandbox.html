@@ -230,7 +230,7 @@
     function executeHTML (filename, content) {
       var node = document.createElement('div');
     
-      node.innerHTML = content || ' ';
+      node.innerHTML = '<div>' + (content || ' ') + '</div>';
       container.appendChild(node.firstChild);
     };
 

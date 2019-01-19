@@ -64,4 +64,5 @@ NOTES
 
 *.log
 
+.vscode
 .tmp
