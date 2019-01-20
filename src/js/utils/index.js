@@ -130,3 +130,11 @@ export function jsEncode(s) {
 export const clone = function (data) {
 	return JSON.parse(JSON.stringify(data));
 };
+
+export const isEmbedded = function () {
+	try {
+		return window.self !== window.top;
+	} catch (e) {
+		return true;
+	}
+};

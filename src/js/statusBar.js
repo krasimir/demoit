@@ -57,13 +57,14 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     IS_PROD && menuItems.push(createLink(
       'profileButton',
       state.loggedIn() ?
-        showProfilePicAndName(state.getProfile()) + ' Profile' :
-        NO_USER() + ' Log in',
+      showProfilePicAndName(state.getProfile()) + ' Profile' :
+      NO_USER() + ' Log in',
       'profile',
       state.loggedIn() ?
       '/u/' + state.getProfile().id :
       `/login?did=${ state.getDemoId() }`
-    ));
+      ));
+    IS_PROD && menuItems.push(createLink('', PLUS_ICON(14) + ' New story', '', '/new'));
     state.isForkable() && menuItems.push(createLink('forkButton', FORK(14) + ' Fork'));
     IS_PROD && menuItems.push(createLink('shareButton', SHARE(14) + ' Share/Embed'));
     state.isDemoOwner() && menuItems.push(createLink('nameButton', SETTINGS_ICON(14) + ' Story'));

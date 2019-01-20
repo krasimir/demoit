@@ -5,6 +5,7 @@ import createConsole from './console';
 import output from './output';
 import loadAppDeps from './dependencies';
 import defineCodeMirrorCommands from './utils/codeMirrorCommands';
+import { isEmbedded } from './utils';
 
 export const ON_SELECT = 'e_ON_SELECT';
 export const ON_FILE_CHANGE = 'e_ON_FILE_CHANGE';
@@ -52,7 +53,7 @@ export default async function editor(state, listener) {
   async function loadFileInEditor() {
     clearConsole();
     codeMirrorEditor.setValue(state.getActiveFileContent());
-    codeMirrorEditor.focus();
+    if (!isEmbedded()) { codeMirrorEditor.focus(); }
     switch (state.getActiveFile().split('.').pop().toLowerCase()) {
       case 'css': codeMirrorEditor.setOption('mode', 'css'); break;
       case 'scss': codeMirrorEditor.setOption('mode', 'css'); break;
@@ -84,7 +85,7 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     mode: 'jsx',
     tabSize: 2,
     lineNumbers: false,
-    autofocus: true,
+    autofocus: false,
     foldGutter: false,
     gutters: [],
     styleSelectedText: true,
@@ -129,7 +130,6 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
     'Ctrl-/': 'toggleCommentIndented'
   });
   CodeMirror.normalizeKeyMap();
-  editor.focus();
 
   container.onMouseUp(() => {
     const selection = editor.getSelection();

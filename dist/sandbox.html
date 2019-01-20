@@ -207,7 +207,24 @@
               load(index + 1);
             });
           } else {
-            load(index + 1);
+            fetch(resource).then(function(resultedResource) {
+              const contentType = resultedResource.headers.get('content-type');
+
+              if (contentType.indexOf('text/css') >= 0) {
+                addCSSFile(resource, function() {
+                  LOADED_DEPS[resource] = true;
+                  load(index + 1);
+                });
+              } else if (contentType.indexOf('application/javascript') >= 0) {
+                addJSFile(resource, function () {
+                  LOADED_DEPS[resource] = true;
+                  load(index + 1);
+                });
+              } else {
+                // console.error('Can not process ' + resource + '. Only text/css and application/javascript are supported.');
+                load(index + 1);
+              }
+            });
           }
         })(0);
       });
@@ -215,7 +232,7 @@
 
     // execute css, html and markdown -----------------------------------------
 
-    var guaranteeValidIdName = function (filename) { filename.replace(/\./g, '_') };
+    var guaranteeValidIdName = function (filename) { return filename.replace(/\./g, '_'); };
 
     function executeCSS (filename, content) {
       var node = document.createElement('style');

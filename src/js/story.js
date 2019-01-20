@@ -1,10 +1,10 @@
-/* eslint-disable max-len, no-use-before-define, no-sequences */
+/* eslint-disable max-len, no-use-before-define, no-sequences, no-undef */
 import el from './utils/element';
 import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 import commitDiff from './utils/commitDiff';
 import { connectCommits, empty as emptySVGGraph } from './utils/svg';
 import confirmPopUp from './popups/confirmPopUp';
-import { CHECK_ICON, CLOSE_ICON } from './utils/icons';
+import { CHECK_ICON, CLOSE_ICON, TRASH_ICON, DOT_CIRCLE, SETTINGS_ICON } from './utils/icons';
 import { truncate } from './utils';
 import cleanUpMarkdown from './utils/cleanUpMarkdown';
 import { DEBUG } from './constants';
@@ -34,51 +34,50 @@ export default function story(state, onChange) {
 
   const render = () => {
     DEBUG && console.log('story:render');
-    const numOfCommits = Object.keys(git.log()).length;
-    const areThereAnyCommits = numOfCommits > 0;
-    const diffs = commitDiff(areThereAnyCommits ? git.show().files : [], git.getAll());
-    const renderedCommits = renderCommits(git, editMode, diffs.length > 0, currentlyEditingHash);
+    const allCommits = git.log();
+    const commits = Object.keys(allCommits).map(hash => ({
+      hash,
+      message: allCommits[hash].message,
+      position: allCommits[hash].meta ? parseInt(allCommits[hash].meta.position, 10) || null : null
+    })).sort((a, b) => {
+      if (a.position !== null && b.position !== null) {
+        return a.position - b.position;
+      } else if (a.position !== null && b.position === null) {
+        return -1;
+      } else if (a.position === null && b.position !== null) {
+        return 1;
+      }
+      return a.hash - b.hash;
+    });
+    const numOfCommits = commits.length;
+    const diffs = commitDiff(numOfCommits > 0 ? git.show().files : [], git.getAll());
+    const renderedCommits = renderCommits(git, commits, editMode, currentlyEditingHash);
 
     container.attr('class', numOfCommits <= 1 ? 'editor-section story no-graph' : 'editor-section story');
-    container
-      .content(
-        `
-      <div>
-        ${renderedCommits ? '<div data-export="list">' + renderedCommits + '</div>' : ''}
-        ${
-          diffs.length > 0 ?
-            `<div class="working-directory">
-            <div class="diffs">
-              ${diffs.map(renderDiff).join('')}
-            </div>
-            <div class="clear commit-buttons-nav">
-              <a href="javascript:void(0)" data-export="editButton" class="commit-button left">
-                &#10004; Save
-              </a>
-              <a href="javascript:void(0)" data-export="addButton" class="commit-button left">
-                &#10004; New commit
-              </a>
-              ${
-                git.getAll().length > 0 ?
-                  `<a href="javascript:void(0)" data-export="discardButton" class="commit-button right">
-                  &#10006; Discard changes
-                </a>` :
-                  ''
-              }
-            </div>
-          </div>
-          ` :
-            ''
-        }
-      </div>
+    container.content(`
+      ${ renderedCommits !== '' ? '<div data-export="list">' + renderedCommits + '</div>' : '' }
+      ${ renderDiffs(git, diffs) }
       <div class="story-arrows"><svg id="svg-canvas" width="32px" height="98%"></svg></div>
-    `
-      )
-      .forEach(el => {
+    `).forEach(el => {
         if (el.attr('data-export') === 'checkoutLink') {
           el.onClick(() => {
-            git.checkout(el.attr('data-commit-hash'));
-            onChange();
+            if (diffs.length > 0) {
+              confirmPopUp(
+                'Checkout',
+                'You are about to checkout another commit. You have an unstaged changes. Are you sure?',
+                decision => {
+                  if (decision) {
+                    git.checkout(el.attr('data-commit-hash'), true);
+                    onChange();
+                    render();
+                  }
+                }
+              );
+            } else {
+              git.checkout(el.attr('data-commit-hash'));
+              onChange();
+              render();
+            }
           });
         }
         if (el.attr('data-export') === 'editMessage') {
@@ -95,6 +94,7 @@ export default function story(state, onChange) {
               `Deleting "${el.attr('data-commit-message')}" commit. Are you sure?`,
               decision => {
                 if (decision) {
+                  editMode = false;
                   git.adios(el.attr('data-commit-hash'));
                 }
               }
@@ -149,7 +149,7 @@ export default function story(state, onChange) {
         },
         function onChange() {
           confirmButton.css('opacity', '1');
-          numOfCommits > 1 && renderGraph(git.logAsTree());
+          numOfCommits > 1 && renderGraph(commits, git.logAsTree());
         },
         onCancel
       );
@@ -170,8 +170,6 @@ export default function story(state, onChange) {
           message: git.show(currentlyEditingHash).message,
           meta: { position }
         });
-        editMode = false;
-        editor = null;
         render();
       });
       injector.onChange(str => {
@@ -184,7 +182,7 @@ export default function story(state, onChange) {
       });
     }
 
-    numOfCommits > 1 && renderGraph(git.logAsTree());
+    numOfCommits > 1 && renderGraph(commits, git.logAsTree());
   };
 
   state.listen(event => {
@@ -204,61 +202,84 @@ export default function story(state, onChange) {
     }
   };
 }
-function renderCommits(git, editMode, unstaged, currentlyEditingHash) {
-  const root = git.logAsTree();
-
+function renderCommits(git, commits, editMode, currentlyEditingHash) {
   function process(commit) {
-    const { hash, message, derivatives, meta } = commit;
+    const { hash, message, position } = commit;
 
-    const currentPosition = meta && parseInt(meta.position, 10) > 0 ? `#${parseInt(meta.position, 10)}` : '';
+    const currentPosition = position && position > 0 ? `<span class="current-position">${position}</span>` : '';
     const messageFirstLine = getTitleFromCommitMessage(message);
-    const linkLabel = (git.head() === hash ? '<span class="commit-head">&#8594;</span>' : '') + messageFirstLine;
-    const link =
-      !unstaged && !editMode ?
-        `<a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}">${linkLabel}</a>` :
-        `<span style="opacity:0.4;">${linkLabel}</span>`;
+    const isCurrent = git.head() === hash;
 
-    return (
-      `
-      <div class="commit${currentlyEditingHash === hash && editMode ? ' commit-edit' : ''}" id="c${hash}">
-        ${
-          currentlyEditingHash === hash && editMode ?
-            `
-              <div class="story-form">
-                <div class="story-form-bar">
-                  <a href="javascript:void(0);" data-export="confirmButton">${CHECK_ICON(12)} save</a>
-                  <a href="javascript:void(0);" data-export="closeButton">${CLOSE_ICON(12)} cancel</a>
-                  <select data-export="publishStatus">
-                    ${getPublishOptions(git, hash)}
-                  </select>
-                  <select data-export="injector">
-                    <option value="">inject</option>
-                    <option value="{inject:all}">All files</option>
-                    ${getFileInjectionOptions(git, hash)}
-                  </select>
-                </div>
-                <div data-export="messageArea" class="message-area"></div>
-              </div>
-            ` :
-            `
-              <div class="commit-nav">
-                <span class="current-position">${currentPosition}</span>
-                <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}">&#9998; story</a>
-                ${
-                  !unstaged ?
-                    `<a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${hash}" data-commit-message="${messageFirstLine}">&#10006; delete</a>` :
-                    ''
-                }
-              </div>
-              ${link}
-            `
-        }
+    if (currentlyEditingHash === hash && editMode) {
+      return `
+        <div class="commit commit-edit" id="c${hash}">
+          <div class="story-form">
+            <div class="story-form-bar">
+              <a href="javascript:void(0);" data-export="confirmButton">${CHECK_ICON(12)} save</a>
+              <a href="javascript:void(0);" data-export="closeButton">${CLOSE_ICON(12)} cancel</a>
+              ${ git.head() !== hash ? `<a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}">${ DOT_CIRCLE(12) } checkout</a>` : '' }
+              <a href="javascript:void(0);" data-export="deleteCommit" data-commit-hash="${hash}" data-commit-message="${messageFirstLine}">${ TRASH_ICON(12) } delete</a>
+              <select data-export="publishStatus">
+                ${getPublishOptions(git, hash)}
+              </select>
+              <select data-export="injector">
+                <option value="">inject</option>
+                <option value="{inject:all}">All files</option>
+                ${getFileInjectionOptions(git, hash)}
+              </select>
+            </div>
+            <div data-export="messageArea" class="message-area"></div>
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <div class="commit ${ isCurrent ? 'commit-head' : ''}" id="c${hash}">
+        <a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}" class="checkout">${currentPosition + messageFirstLine}</a>
+        <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}" class="edit">${ SETTINGS_ICON(12) } teach</a>
       </div>
-    ` + derivatives.map(process).join('')
-    );
+    `;
   }
 
-  return root !== null ? process(root, 0) : '';
+  if (commits.length === 0) {
+    return '';
+  }
+  return commits.map(process).join('');
+}
+function renderDiffs(git, diffs) {
+  if (diffs.length === 0) {
+    return `
+      <div class="working-directory">
+        <div class="clear commit-buttons-nav">
+          <a href="javascript:void(0)" data-export="addButton" class="commit-button left">
+            &#10004; New commit
+          </a>
+        </div>
+      </div>
+    `;
+  }
+  return `
+    <div class="working-directory">
+      <div class="diffs">
+        ${diffs.map(renderDiff).join('')}
+      </div>
+      <div class="clear commit-buttons-nav">
+        ${ git.head() !== null ? `<a href="javascript:void(0)" data-export="editButton" class="commit-button left">
+          &#10004; Save
+        </a>` : '' }
+        <a href="javascript:void(0)" data-export="addButton" class="commit-button left">
+          &#10004; New commit
+        </a>
+        ${
+          git.getAll().length > 0 && git.head() !== null ?
+            `<a href="javascript:void(0)" data-export="discardButton" class="commit-button right">
+            &#10006; Discard changes
+          </a>` :
+            ''
+        }
+      </div>
+    </div>
+  `;
 }
 function codeMirror(container, editorSettings, value, onSave, onChange, onCancel) {
   defineCodeMirrorCommands(CodeMirror);
@@ -331,35 +352,37 @@ function formatDate(date = new Date()) {
 
   return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + date.getHours() + ':' + date.getMinutes();
 }
-function renderGraph(tree) {
+function renderGraph(sortedCommits, tree) {
   setTimeout(() => {
     emptySVGGraph();
 
-    const { connections, yValues } = renderCommitGraphs(tree);
+    DEBUG && console.log(JSON.stringify(sortedCommits.map(({ hash, position }) => ({ hash, position })), null, 2));
 
-    connections.forEach(([top, down]) => connectCommits(SVG_X, yValues[top], yValues[down]));
+    const { connections, commitsYs } = renderCommitGraphs(getYValueOfCommitElement(sortedCommits[0].hash), tree);
+
+    connections.forEach(([ hashA, hashB ]) => connectCommits(SVG_X, SVG_INITIAL_Y + commitsYs[hashA], SVG_INITIAL_Y + commitsYs[hashB]));
   }, 30);
 }
-function renderCommitGraphs(
-  { parent, hash, derivatives },
-  result = { y: SVG_INITIAL_Y, connections: [], yValues: {} }
-) {
-  result.yValues[hash] = result.y;
-  if (el.exists('#c' + hash)) {
-    result.y += el('#c' + hash).e.offsetHeight + 0.3;
-  }
+function renderCommitGraphs(rootY, { parent, hash, derivatives }, result = { commitsYs: {}, connections: [] }) {
+  result.commitsYs[hash] = getYValueOfCommitElement(hash) - rootY;
   if (parent !== null) {
-    result.connections.push([parent, hash]);
+    result.connections.push([ parent, hash ]);
   }
   if (derivatives.length > 0) {
-    derivatives.forEach(commit => renderCommitGraphs(commit, result));
+    derivatives.forEach(commit => renderCommitGraphs(rootY, commit, result));
   }
   return result;
+}
+function getYValueOfCommitElement(hash) {
+  if (el.exists('#c' + hash)) {
+    return el('#c' + hash).e.getBoundingClientRect().top + 0.3;
+  }
+  return 0;
 }
 function getPublishOptions(git, currentHash) {
   const allCommits = git.log();
   const { meta } = allCommits[currentHash];
-  const currentPosition = meta ? parseInt(meta.position, 10) : null;
+  const currentPosition = meta ? parseInt(meta.position, 10) : 0;
   let options = [];
 
   options.push(`<option value="0"${currentPosition === 0 ? 'selected="selected"' : ''}>not in story</option>`);
