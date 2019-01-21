@@ -10,6 +10,7 @@ import editNamePopUp from './popups/editNamePopUp';
 import settings from './settings';
 import statusBar from './statusBar';
 import story from './story';
+import storyPreview from './storyPreview';
 import { DEBUG } from './constants';
 
 createState(pkg.version).then(state => {
@@ -24,18 +25,19 @@ createState(pkg.version).then(state => {
         DEBUG && console.log('editor event=' + event);
         switch (event) {
           case ON_SELECT:
-            addToStory(data, editor);
-            break;
+          addToStory(data, editor);
+          break;
           case ON_FILE_CHANGE:
-            setFilePendingStatus(true);
-            break;
+          setFilePendingStatus(true);
+          break;
           case ON_FILE_SAVE:
-            setFilePendingStatus(false);
-            break;
+          setFilePendingStatus(false);
+          break;
         }
       }
     );
 
+    storyPreview(state);
     executeCurrentFile();
 
     const showSettings = settings(

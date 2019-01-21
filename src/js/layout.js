@@ -1,8 +1,14 @@
 /* eslint-disable no-undef */
 import el from './utils/element';
 import setTheme from './utils/setTheme';
+import { IS_PROD } from './constants';
 
 export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console', 'story'];
+
+if (IS_PROD) {
+  LAYOUT_BLOCKS.push('story-preview');
+}
+
 export const DEFAULT_LAYOUT = {
   elements: [
     {
@@ -55,8 +61,9 @@ export default state => {
   const consoleE = el.fromTemplate('#template-console');
   const editor = el.fromTemplate('#template-editor');
   const story = el.fromTemplate('#template-story');
+  const storyPreview = el.fromTemplate('#template-story-preview');
   const empty = el.withFallback('.does-not-exists');
-  const elementsMap = { HTML, console: consoleE, editor, story };
+  const elementsMap = { HTML, console: consoleE, editor, story, 'story-preview': storyPreview };
   const usedBlocks = [];
 
   const splitFuncs = [];

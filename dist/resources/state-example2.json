@@ -1,0 +1,46 @@
+{
+  "editor": {
+    "theme": "light",
+    "statusBar": false,
+    "layout": {
+      "elements": [
+        {
+          "name": "story",
+          "elements": []
+        },
+        {
+          "name": "story-preview",
+          "elements": []
+        }
+      ],
+      "direction": "horizontal"
+    }
+  },
+  "dependencies": [],
+  "files": {
+    "working": [
+      [
+        "code.js",
+        {
+          "c": "document.querySelector('#output').innerHTML = 'Hello world';\n\nconsole.log('Hello world');"
+        }
+      ]
+    ],
+    "head": "_2",
+    "i": 2,
+    "stage": [],
+    "commits": {
+      "_1": {
+        "message": "first commit",
+        "parent": null,
+        "files": "[[\"code.js\",{\"c\":\"document.querySelector('#output').innerHTML = 'Hello world';\\n\\nconsole.log('Hello world');\"}]]"
+      },
+      "_2": {
+        "message": "second commit",
+        "parent": "_1",
+        "files": ""
+      }
+    }
+  },
+  "v": "7.1.0"
+}

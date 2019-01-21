@@ -140,7 +140,7 @@ svg {
 /*************************** STATUS BAR */
 .status-bar {
   width: 100%;
-  height: 8px;
+  height: 6px;
   background: #ccc;
   transition: height 200ms ease-out;
   overflow: hidden;
