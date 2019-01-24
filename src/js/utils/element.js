@@ -36,6 +36,13 @@ export default function el(selector, parent = document, fallbackToEmpty = false,
       e.innerHTML = str;
       return this.exports();
     },
+    text(str) {
+      if (!str) {
+        return e.innerText;
+      }
+      e.innerText = str;
+      return str;
+    },
     appendChild(child) {
       e.appendChild(child);
       return this;

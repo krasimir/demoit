@@ -590,8 +590,8 @@ svg {
 }
 .story .commit-edit {
   padding: 0;
-  border-left: solid 1px #999 !important;
   border-bottom: solid 1px #999 !important;
+  border-top: none !important;
 }
 .dark .story .commit-edit {
   border: solid 1px #80a6bf !important;

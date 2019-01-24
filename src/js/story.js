@@ -146,6 +146,8 @@ export default function story(state, onChange) {
         function onSaveInEditor(message) {
           confirmButton.css('opacity', '0.3');
           onSave(message);
+          el(`[data-commit-hash="${ currentlyEditingHash }"] > .commit-message-text`)
+            .text(getTitleFromCommitMessage(message));
         },
         function onChange() {
           confirmButton.css('opacity', '1');
@@ -209,9 +211,19 @@ function renderCommits(git, commits, editMode, currentlyEditingHash) {
     const currentPosition = position && position > 0 ? `<span class="current-position">${position}</span>` : '';
     const messageFirstLine = getTitleFromCommitMessage(message);
     const isCurrent = git.head() === hash;
+    let html = '';
+
+    html += `
+      <div class="commit ${ isCurrent ? 'commit-head' : ''}" id="c${hash}">
+        <a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}" class="checkout">
+          ${currentPosition}<span class="commit-message-text">${ messageFirstLine }</span>
+        </a>
+        <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}" class="edit">${ SETTINGS_ICON(12) } teach</a>
+      </div>
+    `;
 
     if (currentlyEditingHash === hash && editMode) {
-      return `
+      html += `
         <div class="commit commit-edit" id="c${hash}">
           <div class="story-form">
             <div class="story-form-bar">
@@ -228,17 +240,12 @@ function renderCommits(git, commits, editMode, currentlyEditingHash) {
                 ${getFileInjectionOptions(git, hash)}
               </select>
             </div>
-            <div data-export="messageArea" class="message-area"></div>
+            <div data-export="messageArea" class="message-area" spellcheck="true"></div>
           </div>
         </div>
       `;
     }
-    return `
-      <div class="commit ${ isCurrent ? 'commit-head' : ''}" id="c${hash}">
-        <a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}" class="checkout">${currentPosition + messageFirstLine}</a>
-        <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}" class="edit">${ SETTINGS_ICON(12) } teach</a>
-      </div>
-    `;
+    return html;
   }
 
   if (commits.length === 0) {

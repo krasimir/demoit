@@ -8,7 +8,7 @@ export default function editNamePopUp({ name, id, description, published, storyW
   name = name || '';
 
   createPopup({
-    title: 'Edit demo name',
+    title: 'Edit story name',
     content: `
       <input data-export="nameInput" value="${ name }" placeholder="Name"/>
       <textarea placeholder="Description" data-export="descriptionInput">${ description || '' }</textarea>
