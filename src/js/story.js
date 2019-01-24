@@ -146,7 +146,7 @@ export default function story(state, onChange) {
         function onSaveInEditor(message) {
           confirmButton.css('opacity', '0.3');
           onSave(message);
-          el(`[data-commit-hash="${ currentlyEditingHash }"] > .commit-message-text`)
+          el.withFallback(`[data-commit-hash="${ currentlyEditingHash }"] > .commit-message-text`)
             .text(getTitleFromCommitMessage(message));
         },
         function onChange() {
