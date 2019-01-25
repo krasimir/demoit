@@ -61,22 +61,26 @@ export default function story(state, onChange) {
     `).forEach(el => {
         if (el.attr('data-export') === 'checkoutLink') {
           el.onClick(() => {
+            const hashToCheckout = el.attr('data-commit-hash');
+
             if (diffs.length > 0) {
               confirmPopUp(
                 'Checkout',
                 'You are about to checkout another commit. You have an unstaged changes. Are you sure?',
                 decision => {
-                  if (decision) {
-                    git.checkout(el.attr('data-commit-hash'), true);
+                  if (decision && allCommits[hashToCheckout]) {
+                    git.checkout(hashToCheckout, true);
                     onChange();
                     render();
                   }
                 }
               );
             } else {
-              git.checkout(el.attr('data-commit-hash'));
-              onChange();
-              render();
+              if (allCommits[hashToCheckout]) {
+                git.checkout(hashToCheckout);
+                onChange();
+                render();
+              }
             }
           });
         }
@@ -216,7 +220,7 @@ function renderCommits(git, commits, editMode, currentlyEditingHash) {
     html += `
       <div class="commit ${ isCurrent ? 'commit-head' : ''}" id="c${hash}">
         <a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}" class="checkout">
-          ${currentPosition}<span class="commit-message-text">${ messageFirstLine }</span>
+          ${currentPosition}<span class="commit-message-text">${ messageFirstLine ? messageFirstLine : '...' }</span>
         </a>
         <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}" class="edit">${ SETTINGS_ICON(12) } teach</a>
       </div>

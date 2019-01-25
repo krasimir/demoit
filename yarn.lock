@@ -2550,10 +2550,10 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gitfred@7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/gitfred/-/gitfred-7.2.0.tgz#da9162ec9bcd80aa3326c6a59d2a2e59e4635037"
-  integrity sha512-vWnf2X8Cahjdmm4CLlpSYNM5JozMX5PSgT9ldnV1e0lt+/X40jeXJCGW85yEcFWWuMJK1fsukoEURr/5oQrlYw==
+gitfred@7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/gitfred/-/gitfred-7.2.2.tgz#4d0008173a2a6b74ff296f4d939311d9ec88ec6e"
+  integrity sha512-bndgElPEDiE/+GHuii7CszcfW2PNZGw3J1O2Py0m4MAjvhIFVykmUkzqIKtnHAN333Ic5MMJ0XG7o5ebybUH2w==
 
 glob-base@^0.3.0:
   version "0.3.0"
