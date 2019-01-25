@@ -46,6 +46,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
       <div class="meta-and-status">
         ${ state.meta().name ? state.meta().name : 'unnamed' }
         ${ state.loggedIn() && !state.isDemoOwner() ? '<span class="badge warning">not yours</span>' : '' }
+        ${ IS_PROD ? `<a href="${ state.getStoryURL() }" class="badge" target="blank">view Story</a>` : '' }
       </div>
     `);
     items.push(createLink('menuButton', BARS(14)));

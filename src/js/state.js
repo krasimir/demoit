@@ -282,6 +282,15 @@ export default async function createState(version) {
     },
     export() {
       return state;
+    },
+    getStoryURL() {
+      const meta = this.meta();
+      let slug = 'story';
+
+      if (meta && meta.name) {
+        slug = meta.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+      }
+      return `/s/${ this.getDemoId() }/${ slug }`;
     }
   };
 

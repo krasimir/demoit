@@ -303,6 +303,11 @@ svg {
   font-size: 0.8em;
   padding: 2px 4px;
   border-radius: 2px;
+  display: inline;
+  background: #e2e2e2;
+}
+.dark .meta-and-status .badge {
+  background: #292929;
 }
 .meta-and-status .badge.info {
   background: #bbd5ef;
