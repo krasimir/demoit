@@ -4,7 +4,7 @@ import defineCodeMirrorCommands from './utils/codeMirrorCommands';
 import commitDiff from './utils/commitDiff';
 import { connectCommits, empty as emptySVGGraph } from './utils/svg';
 import confirmPopUp from './popups/confirmPopUp';
-import { CHECK_ICON, CLOSE_ICON, TRASH_ICON, DOT_CIRCLE, SETTINGS_ICON } from './utils/icons';
+import { CHECK_ICON, CLOSE_ICON, TRASH_ICON, DOT_CIRCLE, BOOK } from './utils/icons';
 import { truncate } from './utils';
 import cleanUpMarkdown from './utils/cleanUpMarkdown';
 import { DEBUG } from './constants';
@@ -222,7 +222,7 @@ function renderCommits(git, commits, editMode, currentlyEditingHash) {
         <a href="javascript:void(0);" data-export="checkoutLink" data-commit-hash="${hash}" class="checkout">
           ${currentPosition}<span class="commit-message-text">${ messageFirstLine ? messageFirstLine : '...' }</span>
         </a>
-        <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}" class="edit">${ SETTINGS_ICON(12) } teach</a>
+        <a href="javascript:void(0);" data-export="editMessage" data-commit-hash="${hash}" class="edit">${ BOOK(12) } edit</a>
       </div>
     `;
 
