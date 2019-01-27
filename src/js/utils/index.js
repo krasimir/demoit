@@ -138,3 +138,14 @@ export const isEmbedded = function () {
 		return true;
 	}
 };
+export const formatDate = function (date = new Date()) {
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = date.getDate(),
+    monthIndex = date.getMonth(),
+    year = date
+      .getFullYear()
+      .toString()
+      .substr(-2);
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + date.getHours() + ':' + date.getMinutes();
+}
