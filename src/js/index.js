@@ -25,13 +25,13 @@ createState(pkg.version).then(state => {
         DEBUG && console.log('editor event=' + event);
         switch (event) {
           case ON_SELECT:
-          addToStory(data, editor);
+            addToStory(data, editor);
           break;
           case ON_FILE_CHANGE:
-          setFilePendingStatus(true);
+            setFilePendingStatus(true);
           break;
           case ON_FILE_SAVE:
-          setFilePendingStatus(false);
+            setFilePendingStatus(false);
           break;
         }
       }

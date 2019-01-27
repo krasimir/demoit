@@ -197,13 +197,34 @@ export default function story(state, onChange) {
 
   render();
 
-  return function addToStory(code, otherEditor) {
+  return function addToStory({ code, list }, otherEditor) {
     if (editMode && editor) {
       otherEditor.setCursor({ line: 0, ch: 0 });
       setTimeout(() => {
         editor.focus();
         editor.refresh();
-        editor.replaceSelection(code);
+
+        let thingToInsert = code;
+
+        // Set annotation link instead
+        try {
+          let { line, ch } = editor.getCursor();
+          const currentLine = editor.getValue().split('\n')[line];
+
+          if (
+            currentLine.charAt(ch) === ')' &&
+            currentLine.charAt(ch - 1) === '(' &&
+            currentLine.charAt(ch - 2) === ']'
+          ) {
+            let { anchor, head } = list.shift();
+
+            thingToInsert = ['a', state.getActiveFile(), anchor.line, head.line ].join(':');
+          }
+        } catch (error) {
+          console.log('Error while setting annotation.');
+        }
+
+        editor.replaceSelection(thingToInsert);
       }, 1);
     }
   };

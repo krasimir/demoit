@@ -44,8 +44,8 @@ export default async function editor(state, listener) {
       state.setActiveFileByIndex(index);
       loadFileInEditor();
     },
-    function onSelection(code) {
-      listener(ON_SELECT, code, codeMirrorEditor);
+    function onSelection(code, list) {
+      listener(ON_SELECT, { code, list }, codeMirrorEditor);
     }
   );
 
@@ -133,8 +133,9 @@ function codeMirror(container, editorSettings, value, onSave, onChange, showFile
 
   container.onMouseUp(() => {
     const selection = editor.getSelection();
+    const list = editor.listSelections();
 
-    selection !== '' && onSelection(selection);
+    selection !== '' && onSelection(selection, list);
   });
 
   return editor;
