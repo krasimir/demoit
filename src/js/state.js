@@ -104,7 +104,6 @@ export default async function createState(version) {
     DEBUG && console.log('state:persist reason=' + reason);
     if (api.isForkable()) {
       if (!fork && !api.isDemoOwner()) { return; }
-
       let diff = DeepDiff.diff(initialState, state);
       let stateData;
 

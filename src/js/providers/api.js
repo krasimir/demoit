@@ -1,10 +1,22 @@
-/* eslint-disable consistent-return */
+/* eslint-disable consistent-return, no-use-before-define */
 import { SAVE_DEMO_URL, GET_DEMOS_URL } from '../constants';
 
 let requestInFlight = false;
+let queue = [];
+
+const emptyQueue = function () {
+  if (queue.length > 0) {
+    const { state, token, diff } = queue.shift();
+
+    saveDemo(state, token, diff);
+  }
+};
 
 const saveDemo = async function (state, token, diff) {
-  if (requestInFlight) { return; }
+  if (requestInFlight) {
+    queue.push({ state, token, diff });
+    return;
+  }
 
   try {
     requestInFlight = true;
@@ -17,6 +29,7 @@ const saveDemo = async function (state, token, diff) {
     const result = await response.json();
 
     requestInFlight = false;
+    emptyQueue();
 
     if (result.error) {
       console.error(result.error);
@@ -25,6 +38,7 @@ const saveDemo = async function (state, token, diff) {
     }
     console.log(result);
   } catch (error) {
+    emptyQueue();
     console.error(error);
   }
 };

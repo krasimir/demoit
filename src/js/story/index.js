@@ -99,6 +99,7 @@ export default function story(state, onChange) {
                 if (decision) {
                   editMode = false;
                   git.adios(el.attr('data-commit-hash'));
+                  onChange();
                 }
               }
             );
