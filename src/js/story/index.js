@@ -85,9 +85,14 @@ export default function story(state, onChange) {
         }
         if (el.attr('data-export') === 'editMessage') {
           el.onClick(() => {
-            editMode = true;
-            currentlyEditingHash = el.attr('data-commit-hash');
-            render();
+            if (!editMode) {
+              editMode = true;
+              currentlyEditingHash = el.attr('data-commit-hash');
+              render();
+            } else {
+              editMode = false;
+              onCancel();
+            }
           });
         }
         if (el.attr('data-export') === 'deleteCommit') {
