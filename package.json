@@ -8,14 +8,14 @@
     "url": "git+https://github.com/krasimir/demoit.git"
   },
   "scripts": {
-    "clean": "shx rm -rf ./dist/*",
+    "clean-demoit": "shx rm -rf ./dist/*",
     "copy-static": "shx cp ./src/index.html ./dist/index.html && shx cp ./src/sandbox.html ./dist/sandbox.html && shx cp -r ./src/resources ./dist && shx cp -r ./src/img ./dist",
     "produce-minified-js": "uglifyjs ./src/js-vendor/split.js ./.tmp/demoit.js -c -m -o ./dist/demoit.js",
     "produce-js": "shx cat ./src/js-vendor/split.js ./.tmp/demoit.js > ./dist/demoit.js",
     "produce-css": "shx cat ./src/css/codemirror.css ./src/css/la.css ./src/css/styles.css ./src/css/light_theme.css ./src/css/dark_theme.css | uglifycss > ./dist/styles.css",
     "produce-editor-js": "uglifyjs ./src/js-vendor/codemirror.js ./src/js-vendor/javascript.js ./src/js-vendor/xml.js ./src/js-vendor/jsx.js ./src/js-vendor/mark-selection.js ./src/js-vendor/matchbrackets.js ./src/js-vendor/comment.js ./src/js-vendor/search_cursor.js ./src/js-vendor/overlay.js ./src/js-vendor/markdown.js ./src/js-vendor/gfm.js ./src/js-vendor/runmode.js ./src/js-vendor/colorize.js ./src/js-vendor/closebrackets.js ./src/js-vendor/match-highlighter.js ./src/js-vendor/css.js ./src/js-vendor/htmlmixed.js ./src/js-vendor/deep-diff.js ./src/js-vendor/babel-6.26.0.min.js ./src/js-vendor/babel-polyfill@6.26.0.js ./src/js-vendor/babel-plugin-transform-es2015-modules-commonjs@6.26.2.js -c -m -o ./dist/resources/editor.js",
     "dev": "yarn build && concurrently \"webpack\" \"onchange ./src/css/*.css -- yarn produce-css\" \"onchange ./.tmp/*.js -- yarn produce-js\" \"cpx ./src/index.html ./dist/ -w\" \"cpx ./src/sandbox.html ./dist/ -w\"",
-    "build": "yarn clean && yarn copy-static && yarn produce-css && yarn produce-editor-js && webpack --config ./webpack.config.prod.js && yarn produce-minified-js",
+    "build": "yarn clean-demoit && yarn copy-static && yarn produce-css && yarn produce-editor-js && webpack --config ./webpack.config.prod.js && yarn produce-minified-js",
     "zip": "node ./scripts/zipit.js",
     "release": "yarn test && yarn build && yarn zip",
     "test": "jest",
@@ -58,7 +58,7 @@
     "zip-folder": "1.0.0"
   },
   "dependencies": {
-    "gitfred": "7.2.3",
+    "gitfred": "7.2.4",
     "hashids": "1.2.2",
     "jszip": "3.1.5",
     "layout-architect": "3.0.0"
