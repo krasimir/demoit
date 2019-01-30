@@ -1,5 +1,5 @@
 export default function setAnnotationLink(editor, code, list, activeFile) {
-  let thingToInsert = code;
+  let thingToInsert = '';
 
   try {
     let { line, ch } = editor.getCursor();
@@ -12,7 +12,12 @@ export default function setAnnotationLink(editor, code, list, activeFile) {
     ) {
       let { anchor, head } = list.shift();
 
-      thingToInsert = ['a', activeFile, anchor.line, head.line ].join(':');
+      thingToInsert = ['a', activeFile, anchor.line, anchor.ch, head.line, head.ch ].join(':');
+    } else if (
+      currentLine.charAt(ch - 1) === '' &&
+      currentLine.charAt(ch + 1) === ''
+    ) {
+      thingToInsert = code;
     }
   } catch (error) {
     console.log('Error while setting annotation.');

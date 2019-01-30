@@ -1,6 +1,6 @@
 {
   "name": "demoit",
-  "version": "7.4.2",
+  "version": "7.5.0",
   "description": "A live coding tool",
   "main": "index.js",
   "repository": {
