@@ -52,15 +52,15 @@ export default function story(state, onChange) {
     const diffs = commitDiff(numOfCommits > 0 ? git.show().files : [], git.getAll());
     const renderedCommits = renderCommits(git, commits, editMode, currentlyEditingHash);
 
-    container.attr('class', numOfCommits <= 1 ? 'editor-section story no-graph' : 'editor-section story');
+    container.attr('class', numOfCommits <= 1 || editMode ? 'editor-section story no-graph' : 'editor-section story');
     container.content(`
       ${ renderedCommits !== '' ? '<div data-export="list">' + renderedCommits + '</div>' : '' }
       ${ renderDiffs(git, diffs) }
-      <div class="story-arrows"><svg id="svg-canvas" width="32px" height="98%"></svg></div>
+      <div class="story-arrows"><svg id="svg-canvas" width="32px" height="100%"></svg></div>
     `).forEach(el => {
         if (el.attr('data-export') === 'checkoutLink') {
           el.onClick(() => {
-            const hashToCheckout = el.attr('data-commit-hash');
+            const hashToCheckout = el.attr('data-hash');
 
             if (diffs.length > 0) {
               confirmPopUp(
@@ -85,13 +85,15 @@ export default function story(state, onChange) {
         }
         if (el.attr('data-export') === 'editMessage') {
           el.onClick(() => {
-            if (!editMode) {
-              editMode = true;
-              currentlyEditingHash = el.attr('data-commit-hash');
-              render();
-            } else {
+            const hash = el.attr('data-hash');
+
+            if (editMode && currentlyEditingHash === hash) {
               editMode = false;
               onCancel();
+            } else {
+              editMode = true;
+              currentlyEditingHash = el.attr('data-hash');
+              render();
             }
           });
         }
@@ -103,11 +105,22 @@ export default function story(state, onChange) {
               decision => {
                 if (decision) {
                   editMode = false;
-                  git.adios(el.attr('data-commit-hash'));
+                  git.adios(el.attr('data-hash'));
                   onChange();
                 }
               }
             );
+          });
+        }
+        if (el.attr('data-export') === 'publishStatus') {
+          el.onChange(position => {
+            const hash = el.attr('data-hash');
+
+            git.amend(hash, {
+              message: git.show(hash).message,
+              meta: { position }
+            });
+            render();
           });
         }
       });
@@ -118,8 +131,6 @@ export default function story(state, onChange) {
       discardButton,
       messageArea,
       confirmButton,
-      closeButton,
-      publishStatus,
       injector
     } = container.namedExports();
 
@@ -155,7 +166,7 @@ export default function story(state, onChange) {
         function onSaveInEditor(message) {
           confirmButton.css('opacity', '0.3');
           onSave(message);
-          el.withFallback(`[data-commit-hash="${ currentlyEditingHash }"] > .commit-message-text`)
+          el.withFallback(`[data-hash="${ currentlyEditingHash }"] > .commit-message-text`)
             .text(getTitleFromCommitMessage(message));
         },
         function onChange() {
@@ -169,18 +180,6 @@ export default function story(state, onChange) {
         onSave(editor.getValue());
         editMode = false;
         editor = null;
-        render();
-      });
-      closeButton.onClick(() => {
-        editMode = false;
-        editor = null;
-        render();
-      });
-      publishStatus.onChange(position => {
-        git.amend(currentlyEditingHash, {
-          message: git.show(currentlyEditingHash).message,
-          meta: { position }
-        });
         render();
       });
       injector.onChange(str => {

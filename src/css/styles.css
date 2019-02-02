@@ -47,6 +47,9 @@ svg {
 .p2 {
   padding: 2em !important;
 }
+.fs08 {
+  font-size: .8em;
+}
 .clear::after {
   content: " ";
   display: block;
@@ -557,6 +560,7 @@ svg {
   top: 0;
   right: 0;
   height: 100%;
+  overflow: hidden;
 }
 .no-graph .story-arrows {
   display: none;
@@ -577,13 +581,16 @@ svg {
   text-align: center;
   text-decoration: none;
   padding: 1em;
-  font-size: 0.8em;
-}
-.story .commit-buttons-nav {
-  padding: 1em 0 1em 1em;
+  font-size: .8em;
+  border: dotted 1px #e2e2ee;
+  display: inline-block;
 }
 .dark .story .commit-button {
   color: #fff;
+  border: solid 1px #80a6bf;
+}
+.story .commit-button.left + .left {
+  margin-left: 1em;
 }
 .story .message-area {
   width: 100%;
@@ -591,10 +598,14 @@ svg {
   display: block;
 }
 .story .commit {
-  position: relative;
+  padding: 1em 42px 1em 1em;
+  border-bottom: solid 1px #eaeaea;
+}
+.story.no-graph .commit {
+  padding: 1em;
 }
 .story .commit-edit {
-  padding: 0;
+  padding: 0 !important;
   border-bottom: solid 1px #999 !important;
   border-top: none !important;
 }
@@ -602,49 +613,61 @@ svg {
   border: solid 1px #80a6bf !important;
 }
 .story .commit-head {
-  background: #eaeaea;
+  border-left: solid 4px #999;
 }
 .dark .story .commit-head {
-  background: #2e414d;
+  border-left-color: #1c5e67;
 }
-.story .commit + .commit {
-  border-top: solid 1px #eaeaea;
+.story.no-graph .commit-head {
+  border-left: none;
 }
 .dark .story .commit + .commit {
   border-top: solid 1px #2e414d;
 }
-.story .commit a.checkout,
-.story .commit a.edit {
+.story .commit hr {
+  margin-top: .7em;
+  margin-bottom: .7em;
+  border-top: none;
+  border-bottom: dotted 1px #e2e2e2;
+  clear: both;
+}
+.dark .story .commit hr {
+  border-bottom: dotted 1px #2e414d;
+}
+.story .current-position {
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin-right: 1em;
+  border: solid 1px #e2e2e2;
+  padding: 0.4em;
+  border-radius: 5px;
+}
+.dark .story .current-position {
+  border: solid 1px #2e414c;
+}
+.story .commit select {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+.story .commit a {
+  display: inline-block;
   color: inherit;
   text-decoration: none;
-  line-height: 1.5em;
-  padding: 1em;
-  display: block;
-}
-.story .commit a.checkout {
-  padding: 1em 100px 1em 1em;
-}
-.story.no-graph .commit a.checkout {
-  padding: 1em 70px 1em 1em;
-}
-.story .commit a.edit {
-  font-size: 0.7em;
-  position: absolute;
-  top: 7px;
-  right: 32px;
-}
-.story .commit a.edit svg {
   opacity: .7;
-  transform: translateY(3px);
-  -webkit-transform: translateY(3px);
 }
-.story.no-graph .commit a.edit {
-  right: 1em;
+.story .commit a:hover {
+  opacity: 1;
+}
+.story .commit a svg {
+  transform: translateY(2px);
+  -webkit-transform: translateY(2px);
+}
+.story .working-directory {
+  padding: 1em;
 }
 .story .working-directory .diffs {
   padding: 1em;
-  margin-left: 1em;
-  margin-top: 1em;
+  margin-bottom: 1em;
   border: solid 1px #e2e2e2;
 }
 .dark .story .working-directory .diffs {
@@ -709,47 +732,4 @@ svg {
 }
 .dark .story .diffs .label-R {
   background: #1c5e67;
-}
-.story-form {
-  position: relative;
-}
-.story .story-form-bar {
-  padding: 1em 1em 17px 5px;
-  border-bottom: dotted 1px #e2e2e2;
-  margin-left: 1em;
-  font-size: .8em;
-}
-.dark .story .story-form-bar {
-  border-bottom: dotted 1px #2e414c;
-}
-.story .story-form-bar a {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-.story .story-form-bar a:hover {
-  opacity: 1;
-}
-.story .story-form-bar a + a {
-  margin-top: 1em;
-}
-.story .story-form-bar a svg {
-  transform: translateY(2px);
-  -webkit-transform: translateY(2px);
-}
-.story .story-form-bar select {
-  font-size: 0.9em;
-  opacity: 0.8;
-  margin-top: 1em;
-}
-.story .current-position {
-  font-size: 0.8em;
-  opacity: 0.8;
-  margin-right: 1em;
-  border: solid 1px #e2e2e2;
-  padding: 0.4em;
-  border-radius: 5px;
-}
-.dark .story .current-position {
-  border: solid 1px #2e414c;
 }
