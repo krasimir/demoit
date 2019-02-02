@@ -1,7 +1,17 @@
 /* eslint-disable no-use-before-define */
 
 export default function renderDiffs(git, diffs) {
-  if (diffs.length === 0) { return ''; }
+  if (diffs.length === 0) {
+    return `
+      <div class="working-directory">
+        <div class="clear commit-buttons-nav">
+          <a href="javascript:void(0)" data-export="addButton" class="commit-button left">
+            &#10004; New commit
+          </a>
+        </div>
+      </div>
+    `;
+  }
   return `
     <div class="working-directory">
       <div class="diffs">

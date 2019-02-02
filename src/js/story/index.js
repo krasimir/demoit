@@ -55,7 +55,7 @@ export default function story(state, onChange) {
     container.attr('class', numOfCommits <= 1 || editMode ? 'editor-section story no-graph' : 'editor-section story');
     container.content(`
       ${ renderedCommits !== '' ? '<div data-export="list">' + renderedCommits + '</div>' : '' }
-      ${ renderDiffs(git, diffs) }
+      ${ editMode ? '' : renderDiffs(git, diffs) }
       <div class="story-arrows"><svg id="svg-canvas" width="32px" height="100%"></svg></div>
     `).forEach(el => {
         if (el.attr('data-export') === 'checkoutLink') {
