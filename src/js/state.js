@@ -168,12 +168,13 @@ export default async function createState(version) {
     },
     meta(meta) {
       if (meta) {
-        const { name, description, published, storyWithCode } = meta;
+        const { name, description, published, storyWithCode, comments } = meta;
 
         state.name = name;
         state.desc = description;
         state.published = !!published;
         state.storyWithCode = !!storyWithCode;
+        state.comments = !!comments;
         onChange('meta');
         persist('meta');
         return null;
@@ -183,7 +184,8 @@ export default async function createState(version) {
         name: state.name,
         description: state.desc,
         published: !!state.published,
-        storyWithCode: !!state.storyWithCode
+        storyWithCode: !!state.storyWithCode,
+        comments: !!state.comments
       };
 
       if (state.demoId) m.id = state.demoId;

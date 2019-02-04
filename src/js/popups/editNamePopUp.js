@@ -4,7 +4,7 @@ import { CHECK_ICON } from '../utils/icons';
 
 const ENTER_KEY = 13;
 
-export default function editNamePopUp({ name, id, description, published, storyWithCode }, onChange) {
+export default function editNamePopUp({ name, id, description, published, storyWithCode, comments }, onChange) {
   name = name || '';
 
   createPopup({
@@ -18,16 +18,20 @@ export default function editNamePopUp({ name, id, description, published, storyW
       <label>
         <input type="checkbox" data-export="withCode" ${ storyWithCode ? 'checked="checked"' : ''}/> Add the editor at the end of the story
       </label>
+      <label>
+        <input type="checkbox" data-export="withComments" ${ comments ? 'checked="checked"' : ''}/> Add a comments section at the end of the story
+      </label>
       <button class="save secondary" data-export="saveButton">${ CHECK_ICON() }<span>Update</span></button>
     `,
-    onRender({ nameInput, descriptionInput, publishCheckbox, saveButton, closePopup, withCode }) {
+    onRender({ nameInput, descriptionInput, publishCheckbox, saveButton, closePopup, withCode, withComments }) {
       const save = () => {
         if (nameInput.e.value !== '') {
           onChange({
             name: nameInput.e.value,
             description: descriptionInput.e.value,
             published: publishCheckbox.e.checked,
-            storyWithCode: withCode.e.checked
+            storyWithCode: withCode.e.checked,
+            comments: withComments.e.checked
           });
         }
         closePopup();
