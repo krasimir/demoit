@@ -98,6 +98,7 @@ svg {
   transition: opacity 300ms;
   -webkit-transition: opacity 300ms;
   opacity: 1;
+  line-height: 1.8em;
 }
 .CodeMirror-lines {
   padding: 1em;
@@ -596,6 +597,7 @@ svg {
   width: 100%;
   max-width: 100%;
   display: block;
+  padding: 1.2em;
 }
 .story .commit {
   padding: 1em 42px 1em 1em;

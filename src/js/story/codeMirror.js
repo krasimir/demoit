@@ -30,7 +30,10 @@ export default function codeMirror(container, editorSettings, value, onSave, onC
     'Cmd-Enter': () => (save(), onCancel(editor.getValue()))
   });
   CodeMirror.normalizeKeyMap();
-  setTimeout(() => editor.focus(), 50);
+  setTimeout(() => {
+    editor.focus();
+    console.log(editor.defaultTextHeight());
+  }, 50);
 
   return editor;
 }
