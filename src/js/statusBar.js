@@ -44,6 +44,7 @@ export default function statusBar(state, showFile, newFile, editFile, showSettin
     items.push(createLink('newFileButton', PLUS_ICON(14), 'new-file'));
     items.push(`
       <div class="meta-and-status">
+        ${ state.meta().published ? '&#10004; ' : '' }
         ${ state.meta().name ? state.meta().name : 'unnamed' }
         ${ state.loggedIn() && !state.isDemoOwner() ? '<span class="badge warning">not yours</span>' : '' }
         ${ IS_PROD ? `<a href="${ state.getStoryURL() }" class="badge" target="blank">view Story</a>` : '' }

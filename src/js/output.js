@@ -5,7 +5,7 @@ var m = 0;
 const markers = {};
 const DEFAULT_HINT = '<div class="centered">&lt;div id="output" /&gt;</div>';
 const createMessageSender = (iframe, addToConsole) => {
-  window.onmessage = function (e) {
+  window.addEventListener('message', function (e) {
     if (e.data.marker) {
       DEBUG && console.log('<-- ' + e.data.marker);
       if (markers[e.data.marker]) {
@@ -15,7 +15,7 @@ const createMessageSender = (iframe, addToConsole) => {
     } else if (e.data.log) {
       addToConsole(e.data.log);
     }
-  };
+  });
   return (op, value, customMarker = null) => {
     const markerId = ++m;
 

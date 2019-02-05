@@ -4,8 +4,16 @@ import el from './utils/element';
 export default function (state) {
   if (!el.exists('#preview')) return;
 
-  const container = el.withFallback('#preview');
   const git = state.git();
+
+  window.addEventListener('message', function (e) {
+    if (e.data.checkoutTo) {
+      console.log(e.data.checkoutTo);
+      git.checkout(e.data.checkoutTo);
+    }
+  });
+
+  const container = el.withFallback('#preview');
   const demoId = state.getDemoId();
   const preview = (input, hash, form) => {
     if (git.head() !== null) {
