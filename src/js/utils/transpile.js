@@ -20,4 +20,4 @@ export default function preprocess(str) {
   const { code } = Babel.transform(str, OPTIONS);
 
   return code;
-}
+};

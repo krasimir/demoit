@@ -13,7 +13,7 @@ export const ON_FILE_SAVE = 'e_ON_FILE_SAVE';
 
 export default async function editor(state, listener) {
   const { clearConsole, addToConsole } = createConsole();
-  const { resetOutput, loadDependenciesInOutput, executeInOut } = await output(state, addToConsole);
+  const { resetOutput, loadDependenciesInOutput, executeInOut } = await output(state, addToConsole, clearConsole);
   const execute = async () => {
     await resetOutput();
     await loadDependenciesInOutput();

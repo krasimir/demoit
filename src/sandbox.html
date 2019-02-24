@@ -112,6 +112,9 @@
     var logMessage = function (message) {
       window.parent.postMessage({ log: message }, '*');
     }
+    var opMessage = function (op) {
+      window.parent.postMessage({ op: op }, '*');
+    }
     var cleanUpOutput = function () {
       while (container.firstChild) {
         container.removeChild(container.firstChild);
@@ -299,6 +302,10 @@
         var args = Array.prototype.slice.call(arguments);
         args.forEach(addLog);
         originalInfo.apply(console, args);
+      };
+      console.clear = function (...args) {
+        opMessage('clean-console');
+        originalClear.apply(console, args);
       };
     })();
 

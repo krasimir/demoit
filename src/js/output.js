@@ -4,7 +4,7 @@ import { DEBUG } from './constants';
 var m = 0;
 const markers = {};
 const DEFAULT_HINT = '<div class="centered">&lt;div id="output" /&gt;</div>';
-const createMessageSender = (iframe, addToConsole) => {
+const createMessageSender = (iframe, addToConsole, clearConsole) => {
   window.addEventListener('message', function (e) {
     if (e.data.marker) {
       DEBUG && console.log('<-- ' + e.data.marker);
@@ -14,6 +14,9 @@ const createMessageSender = (iframe, addToConsole) => {
       }
     } else if (e.data.log) {
       addToConsole(e.data.log);
+    } else if (e.data.op) {
+      DEBUG && console.log('<-- ' + e.data.op);
+      clearConsole();
     }
   });
   return (op, value, customMarker = null) => {
@@ -33,10 +36,10 @@ const createMessageSender = (iframe, addToConsole) => {
   };
 };
 
-export default async function output(state, addToConsole) {
+export default async function output(state, addToConsole, clearConsole) {
   const output = el.withFallback('.output');
   const iframe = output.find('#sandbox');
-  const sendMessage = createMessageSender(iframe, addToConsole);
+  const sendMessage = createMessageSender(iframe, addToConsole, clearConsole);
 
   return {
     setOutputHTML: async function clearOutput(hintValue = DEFAULT_HINT) {
