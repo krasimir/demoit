@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { load as loadDependencies, cache } from './dependencies';
+import { load as loadDependencies } from './dependencies';
 import { clone } from './utils';
 
 const ZIP_FILE = '/poet.codes.zip';
@@ -10,9 +10,7 @@ async function fetchRawFile(url, blob = false) {
     url
   };
 }
-async function fetchRemoteDependencies() {
-  const depsToLoad = Object.keys(cache());
-
+async function fetchRemoteDependencies(depsToLoad) {
   return await Promise.all(
     depsToLoad
       .filter(url => url.match(/^(http|https)/))
@@ -27,7 +25,7 @@ export default function download(state) {
       .prop('innerHTML', 'Please wait. Preparing the zip file.');
 
     try {
-      const remoteDeps = await fetchRemoteDependencies();
+      const remoteDeps = await fetchRemoteDependencies(state.getDependencies());
 
       await loadDependencies(['./resources/jszip.min.js', './resources/FileSaver.min.js']);
 
@@ -46,7 +44,7 @@ export default function download(state) {
           zip.file(fileName, content);
           return fileName;
         });
-        zip.file('index.html', indexFile.replace('var state = null;', `var state = ${ JSON.stringify(newState) };`));
+        zip.file('index.html', indexFile.replace('var state = null;', `var state = ${ JSON.stringify(newState, null, 2) };`));
         saveAs(await zip.generateAsync({ type: 'blob' }), 'poet.codes.zip');
       });
 

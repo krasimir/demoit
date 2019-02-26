@@ -285,7 +285,7 @@
       var originalClear = console.clear;
   
       console.error = function (error) {
-        addLog(error.stack);
+        addLog(error.stack ? error.stack : error.toString());
         originalError.apply(console, arguments);
       };
       console.log = function () {
