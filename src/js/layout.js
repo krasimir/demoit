@@ -7,6 +7,8 @@ export const LAYOUT_BLOCKS = ['editor', 'HTML', 'console', 'story'];
 
 if (IS_PROD) {
   LAYOUT_BLOCKS.push('story-preview');
+  LAYOUT_BLOCKS.push('story-read-only');
+  LAYOUT_BLOCKS.push('annotate');
 }
 
 export const DEFAULT_LAYOUT = {
@@ -62,8 +64,18 @@ export default state => {
   const editor = el.fromTemplate('#template-editor');
   const story = el.fromTemplate('#template-story');
   const storyPreview = el.fromTemplate('#template-story-preview');
+  const storyReadOnly = el.fromTemplate('#template-story-read-only');
+  const annotate = el.fromTemplate('#template-annotate');
   const empty = el.withFallback('.does-not-exists');
-  const elementsMap = { HTML, console: consoleE, editor, story, 'story-preview': storyPreview };
+  const elementsMap = {
+    HTML,
+    console: consoleE,
+    editor,
+    story,
+    'story-preview': storyPreview,
+    'story-read-only': storyReadOnly,
+    annotate
+  };
   const usedBlocks = [];
 
   const splitFuncs = [];

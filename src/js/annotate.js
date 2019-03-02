@@ -2,7 +2,7 @@
 import el from './utils/element';
 
 export default function (state) {
-  if (!el.exists('#preview')) return;
+  if (!el.exists('#annotate')) return;
 
   const git = state.git();
 
@@ -12,7 +12,7 @@ export default function (state) {
     }
   });
 
-  const container = el.withFallback('#preview');
+  const container = el.withFallback('#annotate');
   const demoId = state.getDemoId();
   const preview = (input, hash, form) => {
     if (git.head() !== null) {
@@ -23,7 +23,7 @@ export default function (state) {
   };
 
   container.content(`
-    <form data-export="form" action="/e/${ state.getDemoId() }/story.local" target="frame${ demoId }" method="post">
+    <form data-export="form" action="/e/${ state.getDemoId() }/story.annotate" target="frame${ demoId }" method="post">
       <input type="hidden" data-export="input" name="git"/>
       <input type="hidden" data-export="hash" name="hash"/>
     </form>
