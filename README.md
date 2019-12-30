@@ -1,7 +1,7 @@
 ![demoit](./_assets/demoit_light.png)
 ![demoit](./_assets/demoit_dark.png)
 
-# **Demoit** is the front-end app behind [Poet](https://poet.codes)
+# **Demoit** is the front-end app behind [Poet](https://poet.krasimir.now.sh)
 
 * No installation.
 * No server needed. It works offline.
@@ -14,13 +14,13 @@
 
 ## Demo :rocket:
 
-[https://poet.codes/new](https://poet.codes/new)
+[https://poet.krasimir.now.sh/new](https://poet.krasimir.now.sh/new)
 
 ---
 
 ## Usage
 
-* Online at [poet.codes](https://poet.codes)
+* Online at [poet.krasimir.now.sh](https://poet.krasimir.now.sh)
 * Offline by downloading [Demoit.zip](https://github.com/krasimir/demoit/raw/master/demoit.zip)
 
 ## Configuration

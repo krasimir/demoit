@@ -2,7 +2,7 @@
 import { load as loadDependencies } from './dependencies';
 import { clone } from './utils';
 
-const ZIP_FILE = '/poet.codes.zip';
+const ZIP_FILE = '/poet.krasimir.now.sh.zip';
 
 async function fetchRawFile(url, blob = false) {
   return {
@@ -33,7 +33,7 @@ export default function download(state) {
 
       button
         .prop('disabled', false)
-        .prop('innerHTML', 'Download poet.codes.zip');
+        .prop('innerHTML', 'Download poet.krasimir.now.sh.zip');
       button.onClick(async () => {
         const indexFile = await zip.file('index.html').async('string');
         const newState = clone(state.dump());
@@ -45,7 +45,7 @@ export default function download(state) {
           return fileName;
         });
         zip.file('index.html', indexFile.replace('var state = null;', `var state = ${ JSON.stringify(newState, null, 2) };`));
-        saveAs(await zip.generateAsync({ type: 'blob' }), 'poet.codes.zip');
+        saveAs(await zip.generateAsync({ type: 'blob' }), 'poet.krasimir.now.sh.zip');
       });
 
     } catch (error) {

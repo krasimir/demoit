@@ -52,8 +52,8 @@ export default function settingsPopUp(
       `
         <p>
           v${ version }<br />
-          On the web: <a href="https://poet.codes" target="_blank">Poet.Codes</a><br />
-          GitHub repo: <a href="https://github.com/krasimir/poet.codes.feedback/issues" target="_blank">github.com/krasimir/poet.codes.feedback</a>
+          On the web: <a href="https://poet.krasimir.now.sh" target="_blank">poet.krasimir.now.sh</a><br />
+          GitHub repo: <a href="https://github.com/krasimir/poet.krasimir.now.sh.feedback/issues" target="_blank">github.com/krasimir/poet.krasimir.now.sh.feedback</a>
         </p>
       `
     ],
